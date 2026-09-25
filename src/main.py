@@ -59,6 +59,12 @@ def main() -> int:
     old_state = load_json(STATE_PATH, {"sources": {}})
     state = json.loads(json.dumps(old_state))  # 深拷贝，避免误改
 
+    # 全局关注关键词（config.json 顶层 keywords，适用于所有源；空 = 关注全部）
+    global_keywords = config.get("keywords") or []
+    kw_txt = f"，全局关键词: {', '.join(str(k) for k in global_keywords)}" \
+        if global_keywords else "，关注全部"
+    print(f"[config] 关注关键词: {kw_txt.strip('，')}")
+
     sources = [s for s in config.get("sources", []) if s.get("enabled", True)]
     if not sources:
         print("[warn] config.json 中没有启用的源，请先在网页端/仓库中配置")
@@ -69,9 +75,7 @@ def main() -> int:
     for source in sources:
         sid = source.get("id") or source.get("name", "source")
         name = source.get("name", sid)
-        keywords = source.get("keywords") or []
-        kw_txt = f"，关键词: {', '.join(str(k) for k in keywords)}" if keywords else "，关注全部"
-        print(f"[check] {name} -> {source.get('list_url')}{kw_txt}")
+        print(f"[check] {name} -> {source.get('list_url')}")
 
         try:
             items = parse_source(source)
@@ -79,8 +83,8 @@ def main() -> int:
             print(f"  [error] 抓取/解析失败: {exc}")
             continue
 
-        matched = [it for it in items if match_keywords(it["title"], keywords)]
-        if keywords:
+        matched = [it for it in items if match_keywords(it["title"], global_keywords)]
+        if global_keywords:
             print(f"  [filter] 抓到 {len(items)} 条，命中关键词 {len(matched)} 条")
 
         info = state["sources"].get(sid, {})

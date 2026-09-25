@@ -1,4 +1,7 @@
 {
+  "keywords": [
+    "CorelDRAW"
+  ],
   "sources": [
     {
       "id": "x6d-green",
@@ -8,9 +11,6 @@
       "title_selector": "a.soft-title",
       "date_selector": "div.list-ca",
       "date_prefix": "时间：",
-      "keywords": [
-        "CorelDRAW"
-      ],
       "max_items": 30,
       "enabled": true
     }

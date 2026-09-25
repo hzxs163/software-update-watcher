@@ -55,54 +55,21 @@
   .btn-primary:hover { background: var(--brand-dark); }
   .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
   .btn-ghost:hover { background: #f8fafc; color: var(--text); }
-  .btn-danger { background: transparent; color: var(--danger); border: 1px solid #fecaca; }
-  .btn-danger:hover { background: #fef2f2; }
   .btn-sm { padding: 4px 10px; font-size: 12px; }
 
   .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
-  .src-item {
-    border: 1px solid var(--border); border-radius: 10px; padding: 14px;
-    margin-bottom: 12px; background: #fcfdfe; position: relative;
-  }
-  .src-item.disabled { opacity: .62; }
-  .src-item .top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-  .src-item .name { font-size: 14px; font-weight: 600; }
-  .src-item .name .tag {
-    font-size: 11px; background: var(--ok); color: #fff; border-radius: 4px;
-    padding: 1px 7px; margin-left: 8px; font-weight: 500; vertical-align: 2px;
-  }
-  .src-item .name .tag.off { background: #94a3b8; }
-  .src-item .url { color: var(--brand-dark); font-size: 12px; word-break: break-all; }
-  .src-item .meta { color: var(--muted); font-size: 12px; margin-top: 8px; }
-  .src-item .meta code {
-    background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px;
-    padding: 0 5px; font-family: "SF Mono", Consolas, monospace; font-size: 11px;
-  }
-  .src-item .kw { margin-top: 8px; font-size: 12px; color: #475569; }
-  .src-item .kwb {
-    display: inline-block; background: #ecfdf5; border: 1px solid #a7f3d0;
-    color: #065f46; border-radius: 999px; padding: 1px 10px; margin: 2px 4px 2px 0;
-    font-size: 11.5px;
-  }
-  .src-item .kwall {
-    display: inline-block; background: #f1f5f9; border: 1px solid var(--border);
-    color: #64748b; border-radius: 999px; padding: 1px 10px; margin: 2px 4px 2px 0;
-    font-size: 11.5px;
-  }
-  .src-item .ops { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 
   .field { margin-bottom: 12px; }
   .field label { display: block; font-size: 12.5px; color: #475569; margin-bottom: 4px; font-weight: 500; }
-  .field input, .field textarea, .field select {
+  .field input, .field textarea {
     width: 100%; border: 1px solid var(--border); border-radius: 8px;
     padding: 8px 10px; font-size: 13px; font-family: inherit; background: #fff;
   }
+  .field textarea { min-height: 96px; line-height: 1.7; }
   .field input:focus, .field textarea:focus { outline: 2px solid #67e8f9; border-color: #22d3ee; }
-  .field .hint { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .field .hint { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
-  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-  @media (max-width: 560px) { .grid3 { grid-template-columns: 1fr; } }
 
   .toggle {
     display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
@@ -110,18 +77,22 @@
   }
   .toggle input { width: auto; accent-color: var(--brand); }
 
-  .modal-mask {
-    position: fixed; inset: 0; background: rgba(15,23,42,.45); display: none;
-    align-items: flex-start; justify-content: center; padding: 40px 16px; z-index: 50;
-    overflow-y: auto;
+  .src-item {
+    border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
+    margin-bottom: 10px; background: #fcfdfe;
   }
-  .modal-mask.show { display: flex; }
-  .modal {
-    background: #fff; border-radius: 14px; width: 100%; max-width: 620px;
-    padding: 22px; box-shadow: 0 20px 50px rgba(15,23,42,.25);
+  .src-item .top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .src-item .name { font-size: 14px; font-weight: 600; }
+  .src-item .name .tag {
+    font-size: 11px; background: var(--ok); color: #fff; border-radius: 4px;
+    padding: 1px 7px; margin-left: 8px; font-weight: 500; vertical-align: 2px;
   }
-  .modal h3 { font-size: 16px; margin-bottom: 16px; }
-  .modal .ops { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+  .src-item .url { color: var(--brand-dark); font-size: 12px; word-break: break-all; }
+  .src-item .meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
+  .src-item .meta code {
+    background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px;
+    padding: 0 5px; font-family: "SF Mono", Consolas, monospace; font-size: 11px;
+  }
 
   .toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -142,34 +113,41 @@
     border-radius: 8px; padding: 10px 12px; font-size: 12.5px; margin-top: 12px;
   }
   .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 24px 0; }
-  textarea.code {
-    font-family: "SF Mono", Consolas, monospace; font-size: 12px; min-height: 200px;
-    white-space: pre;
-  }
 </style>
 </head>
 <body>
 <header>
   <h1>软件更新监控 · 配置台</h1>
-  <p>管理要关注的软件站源、推送设置，并导出 config.json 提交到仓库生效</p>
+  <p>首页设置关注关键词，命中关键词的新更新才会推送；源规则已内置，后续陆续添加即可</p>
 </header>
 
 <div class="wrap">
   <div class="layout">
 
-    <!-- 左：源管理 -->
+    <!-- 左：关键词 + 源 + 推送 -->
     <div>
       <div class="card">
-        <h2>关注的软件站源 <span class="count" id="srcCount">0</span></h2>
-        <div class="toolbar">
-          <button class="btn btn-primary" id="btnAdd">＋ 添加源</button>
-          <button class="btn btn-ghost" id="btnImport">导入 config.json</button>
+        <h2>① 关注关键词（全局）</h2>
+        <div class="field">
+          <textarea id="keywords" placeholder="CorelDRAW&#10;Bandicam&#10;Photoshop&#10;&#10;留空 = 关注全部更新"></textarea>
+          <div class="hint">每行一个或用逗号分隔；列表页出现<b>标题含任一关键词</b>的新条目时才推送。</div>
         </div>
-        <div id="srcList"></div>
+        <div class="toolbar">
+          <button class="btn btn-primary" id="btnSaveKw">保存关键词</button>
+        </div>
       </div>
 
       <div class="card">
-        <h2>定时与推送</h2>
+        <h2>② 监控中的软件站源 <span class="count" id="srcCount">0</span></h2>
+        <div id="srcList"></div>
+        <div class="notice">
+          源的选择器规则已内置写死，无需配置。后续新增软件站，把「站名 + 列表页地址」告知豆包，
+          或直接在仓库 <code>src/config.json</code> 的 <code>sources</code> 里加一条即可。
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>③ 定时与推送</h2>
         <div class="field">
           <label>推送服务</label>
           <select id="pushProvider">
@@ -209,27 +187,24 @@
       <div class="card steps">
         <h2>使用步骤</h2>
         <ol>
-          <li>在本页添加/编辑要监控的软件站源，配置推送。</li>
+          <li>在本页顶部设置「关注关键词」，点保存。</li>
           <li>点击「导出 config.json」，把内容保存为仓库中的 <code>src/config.json</code>。</li>
           <li>在 GitHub 仓库 <b>Settings → Secrets and variables → Actions</b> 添加密钥：
             <code>WXPUSHER_APP_TOKEN</code>（应用令牌）、<code>WXPUSHER_UID</code>（你的 UID）。</li>
-          <li>Actions 每 6 小时自动抓取；<b>首次运行只建立基线不推送</b>，之后有更新才推送微信。</li>
+          <li>Actions 每 6 小时自动抓取；<b>首次运行只建立基线不推送</b>，之后命中关键词的新条目才推送微信。</li>
           <li>也可到 Actions 页面手动触发「check-updates」立即检查。</li>
         </ol>
       </div>
 
       <div class="card steps">
-        <h2>添加新源的规则</h2>
+        <h2>源怎么加</h2>
         <ol>
-          <li><b>列表页 URL</b>：软件站按时间倒序的列表地址。</li>
-          <li><b>条目选择器</b>：每条内容的外层容器，如 <code>ul.list-soft li</code>。</li>
-          <li><b>标题选择器</b>：条目内标题链接，如 <code>a.soft-title</code>（取文本+链接）。</li>
-          <li><b>日期选择器</b>（可选）：如 <code>div.list-ca</code>，配合「日期前缀」去掉“时间：”。</li>
-          <li>不确定选择器时，用浏览器 F12 查看元素后填写。</li>
+          <li>当前已内置「小刀娱乐网-绿色软件」等源，解析规则已写死。</li>
+          <li>新增源：在 <code>src/config.json</code> 的 <code>sources</code> 数组加一条
+            <code>{id, name, list_url, item_selector, title_selector, date_selector, max_items, enabled}</code>。</li>
+          <li>不同网站结构不同，选择器需按其页面调整；不确定时直接告知豆包帮你配置。</li>
+          <li>关键词是全局的：所有源统一按同一组关键词过滤。</li>
         </ol>
-        <div class="notice">
-          内置模板「小刀娱乐网-绿色软件」已配好，点「添加源」选择即可。
-        </div>
       </div>
 
       <div class="card steps">
@@ -244,113 +219,28 @@
   </div>
 </div>
 
-<!-- 编辑弹窗 -->
-<div class="modal-mask" id="editMask">
-  <div class="modal">
-    <h3 id="editTitle">添加源</h3>
-    <input type="hidden" id="fId">
-    <div class="field">
-      <label>源名称 *</label>
-      <input id="fName" placeholder="如：小刀娱乐网-绿色软件">
-    </div>
-    <div class="field">
-      <label>列表页 URL *</label>
-      <input id="fUrl" placeholder="https://www.x6d.com/html/23.html">
-    </div>
-    <div class="field">
-      <label>关注关键词（可选）</label>
-      <textarea id="fKeywords" rows="2" placeholder="CorelDRAW&#10;Bandicam&#10;留空 = 关注该源全部更新"></textarea>
-      <div class="hint">每行一个或用逗号分隔；列表页出现标题含任一关键词的新条目时才会推送。</div>
-    </div>
-    <div class="grid2">
-      <div class="field">
-        <label>条目选择器 *</label>
-        <input id="fItemSel" placeholder="ul.list-soft li">
-      </div>
-      <div class="field">
-        <label>标题选择器 *</label>
-        <input id="fTitleSel" placeholder="a.soft-title">
-      </div>
-    </div>
-    <div class="grid3">
-      <div class="field">
-        <label>日期选择器（可选）</label>
-        <input id="fDateSel" placeholder="div.list-ca">
-      </div>
-      <div class="field">
-        <label>日期前缀（可选）</label>
-        <input id="fDatePrefix" placeholder="时间：">
-      </div>
-      <div class="field">
-        <label>抓取条数</label>
-        <input id="fMaxItems" type="number" min="1" max="100" value="30">
-      </div>
-    </div>
-    <div class="field">
-      <label class="toggle"><input type="checkbox" id="fEnabled" checked> 启用该源</label>
-    </div>
-    <div class="ops">
-      <button class="btn btn-ghost" id="btnCancelEdit">取消</button>
-      <button class="btn btn-primary" id="btnSaveEdit">保存</button>
-    </div>
-  </div>
-</div>
-
-<!-- 导入弹窗 -->
-<div class="modal-mask" id="importMask">
-  <div class="modal">
-    <h3>导入 config.json</h3>
-    <div class="field">
-      <textarea class="code" id="importText" placeholder='粘贴 config.json 内容，如：{"sources":[...],"push":{...}}'></textarea>
-      <div class="hint">导入会合并：覆盖同名源，保留其他源与推送设置。</div>
-    </div>
-    <div class="ops">
-      <button class="btn btn-ghost" id="btnCancelImport">取消</button>
-      <button class="btn btn-primary" id="btnDoImport">导入</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 "use strict";
-const LS_KEY = "sw-monitor-config-v1";
+const LS_KEY = "sw-monitor-config-v2";
 
-const TEMPLATES = [
+// 内置写死的源规则（与仓库 src/config.json 保持一致；实际监控以仓库配置为准）
+const BUILTIN_SOURCES = [
   {
+    id: "x6d-green",
     name: "小刀娱乐网-绿色软件",
     list_url: "https://www.x6d.com/html/23.html",
     item_selector: "ul.list-soft li.layui-clear",
     title_selector: "a.soft-title",
     date_selector: "div.list-ca",
     date_prefix: "时间：",
-    keywords: [],
-    max_items: 30
-  },
-  {
-    name: "小刀娱乐网-安卓软件",
-    list_url: "https://www.x6d.com/html/47.html",
-    item_selector: "ul.list-soft li.layui-clear",
-    title_selector: "a.soft-title",
-    date_selector: "div.list-ca",
-    date_prefix: "时间：",
-    keywords: [],
-    max_items: 30
-  },
-  {
-    name: "小刀娱乐网-系统相关",
-    list_url: "https://www.x6d.com/html/28.html",
-    item_selector: "ul.list-soft li.layui-clear",
-    title_selector: "a.soft-title",
-    date_selector: "div.list-ca",
-    date_prefix: "时间：",
-    keywords: [],
-    max_items: 30
+    max_items: 30,
+    enabled: true
   }
 ];
 
-let cfg = { sources: [], push: { provider: "wxpusher", appToken: "", target: "" } };
+let cfg = { keywords: [], sources: BUILTIN_SOURCES, push: { provider: "wxpusher", appToken: "", target: "" } };
 
 /* ---------- 存储 ---------- */
 function persist() { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }
@@ -359,17 +249,18 @@ function load() {
   if (raw) {
     try {
       const c = JSON.parse(raw);
-      if (c && Array.isArray(c.sources)) cfg = c;
-      cfg.push = Object.assign({ provider: "wxpusher", appToken: "", target: "" }, cfg.push || {});
-      return;
+      if (c && Array.isArray(c.keywords)) {
+        cfg = {
+          keywords: c.keywords,
+          sources: BUILTIN_SOURCES,
+          push: Object.assign({ provider: "wxpusher", appToken: "", target: "" }, c.push || {})
+        };
+        return;
+      }
     } catch (e) { /* 损坏则用默认 */ }
   }
-  cfg = {
-    sources: [{ ...TEMPLATES[0], id: uid(), enabled: true, keywords: [] }],
-    push: { provider: "wxpusher", appToken: "", target: "" }
-  };
+  cfg = { keywords: ["CorelDRAW"], sources: BUILTIN_SOURCES, push: { provider: "wxpusher", appToken: "", target: "" } };
 }
-function uid() { return "s" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
 /* ---------- 渲染 ---------- */
 const $ = (s) => document.querySelector(s);
@@ -377,36 +268,24 @@ function renderList() {
   const box = $("#srcList");
   document.getElementById("srcCount").textContent = cfg.sources.length;
   if (!cfg.sources.length) {
-    box.innerHTML = '<div class="empty">还没有关注任何源，点击「＋ 添加源」开始</div>';
+    box.innerHTML = '<div class="empty">暂无源，请在仓库 src/config.json 中添加</div>';
     return;
   }
   box.innerHTML = "";
-  cfg.sources.forEach((s, i) => {
+  cfg.sources.forEach((s) => {
     const div = document.createElement("div");
-    div.className = "src-item" + (s.enabled === false ? " disabled" : "");
+    div.className = "src-item";
     div.innerHTML = `
       <div class="top">
-        <div>
-          <div class="name">${esc(s.name)}${s.enabled === false ? '<span class="tag off">停用</span>' : '<span class="tag">监控中</span>'}</div>
-          <div class="url">${esc(s.list_url)}</div>
-        </div>
+        <div class="name">${esc(s.name)}${s.enabled === false ? '<span class="tag" style="background:#94a3b8">停用</span>' : '<span class="tag">监控中</span>'}</div>
+        <div class="url">${esc(s.list_url)}</div>
       </div>
-      <div class="meta">
-        条目 <code>${esc(s.item_selector || "li")}</code> ·
-        标题 <code>${esc(s.title_selector || "a")}</code> ·
-        日期 <code>${esc(s.date_selector || "—")}</code> ·
-        抓取 <code>${esc(String(s.max_items ?? 30))}</code> 条
-        ${kwTag(s)}
-      </div>
-      <div class="ops">
-        <button class="btn btn-sm btn-ghost" data-act="edit" data-i="${i}">编辑</button>
-        <button class="btn btn-sm btn-ghost" data-act="toggle" data-i="${i}">${s.enabled === false ? "启用" : "停用"}</button>
-        <button class="btn btn-sm btn-ghost" data-act="up" data-i="${i}" ${i === 0 ? "disabled" : ""}>↑</button>
-        <button class="btn btn-sm btn-ghost" data-act="down" data-i="${i}" ${i === cfg.sources.length - 1 ? "disabled" : ""}>↓</button>
-        <button class="btn btn-sm btn-danger" data-act="del" data-i="${i}">删除</button>
-      </div>`;
+      <div class="meta">规则已内置：条目 <code>${esc(s.item_selector || "li")}</code> · 标题 <code>${esc(s.title_selector || "a")}</code> · 抓取 <code>${esc(String(s.max_items ?? 30))}</code> 条</div>`;
     box.appendChild(div);
   });
+}
+function renderKeywords() {
+  $("#keywords").value = Array.isArray(cfg.keywords) ? cfg.keywords.join("\n") : "";
 }
 function renderPush() {
   $("#pushToken").value = cfg.push.appToken || "";
@@ -416,90 +295,17 @@ function esc(s) {
   return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
-function kwTag(s) {
-  const kws = Array.isArray(s.keywords) && s.keywords.length ? s.keywords : [];
-  if (!kws.length) return '<div class="kw">关注：<span class="kwall">全部更新</span></div>';
-  return '<div class="kw">关注：' + kws.map((k) => `<span class="kwb">${esc(k)}</span>`).join("") + "</div>";
-}
 function parseKeywords(raw) {
   return String(raw || "").split(/[\n,，、;；]/).map((k) => k.trim()).filter(Boolean);
 }
 
-/* ---------- 弹窗 ---------- */
-function openEdit(index) {
-  const isEdit = index != null;
-  $("#editTitle").textContent = isEdit ? "编辑源" : "添加源";
-  const s = isEdit ? cfg.sources[index] : { id: uid(), enabled: true, max_items: 30 };
-  $("#fId").value = s.id || "";
-  $("#fName").value = s.name || "";
-  $("#fUrl").value = s.list_url || "";
-  $("#fItemSel").value = s.item_selector || "";
-  $("#fTitleSel").value = s.title_selector || "";
-  $("#fDateSel").value = s.date_selector || "";
-  $("#fDatePrefix").value = s.date_prefix || "";
-  $("#fKeywords").value = Array.isArray(s.keywords) ? s.keywords.join("\n") : "";
-  $("#fMaxItems").value = s.max_items ?? 30;
-  $("#fEnabled").checked = s.enabled !== false;
-  $("#editMask").classList.add("show");
-  window._editIndex = isEdit ? index : null;
-}
-function closeEdit() { $("#editMask").classList.remove("show"); }
-
 /* ---------- 事件 ---------- */
-$("#btnAdd").onclick = () => {
-  const tpl = prompt(
-    "选择内置模板或留空自定义：\n1. 小刀娱乐网-绿色软件\n2. 小刀娱乐网-安卓软件\n3. 小刀娱乐网-系统相关",
-    "1"
-  );
-  const idx = parseInt(tpl || "0", 10);
-  const s = { ...TEMPLATES[idx - 1], id: uid(), enabled: true };
-  if (idx >= 1 && idx <= 3) {
-    cfg.sources.push(s);
-    persist(); renderList();
-    toast("已添加模板源，可点击「编辑」调整");
-  } else {
-    openEdit(null);
-  }
+$("#btnSaveKw").onclick = () => {
+  cfg.keywords = parseKeywords($("#keywords").value);
+  persist();
+  toast(cfg.keywords.length ? "关键词已保存：" + cfg.keywords.join("、") : "关键词已清空，将关注全部更新");
 };
 
-$("#srcList").addEventListener("click", (e) => {
-  const btn = e.target.closest("button[data-act]");
-  if (!btn || btn.disabled) return;
-  const act = btn.dataset.act, i = +btn.dataset.i;
-  if (act === "edit") openEdit(i);
-  if (act === "toggle") { cfg.sources[i].enabled = cfg.sources[i].enabled === false; persist(); renderList(); }
-  if (act === "up" && i > 0) { [cfg.sources[i - 1], cfg.sources[i]] = [cfg.sources[i], cfg.sources[i - 1]]; persist(); renderList(); }
-  if (act === "down" && i < cfg.sources.length - 1) { [cfg.sources[i + 1], cfg.sources[i]] = [cfg.sources[i], cfg.sources[i + 1]]; persist(); renderList(); }
-  if (act === "del") {
-    if (!confirm(`删除源「${cfg.sources[i].name}」？`)) return;
-    cfg.sources.splice(i, 1); persist(); renderList();
-  }
-});
-
-$("#btnSaveEdit").onclick = () => {
-  const name = $("#fName").value.trim();
-  const url = $("#fUrl").value.trim();
-  const item = $("#fItemSel").value.trim();
-  const title = $("#fTitleSel").value.trim();
-  if (!name || !url || !item || !title) { toast("名称、URL、条目选择器、标题选择器为必填"); return; }
-  const s = {
-    id: $("#fId").value || uid(),
-    name,
-    list_url: url,
-    item_selector: item,
-    title_selector: title,
-    date_selector: $("#fDateSel").value.trim() || "",
-    date_prefix: $("#fDatePrefix").value.trim() || "",
-    keywords: parseKeywords($("#fKeywords").value),
-    max_items: Math.max(1, Math.min(100, parseInt($("#fMaxItems").value, 10) || 30)),
-    enabled: $("#fEnabled").checked
-  };
-  if (window._editIndex == null) cfg.sources.push(s); else cfg.sources[window._editIndex] = s;
-  persist(); renderList(); closeEdit(); toast("已保存");
-};
-$("#btnCancelEdit").onclick = closeEdit;
-
-/* ---------- 推送 ---------- */
 $("#pushToken").addEventListener("input", (e) => { cfg.push.appToken = e.target.value; persist(); });
 $("#pushTarget").addEventListener("input", (e) => { cfg.push.target = e.target.value; persist(); });
 
@@ -530,25 +336,6 @@ $("#btnCopy").onclick = async () => {
   catch { toast("复制失败，请手动选择复制"); }
 };
 
-/* ---------- 导入 ---------- */
-$("#btnImport").onclick = () => { $("#importText").value = ""; $("#importMask").classList.add("show"); };
-$("#btnCancelImport").onclick = () => $("#importMask").classList.remove("show");
-$("#btnDoImport").onclick = () => {
-  try {
-    const c = JSON.parse($("#importText").value);
-    if (!Array.isArray(c.sources)) throw new Error("缺少 sources 数组");
-    const ids = new Set(cfg.sources.map((s) => s.id));
-    c.sources.forEach((s) => { if (ids.has(s.id)) cfg.sources = cfg.sources.filter((x) => x.id !== s.id); });
-    cfg.sources.push(...c.sources);
-    if (c.push) cfg.push = Object.assign(cfg.push, c.push);
-    persist(); renderList(); renderPush();
-    $("#importMask").classList.remove("show");
-    toast("导入成功");
-  } catch (e) {
-    toast("导入失败：" + e.message);
-  }
-};
-
 /* ---------- 提示 ---------- */
 let toastTimer = null;
 function toast(msg) {
@@ -559,7 +346,7 @@ function toast(msg) {
 }
 
 /* ---------- 初始化 ---------- */
-load(); renderList(); renderPush();
+load(); renderList(); renderKeywords(); renderPush();
 </script>
 </body>
 </html>
