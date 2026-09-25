@@ -89,3 +89,15 @@ def _extract_date(item_el, date_selector: str, date_prefix: str) -> str:
 def clean_text(raw: str) -> str:
     """去掉 HTML 标签与多余空白，用于生成纯文本摘要。"""
     return _HTML_TAG_RE.sub("", raw or "").strip()
+
+
+def match_keywords(title: str, keywords: list) -> bool:
+    """判断标题是否命中任一关注关键词（大小写不敏感）。
+
+    keywords 为空时视为关注全部，返回 True。
+    """
+    keys = [str(k).strip() for k in (keywords or []) if str(k).strip()]
+    if not keys:
+        return True
+    t = title.lower()
+    return any(k.lower() in t for k in keys)

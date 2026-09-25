@@ -78,6 +78,17 @@
     background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px;
     padding: 0 5px; font-family: "SF Mono", Consolas, monospace; font-size: 11px;
   }
+  .src-item .kw { margin-top: 8px; font-size: 12px; color: #475569; }
+  .src-item .kwb {
+    display: inline-block; background: #ecfdf5; border: 1px solid #a7f3d0;
+    color: #065f46; border-radius: 999px; padding: 1px 10px; margin: 2px 4px 2px 0;
+    font-size: 11.5px;
+  }
+  .src-item .kwall {
+    display: inline-block; background: #f1f5f9; border: 1px solid var(--border);
+    color: #64748b; border-radius: 999px; padding: 1px 10px; margin: 2px 4px 2px 0;
+    font-size: 11.5px;
+  }
   .src-item .ops { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 
   .field { margin-bottom: 12px; }
@@ -246,6 +257,11 @@
       <label>列表页 URL *</label>
       <input id="fUrl" placeholder="https://www.x6d.com/html/23.html">
     </div>
+    <div class="field">
+      <label>关注关键词（可选）</label>
+      <textarea id="fKeywords" rows="2" placeholder="CorelDRAW&#10;Bandicam&#10;留空 = 关注该源全部更新"></textarea>
+      <div class="hint">每行一个或用逗号分隔；列表页出现标题含任一关键词的新条目时才会推送。</div>
+    </div>
     <div class="grid2">
       <div class="field">
         <label>条目选择器 *</label>
@@ -309,6 +325,7 @@ const TEMPLATES = [
     title_selector: "a.soft-title",
     date_selector: "div.list-ca",
     date_prefix: "时间：",
+    keywords: [],
     max_items: 30
   },
   {
@@ -318,6 +335,7 @@ const TEMPLATES = [
     title_selector: "a.soft-title",
     date_selector: "div.list-ca",
     date_prefix: "时间：",
+    keywords: [],
     max_items: 30
   },
   {
@@ -327,6 +345,7 @@ const TEMPLATES = [
     title_selector: "a.soft-title",
     date_selector: "div.list-ca",
     date_prefix: "时间：",
+    keywords: [],
     max_items: 30
   }
 ];
@@ -346,7 +365,7 @@ function load() {
     } catch (e) { /* 损坏则用默认 */ }
   }
   cfg = {
-    sources: [{ ...TEMPLATES[0], id: uid(), enabled: true }],
+    sources: [{ ...TEMPLATES[0], id: uid(), enabled: true, keywords: [] }],
     push: { provider: "wxpusher", appToken: "", target: "" }
   };
 }
@@ -377,6 +396,7 @@ function renderList() {
         标题 <code>${esc(s.title_selector || "a")}</code> ·
         日期 <code>${esc(s.date_selector || "—")}</code> ·
         抓取 <code>${esc(String(s.max_items ?? 30))}</code> 条
+        ${kwTag(s)}
       </div>
       <div class="ops">
         <button class="btn btn-sm btn-ghost" data-act="edit" data-i="${i}">编辑</button>
@@ -396,6 +416,14 @@ function esc(s) {
   return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
+function kwTag(s) {
+  const kws = Array.isArray(s.keywords) && s.keywords.length ? s.keywords : [];
+  if (!kws.length) return '<div class="kw">关注：<span class="kwall">全部更新</span></div>';
+  return '<div class="kw">关注：' + kws.map((k) => `<span class="kwb">${esc(k)}</span>`).join("") + "</div>";
+}
+function parseKeywords(raw) {
+  return String(raw || "").split(/[\n,，、;；]/).map((k) => k.trim()).filter(Boolean);
+}
 
 /* ---------- 弹窗 ---------- */
 function openEdit(index) {
@@ -409,6 +437,7 @@ function openEdit(index) {
   $("#fTitleSel").value = s.title_selector || "";
   $("#fDateSel").value = s.date_selector || "";
   $("#fDatePrefix").value = s.date_prefix || "";
+  $("#fKeywords").value = Array.isArray(s.keywords) ? s.keywords.join("\n") : "";
   $("#fMaxItems").value = s.max_items ?? 30;
   $("#fEnabled").checked = s.enabled !== false;
   $("#editMask").classList.add("show");
@@ -461,6 +490,7 @@ $("#btnSaveEdit").onclick = () => {
     title_selector: title,
     date_selector: $("#fDateSel").value.trim() || "",
     date_prefix: $("#fDatePrefix").value.trim() || "",
+    keywords: parseKeywords($("#fKeywords").value),
     max_items: Math.max(1, Math.min(100, parseInt($("#fMaxItems").value, 10) || 30)),
     enabled: $("#fEnabled").checked
   };

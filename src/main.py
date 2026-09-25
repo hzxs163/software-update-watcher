@@ -20,7 +20,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from crawler import parse_source
+from crawler import parse_source, match_keywords
 from notify import resolve_push_config, send_wxpusher, build_message
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -69,7 +69,9 @@ def main() -> int:
     for source in sources:
         sid = source.get("id") or source.get("name", "source")
         name = source.get("name", sid)
-        print(f"[check] {name} -> {source.get('list_url')}")
+        keywords = source.get("keywords") or []
+        kw_txt = f"，关键词: {', '.join(str(k) for k in keywords)}" if keywords else "，关注全部"
+        print(f"[check] {name} -> {source.get('list_url')}{kw_txt}")
 
         try:
             items = parse_source(source)
@@ -77,21 +79,25 @@ def main() -> int:
             print(f"  [error] 抓取/解析失败: {exc}")
             continue
 
+        matched = [it for it in items if match_keywords(it["title"], keywords)]
+        if keywords:
+            print(f"  [filter] 抓到 {len(items)} 条，命中关键词 {len(matched)} 条")
+
         info = state["sources"].get(sid, {})
         seen = set(info.get("seen", []))
         is_init = info.get("initialized", False)
 
-        new_items = [it for it in items if it["key"] not in seen]
+        new_items = [it for it in matched if it["key"] not in seen]
         if is_init:
             for it in new_items:
                 print(f"  [new] {it['title']} {it['url']}")
             all_new.extend({"source": name, **it} for it in new_items)
         else:
-            print(f"  [init] 首次运行，记录 {len(items)} 条基线（本次不推送）")
+            print(f"  [init] 首次运行，记录 {len(matched)} 条基线（本次不推送）")
 
         # 合并关键字：新条目在前，历史在后，截断到 SEEN_LIMIT
         merged = list(dict.fromkeys(
-            [it["key"] for it in new_items] + [it["key"] for it in items]
+            [it["key"] for it in new_items] + [it["key"] for it in matched]
         ))[:SEEN_LIMIT]
         state["sources"][sid] = {
             "seen": merged,
