@@ -66,7 +66,9 @@ def fetch_html(url: str, timeout: int = 30) -> str:
 
     # 通道1：直连（带浏览器头 + 重试）
     try:
-        return _fetch_direct(url, timeout)
+        text = _fetch_direct(url, timeout)
+        print("  [fetch] 通道: 直连成功")
+        return text
     except Exception as exc:  # noqa: BLE001
         errors.append(f"直连: {exc}")
 
@@ -76,6 +78,7 @@ def fetch_html(url: str, timeout: int = 30) -> str:
         try:
             resp = requests.get(proxy_url, headers=_BASE_HEADERS, timeout=timeout)
             if resp.ok and len(resp.text) > 500:
+                print(f"  [fetch] 通道: 代理 {proxy_url.split('/')[2]} 成功")
                 return resp.text
             errors.append(f"代理 {proxy_url.split('/')[2]}: HTTP {resp.status_code}")
         except Exception as exc:  # noqa: BLE001
@@ -89,6 +92,7 @@ def fetch_html(url: str, timeout: int = 30) -> str:
             timeout=timeout * 2,
         )
         if resp.ok and len(resp.text) > 500:
+            print("  [fetch] 通道: jina-reader 成功")
             return resp.text
         errors.append(f"jina: HTTP {resp.status_code}")
     except Exception as exc:  # noqa: BLE001
