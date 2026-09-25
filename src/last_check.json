@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-25 13:32:05",
+  "checked_at": "2026-09-25 13:37:38",
   "keywords": [
     "CorelDRAW"
   ],
@@ -9,7 +9,9 @@
   "sources": {
     "x6d-green": {
       "name": "小刀娱乐网-绿色软件",
-      "error": "HTTP 502"
+      "fetched": 24,
+      "matched": 1,
+      "new": 0
     }
   }
 }
