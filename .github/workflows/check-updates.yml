@@ -1,0 +1,48 @@
+name: check-updates
+
+on:
+  schedule:
+    # 每 6 小时运行一次（UTC 时间，对应北京时间 2/8/14/20 点）
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # 支持在 Actions 页面手动触发
+
+permissions:
+  contents: write # 允许提交更新后的 state.json
+
+concurrency:
+  group: check-updates
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run update check
+        run: python src/main.py
+        env:
+          WXPUSHER_APP_TOKEN: ${{ secrets.WXPUSHER_APP_TOKEN }}
+          WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}
+
+      - name: Commit state changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/state.json
+          if git diff --cached --quiet; then
+            echo "state.json 无变化，跳过提交"
+          else
+            git commit -m "chore: update watch state"
+            git push
+          fi

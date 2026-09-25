@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 运行状态（由 Actions 自动维护并提交，本地不提交）
+# 注意：state.json 需要入库，以便 Actions 跨运行对比，不要忽略
+
+# 系统
+.DS_Store
+Thumbs.db

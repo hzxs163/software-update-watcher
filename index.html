@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>软件更新监控 · 配置台</title>
+<style>
+  :root {
+    --brand: #0e7490;
+    --brand-dark: #155e75;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --danger: #dc2626;
+    --ok: #059669;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, #164e63 0%, #0e7490 100%);
+    color: #fff; padding: 28px 24px 22px;
+  }
+  header h1 { font-size: 22px; letter-spacing: .5px; }
+  header p { opacity: .85; font-size: 13px; margin-top: 6px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 20px 16px 60px; }
+  .layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px; margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+  .card h2 {
+    font-size: 15px; margin-bottom: 14px; display: flex;
+    align-items: center; gap: 8px;
+  }
+  .card h2 .count {
+    font-size: 12px; background: #e0f2fe; color: var(--brand-dark);
+    border-radius: 999px; padding: 1px 10px; font-weight: 600;
+  }
+
+  .btn {
+    border: none; border-radius: 8px; cursor: pointer; font-size: 13px;
+    padding: 8px 14px; transition: all .15s; font-weight: 500;
+  }
+  .btn-primary { background: var(--brand); color: #fff; }
+  .btn-primary:hover { background: var(--brand-dark); }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: #f8fafc; color: var(--text); }
+  .btn-danger { background: transparent; color: var(--danger); border: 1px solid #fecaca; }
+  .btn-danger:hover { background: #fef2f2; }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .src-item {
+    border: 1px solid var(--border); border-radius: 10px; padding: 14px;
+    margin-bottom: 12px; background: #fcfdfe; position: relative;
+  }
+  .src-item.disabled { opacity: .62; }
+  .src-item .top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .src-item .name { font-size: 14px; font-weight: 600; }
+  .src-item .name .tag {
+    font-size: 11px; background: var(--ok); color: #fff; border-radius: 4px;
+    padding: 1px 7px; margin-left: 8px; font-weight: 500; vertical-align: 2px;
+  }
+  .src-item .name .tag.off { background: #94a3b8; }
+  .src-item .url { color: var(--brand-dark); font-size: 12px; word-break: break-all; }
+  .src-item .meta { color: var(--muted); font-size: 12px; margin-top: 8px; }
+  .src-item .meta code {
+    background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px;
+    padding: 0 5px; font-family: "SF Mono", Consolas, monospace; font-size: 11px;
+  }
+  .src-item .ops { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12.5px; color: #475569; margin-bottom: 4px; font-weight: 500; }
+  .field input, .field textarea, .field select {
+    width: 100%; border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 10px; font-size: 13px; font-family: inherit; background: #fff;
+  }
+  .field input:focus, .field textarea:focus { outline: 2px solid #67e8f9; border-color: #22d3ee; }
+  .field .hint { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .grid3 { grid-template-columns: 1fr; } }
+
+  .toggle {
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+    font-size: 12.5px; color: #475569; user-select: none;
+  }
+  .toggle input { width: auto; accent-color: var(--brand); }
+
+  .modal-mask {
+    position: fixed; inset: 0; background: rgba(15,23,42,.45); display: none;
+    align-items: flex-start; justify-content: center; padding: 40px 16px; z-index: 50;
+    overflow-y: auto;
+  }
+  .modal-mask.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: 14px; width: 100%; max-width: 620px;
+    padding: 22px; box-shadow: 0 20px 50px rgba(15,23,42,.25);
+  }
+  .modal h3 { font-size: 16px; margin-bottom: 16px; }
+  .modal .ops { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 999px;
+    font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .25s;
+    z-index: 99; box-shadow: 0 8px 24px rgba(15,23,42,.3);
+  }
+  .toast.show { opacity: 1; }
+
+  .steps ol { padding-left: 20px; font-size: 13px; }
+  .steps li { margin-bottom: 8px; }
+  .steps code {
+    background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px;
+    padding: 1px 6px; font-size: 12px; font-family: Consolas, monospace;
+  }
+  .notice {
+    background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46;
+    border-radius: 8px; padding: 10px 12px; font-size: 12.5px; margin-top: 12px;
+  }
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 24px 0; }
+  textarea.code {
+    font-family: "SF Mono", Consolas, monospace; font-size: 12px; min-height: 200px;
+    white-space: pre;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>软件更新监控 · 配置台</h1>
+  <p>管理要关注的软件站源、推送设置，并导出 config.json 提交到仓库生效</p>
+</header>
+
+<div class="wrap">
+  <div class="layout">
+
+    <!-- 左：源管理 -->
+    <div>
+      <div class="card">
+        <h2>关注的软件站源 <span class="count" id="srcCount">0</span></h2>
+        <div class="toolbar">
+          <button class="btn btn-primary" id="btnAdd">＋ 添加源</button>
+          <button class="btn btn-ghost" id="btnImport">导入 config.json</button>
+        </div>
+        <div id="srcList"></div>
+      </div>
+
+      <div class="card">
+        <h2>定时与推送</h2>
+        <div class="field">
+          <label>推送服务</label>
+          <select id="pushProvider">
+            <option value="wxpusher" selected>WxPusher（微信推送）</option>
+          </select>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label>App Token</label>
+            <input id="pushToken" type="text" placeholder="AT_xxxx… 或 ${WXPUSHER_APP_TOKEN}">
+          </div>
+          <div class="field">
+            <label>收件人（UID 或 topic:数字）</label>
+            <input id="pushTarget" type="text" placeholder="c1Bcpqx… 或 topic:123">
+          </div>
+        </div>
+        <div class="field">
+          <label class="toggle">
+            <input type="checkbox" id="useEnvTemplate" checked>
+            导出时使用环境变量模板 ${WXPUSHER_APP_TOKEN} / ${WXPUSHER_UID}（推荐，避免密钥入库）
+          </label>
+        </div>
+        <div class="toolbar">
+          <button class="btn btn-primary" id="btnExport">导出 config.json</button>
+          <button class="btn btn-ghost" id="btnCopy">复制配置</button>
+        </div>
+        <div class="notice">
+          定时任务在仓库 Actions 中每 6 小时自动运行（可手动触发）。<br>
+          把导出的 config.json 覆盖仓库 <code>src/config.json</code> 并提交即可生效；
+          推送密钥建议配置为 GitHub Secrets：<code>WXPUSHER_APP_TOKEN</code>、<code>WXPUSHER_UID</code>。
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：说明 -->
+    <div>
+      <div class="card steps">
+        <h2>使用步骤</h2>
+        <ol>
+          <li>在本页添加/编辑要监控的软件站源，配置推送。</li>
+          <li>点击「导出 config.json」，把内容保存为仓库中的 <code>src/config.json</code>。</li>
+          <li>在 GitHub 仓库 <b>Settings → Secrets and variables → Actions</b> 添加密钥：
+            <code>WXPUSHER_APP_TOKEN</code>（应用令牌）、<code>WXPUSHER_UID</code>（你的 UID）。</li>
+          <li>Actions 每 6 小时自动抓取；<b>首次运行只建立基线不推送</b>，之后有更新才推送微信。</li>
+          <li>也可到 Actions 页面手动触发「check-updates」立即检查。</li>
+        </ol>
+      </div>
+
+      <div class="card steps">
+        <h2>添加新源的规则</h2>
+        <ol>
+          <li><b>列表页 URL</b>：软件站按时间倒序的列表地址。</li>
+          <li><b>条目选择器</b>：每条内容的外层容器，如 <code>ul.list-soft li</code>。</li>
+          <li><b>标题选择器</b>：条目内标题链接，如 <code>a.soft-title</code>（取文本+链接）。</li>
+          <li><b>日期选择器</b>（可选）：如 <code>div.list-ca</code>，配合「日期前缀」去掉“时间：”。</li>
+          <li>不确定选择器时，用浏览器 F12 查看元素后填写。</li>
+        </ol>
+        <div class="notice">
+          内置模板「小刀娱乐网-绿色软件」已配好，点「添加源」选择即可。
+        </div>
+      </div>
+
+      <div class="card steps">
+        <h2>WxPusher 注册</h2>
+        <ol>
+          <li>打开 <code>https://wxpusher.zjiecode.com</code> 注册账号。</li>
+          <li>创建应用，得到 <b>App Token</b>（AT_ 开头）。</li>
+          <li>用微信扫码关注应用，在「用户管理」复制自己的 <b>UID</b>。</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 编辑弹窗 -->
+<div class="modal-mask" id="editMask">
+  <div class="modal">
+    <h3 id="editTitle">添加源</h3>
+    <input type="hidden" id="fId">
+    <div class="field">
+      <label>源名称 *</label>
+      <input id="fName" placeholder="如：小刀娱乐网-绿色软件">
+    </div>
+    <div class="field">
+      <label>列表页 URL *</label>
+      <input id="fUrl" placeholder="https://www.x6d.com/html/23.html">
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>条目选择器 *</label>
+        <input id="fItemSel" placeholder="ul.list-soft li">
+      </div>
+      <div class="field">
+        <label>标题选择器 *</label>
+        <input id="fTitleSel" placeholder="a.soft-title">
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="field">
+        <label>日期选择器（可选）</label>
+        <input id="fDateSel" placeholder="div.list-ca">
+      </div>
+      <div class="field">
+        <label>日期前缀（可选）</label>
+        <input id="fDatePrefix" placeholder="时间：">
+      </div>
+      <div class="field">
+        <label>抓取条数</label>
+        <input id="fMaxItems" type="number" min="1" max="100" value="30">
+      </div>
+    </div>
+    <div class="field">
+      <label class="toggle"><input type="checkbox" id="fEnabled" checked> 启用该源</label>
+    </div>
+    <div class="ops">
+      <button class="btn btn-ghost" id="btnCancelEdit">取消</button>
+      <button class="btn btn-primary" id="btnSaveEdit">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 导入弹窗 -->
+<div class="modal-mask" id="importMask">
+  <div class="modal">
+    <h3>导入 config.json</h3>
+    <div class="field">
+      <textarea class="code" id="importText" placeholder='粘贴 config.json 内容，如：{"sources":[...],"push":{...}}'></textarea>
+      <div class="hint">导入会合并：覆盖同名源，保留其他源与推送设置。</div>
+    </div>
+    <div class="ops">
+      <button class="btn btn-ghost" id="btnCancelImport">取消</button>
+      <button class="btn btn-primary" id="btnDoImport">导入</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const LS_KEY = "sw-monitor-config-v1";
+
+const TEMPLATES = [
+  {
+    name: "小刀娱乐网-绿色软件",
+    list_url: "https://www.x6d.com/html/23.html",
+    item_selector: "ul.list-soft li.layui-clear",
+    title_selector: "a.soft-title",
+    date_selector: "div.list-ca",
+    date_prefix: "时间：",
+    max_items: 30
+  },
+  {
+    name: "小刀娱乐网-安卓软件",
+    list_url: "https://www.x6d.com/html/47.html",
+    item_selector: "ul.list-soft li.layui-clear",
+    title_selector: "a.soft-title",
+    date_selector: "div.list-ca",
+    date_prefix: "时间：",
+    max_items: 30
+  },
+  {
+    name: "小刀娱乐网-系统相关",
+    list_url: "https://www.x6d.com/html/28.html",
+    item_selector: "ul.list-soft li.layui-clear",
+    title_selector: "a.soft-title",
+    date_selector: "div.list-ca",
+    date_prefix: "时间：",
+    max_items: 30
+  }
+];
+
+let cfg = { sources: [], push: { provider: "wxpusher", appToken: "", target: "" } };
+
+/* ---------- 存储 ---------- */
+function persist() { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }
+function load() {
+  const raw = localStorage.getItem(LS_KEY);
+  if (raw) {
+    try {
+      const c = JSON.parse(raw);
+      if (c && Array.isArray(c.sources)) cfg = c;
+      cfg.push = Object.assign({ provider: "wxpusher", appToken: "", target: "" }, cfg.push || {});
+      return;
+    } catch (e) { /* 损坏则用默认 */ }
+  }
+  cfg = {
+    sources: [{ ...TEMPLATES[0], id: uid(), enabled: true }],
+    push: { provider: "wxpusher", appToken: "", target: "" }
+  };
+}
+function uid() { return "s" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+/* ---------- 渲染 ---------- */
+const $ = (s) => document.querySelector(s);
+function renderList() {
+  const box = $("#srcList");
+  document.getElementById("srcCount").textContent = cfg.sources.length;
+  if (!cfg.sources.length) {
+    box.innerHTML = '<div class="empty">还没有关注任何源，点击「＋ 添加源」开始</div>';
+    return;
+  }
+  box.innerHTML = "";
+  cfg.sources.forEach((s, i) => {
+    const div = document.createElement("div");
+    div.className = "src-item" + (s.enabled === false ? " disabled" : "");
+    div.innerHTML = `
+      <div class="top">
+        <div>
+          <div class="name">${esc(s.name)}${s.enabled === false ? '<span class="tag off">停用</span>' : '<span class="tag">监控中</span>'}</div>
+          <div class="url">${esc(s.list_url)}</div>
+        </div>
+      </div>
+      <div class="meta">
+        条目 <code>${esc(s.item_selector || "li")}</code> ·
+        标题 <code>${esc(s.title_selector || "a")}</code> ·
+        日期 <code>${esc(s.date_selector || "—")}</code> ·
+        抓取 <code>${esc(String(s.max_items ?? 30))}</code> 条
+      </div>
+      <div class="ops">
+        <button class="btn btn-sm btn-ghost" data-act="edit" data-i="${i}">编辑</button>
+        <button class="btn btn-sm btn-ghost" data-act="toggle" data-i="${i}">${s.enabled === false ? "启用" : "停用"}</button>
+        <button class="btn btn-sm btn-ghost" data-act="up" data-i="${i}" ${i === 0 ? "disabled" : ""}>↑</button>
+        <button class="btn btn-sm btn-ghost" data-act="down" data-i="${i}" ${i === cfg.sources.length - 1 ? "disabled" : ""}>↓</button>
+        <button class="btn btn-sm btn-danger" data-act="del" data-i="${i}">删除</button>
+      </div>`;
+    box.appendChild(div);
+  });
+}
+function renderPush() {
+  $("#pushToken").value = cfg.push.appToken || "";
+  $("#pushTarget").value = cfg.push.target || "";
+}
+function esc(s) {
+  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/* ---------- 弹窗 ---------- */
+function openEdit(index) {
+  const isEdit = index != null;
+  $("#editTitle").textContent = isEdit ? "编辑源" : "添加源";
+  const s = isEdit ? cfg.sources[index] : { id: uid(), enabled: true, max_items: 30 };
+  $("#fId").value = s.id || "";
+  $("#fName").value = s.name || "";
+  $("#fUrl").value = s.list_url || "";
+  $("#fItemSel").value = s.item_selector || "";
+  $("#fTitleSel").value = s.title_selector || "";
+  $("#fDateSel").value = s.date_selector || "";
+  $("#fDatePrefix").value = s.date_prefix || "";
+  $("#fMaxItems").value = s.max_items ?? 30;
+  $("#fEnabled").checked = s.enabled !== false;
+  $("#editMask").classList.add("show");
+  window._editIndex = isEdit ? index : null;
+}
+function closeEdit() { $("#editMask").classList.remove("show"); }
+
+/* ---------- 事件 ---------- */
+$("#btnAdd").onclick = () => {
+  const tpl = prompt(
+    "选择内置模板或留空自定义：\n1. 小刀娱乐网-绿色软件\n2. 小刀娱乐网-安卓软件\n3. 小刀娱乐网-系统相关",
+    "1"
+  );
+  const idx = parseInt(tpl || "0", 10);
+  const s = { ...TEMPLATES[idx - 1], id: uid(), enabled: true };
+  if (idx >= 1 && idx <= 3) {
+    cfg.sources.push(s);
+    persist(); renderList();
+    toast("已添加模板源，可点击「编辑」调整");
+  } else {
+    openEdit(null);
+  }
+};
+
+$("#srcList").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-act]");
+  if (!btn || btn.disabled) return;
+  const act = btn.dataset.act, i = +btn.dataset.i;
+  if (act === "edit") openEdit(i);
+  if (act === "toggle") { cfg.sources[i].enabled = cfg.sources[i].enabled === false; persist(); renderList(); }
+  if (act === "up" && i > 0) { [cfg.sources[i - 1], cfg.sources[i]] = [cfg.sources[i], cfg.sources[i - 1]]; persist(); renderList(); }
+  if (act === "down" && i < cfg.sources.length - 1) { [cfg.sources[i + 1], cfg.sources[i]] = [cfg.sources[i], cfg.sources[i + 1]]; persist(); renderList(); }
+  if (act === "del") {
+    if (!confirm(`删除源「${cfg.sources[i].name}」？`)) return;
+    cfg.sources.splice(i, 1); persist(); renderList();
+  }
+});
+
+$("#btnSaveEdit").onclick = () => {
+  const name = $("#fName").value.trim();
+  const url = $("#fUrl").value.trim();
+  const item = $("#fItemSel").value.trim();
+  const title = $("#fTitleSel").value.trim();
+  if (!name || !url || !item || !title) { toast("名称、URL、条目选择器、标题选择器为必填"); return; }
+  const s = {
+    id: $("#fId").value || uid(),
+    name,
+    list_url: url,
+    item_selector: item,
+    title_selector: title,
+    date_selector: $("#fDateSel").value.trim() || "",
+    date_prefix: $("#fDatePrefix").value.trim() || "",
+    max_items: Math.max(1, Math.min(100, parseInt($("#fMaxItems").value, 10) || 30)),
+    enabled: $("#fEnabled").checked
+  };
+  if (window._editIndex == null) cfg.sources.push(s); else cfg.sources[window._editIndex] = s;
+  persist(); renderList(); closeEdit(); toast("已保存");
+};
+$("#btnCancelEdit").onclick = closeEdit;
+
+/* ---------- 推送 ---------- */
+$("#pushToken").addEventListener("input", (e) => { cfg.push.appToken = e.target.value; persist(); });
+$("#pushTarget").addEventListener("input", (e) => { cfg.push.target = e.target.value; persist(); });
+
+/* ---------- 导出 ---------- */
+function buildExport() {
+  const c = JSON.parse(JSON.stringify(cfg));
+  const useEnv = $("#useEnvTemplate").checked;
+  if (useEnv) {
+    c.push.appToken = "${WXPUSHER_APP_TOKEN}";
+    c.push.target = "${WXPUSHER_UID}";
+  }
+  return c;
+}
+function download(name, text) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type: "application/json;charset=utf-8" }));
+  a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+$("#btnExport").onclick = () => {
+  const c = buildExport();
+  download("config.json", JSON.stringify(c, null, 2));
+  toast("已导出 config.json");
+};
+$("#btnCopy").onclick = async () => {
+  const text = JSON.stringify(buildExport(), null, 2);
+  try { await navigator.clipboard.writeText(text); toast("配置已复制到剪贴板"); }
+  catch { toast("复制失败，请手动选择复制"); }
+};
+
+/* ---------- 导入 ---------- */
+$("#btnImport").onclick = () => { $("#importText").value = ""; $("#importMask").classList.add("show"); };
+$("#btnCancelImport").onclick = () => $("#importMask").classList.remove("show");
+$("#btnDoImport").onclick = () => {
+  try {
+    const c = JSON.parse($("#importText").value);
+    if (!Array.isArray(c.sources)) throw new Error("缺少 sources 数组");
+    const ids = new Set(cfg.sources.map((s) => s.id));
+    c.sources.forEach((s) => { if (ids.has(s.id)) cfg.sources = cfg.sources.filter((x) => x.id !== s.id); });
+    cfg.sources.push(...c.sources);
+    if (c.push) cfg.push = Object.assign(cfg.push, c.push);
+    persist(); renderList(); renderPush();
+    $("#importMask").classList.remove("show");
+    toast("导入成功");
+  } catch (e) {
+    toast("导入失败：" + e.message);
+  }
+};
+
+/* ---------- 提示 ---------- */
+let toastTimer = null;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+/* ---------- 初始化 ---------- */
+load(); renderList(); renderPush();
+</script>
+</body>
+</html>

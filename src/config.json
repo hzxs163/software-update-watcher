@@ -1,0 +1,20 @@
+{
+  "sources": [
+    {
+      "id": "x6d-green",
+      "name": "小刀娱乐网-绿色软件",
+      "list_url": "https://www.x6d.com/html/23.html",
+      "item_selector": "ul.list-soft li.layui-clear",
+      "title_selector": "a.soft-title",
+      "date_selector": "div.list-ca",
+      "date_prefix": "时间：",
+      "max_items": 30,
+      "enabled": true
+    }
+  ],
+  "push": {
+    "provider": "wxpusher",
+    "appToken": "${WXPUSHER_APP_TOKEN}",
+    "target": "${WXPUSHER_UID}"
+  }
+}
