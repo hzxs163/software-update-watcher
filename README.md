@@ -119,6 +119,9 @@ WXPUSHER_APP_TOKEN=AT_xxx WXPUSHER_UID=your_uid python src/main.py   # 带推送
 
 - **首次运行推送了一堆？** 不会。首次运行只记录基线（日志 `[init]`），不推送。
 - **为什么日志显示抓取 0 条？** 站点改版或选择器不对，检查 `item_selector`/`title_selector`。
+- **Actions 日志报 502 / 抓取失败？** x6d 等站点可能对数据中心 IP（GitHub Actions）临时封锁，
+  返回 502/302 验证页。爬虫已内置多通道：**直连 → 公共代理（allorigins/codetabs/cors.eu.org/thingproxy）→ Jina Reader**，
+  直连失败会自动切换，日志会打印 `[fetch] 通道: xxx` 便于排查；若全部通道失败，下次运行会自动重试。
 - **网页端「手动检查」失败？** 手动检查是纯前端经公共 CORS 代理抓取列表页实现的即时预览。
   代理不可用时，页面会自动降级展示仓库最近一次 Actions 检查结果（`src/last_check.json`）；
   两者都不可用时再稍后重试，或以仓库 Actions 的定时结果为准。
