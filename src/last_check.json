@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-25 13:40:34",
+  "checked_at": "2026-09-25 20:53:58",
   "keywords": [
     "CorelDRAW"
   ],
@@ -9,9 +9,7 @@
   "sources": {
     "x6d-green": {
       "name": "小刀娱乐网-绿色软件",
-      "fetched": 24,
-      "matched": 1,
-      "new": 0
+      "error": "所有抓取通道均失败: 直连: HTTP 502；代理 api.allorigins.win: HTTP 520；代理 api.codetabs.com: HTTP 522；代理 cors.eu.org: HTTP 429；代理 thingproxy.freeboard.io: HTTPSConnectionPool(host='thingproxy.freeboard.io', port=443): Max retries exceeded with url: /fetch/https://www.x6d.com/html/23.html (Caused by NameResolutionError(\"HTTPSConnection(host='thingproxy.freeboard.io', port=443): Failed to resolve 'thingproxy.freeboard.io' ([Errno -2] Name or service not known)\"))；jina: HTTP 403"
     }
   }
 }
