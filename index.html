@@ -176,7 +176,7 @@
   </div>
 
   <div class="foot-note">
-    手动检查为网页端即时预览（经公共代理抓取列表页，与本机基线对比）；
+    手动检查为网页端即时预览（经公共代理抓取列表页，与本机基线对比）；代理不可用时自动展示仓库最近检查结果。
     正式推送仍由仓库 Actions 每 6 小时自动执行。首次检查只记录基线不提示更新。
   </div>
 </div>
@@ -323,18 +323,35 @@ function parseKeywords(raw) {
 }
 
 /* ---------- 手动检查 ---------- */
-function fetchViaProxy(url, timeoutMs = 20000) {
-  const proxies = [
-    (u) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
-    (u) => "https://corsproxy.io/?url=" + encodeURIComponent(u),
-    (u) => "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u)
+function fetchViaProxies(url, timeoutMs = 10000) {
+  // 免 key 公共 CORS 代理，逐个顺序尝试；HTML 或 markdown 两种返回格式
+  const tries = [
+    { name: "allorigins-raw", fn: (u) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u), kind: "html" },
+    { name: "allorigins-get", fn: (u) => "https://api.allorigins.win/get?url=" + encodeURIComponent(u), kind: "allorigins-get" },
+    { name: "codetabs", fn: (u) => "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u), kind: "html" },
+    { name: "jina-reader", fn: (u) => "https://r.jina.ai/" + u, kind: "markdown" },
+    { name: "cors.eu.org", fn: (u) => "https://cors.eu.org/" + u, kind: "html" },
+    { name: "thingproxy", fn: (u) => "https://thingproxy.freeboard.io/fetch/" + u, kind: "html" }
   ];
-  return Promise.race(proxies.map((p) =>
-    fetch(p(url), { signal: AbortSignal.timeout(timeoutMs) }).then((r) => {
-      if (!r.ok) throw new Error("proxy " + r.status);
-      return r.text();
-    })
-  ));
+  const errors = [];
+  return (async () => {
+    for (const t of tries) {
+      try {
+        const r = await fetch(t.fn(url), { signal: AbortSignal.timeout(timeoutMs) });
+        if (!r.ok) { errors.push(`${t.name}:${r.status}`); continue; }
+        const text = await r.text();
+        if (!text || text.length < 300) { errors.push(`${t.name}:空响应`); continue; }
+        if (t.kind === "allorigins-get") {
+          const j = JSON.parse(text);
+          return { kind: "html", text: j.contents || "" };
+        }
+        return { kind: t.kind, text };
+      } catch (e) {
+        errors.push(`${t.name}:${e.name === "TimeoutError" ? "超时" : "连接失败"}`);
+      }
+    }
+    throw new Error("代理均不可用（" + errors.join(" / ") + "）");
+  })();
 }
 
 function parseItems(html, source) {
@@ -354,6 +371,46 @@ function parseItems(html, source) {
   return items;
 }
 
+// Jina Reader 返回 markdown，解析其中的 [标题](链接) 条目
+function parseMarkdownLinks(text) {
+  const items = [];
+  const re = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const title = m[1].trim();
+    const href = m[2].trim();
+    if (!title || !href || href.startsWith("data:")) continue;
+    items.push({ key: href, title, url: href });
+  }
+  return items;
+}
+
+// 从当前页面地址推断仓库（{owner}.github.io/{repo}/），失败则回退默认仓库
+function repoFromPage() {
+  try {
+    const host = location.hostname.split(".");
+    if (host.length >= 2 && host[0] && !["localhost", "127"].includes(host[0])) {
+      const repo = location.pathname.split("/").filter(Boolean)[0];
+      if (repo) return { owner: host[0], repo };
+    }
+  } catch (e) { /* 回退 */ }
+  return { owner: "hzxs163", repo: "software-update-watcher" };
+}
+
+// 降级通道：读取仓库 last_check.json（公开仓库免认证），展示最近一次 Actions 结果
+async function fetchLastCheck() {
+  const { owner, repo } = repoFromPage();
+  const r = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/contents/src/last_check.json`,
+    { signal: AbortSignal.timeout(10000) }
+  );
+  if (!r.ok) throw new Error("暂无仓库检查记录");
+  const d = await r.json();
+  const bin = atob(d.content);
+  const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+
 async function manualCheck(i) {
   const kw = cfg.keywords[i];
   const btn = document.getElementById(`kw-btn-${i}`);
@@ -364,8 +421,9 @@ async function manualCheck(i) {
     const merged = [];
     for (const src of cfg.sources) {
       if (src.enabled === false) continue;
-      const html = await fetchViaProxy(src.list_url);
-      merged.push(...parseItems(html, src));
+      const { kind, text } = await fetchViaProxies(src.list_url);
+      const parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseItems(text, src);
+      merged.push(...parsed);
     }
     // 按 key 去重
     const seenKeys = new Set();
@@ -396,8 +454,19 @@ async function manualCheck(i) {
         `无更新 —— 当前列表命中 <b>${keys.length}</b> 条，均与上次一致${last ? `（上次检查 ${esc(last)}）` : ""}`);
     }
   } catch (e) {
-    setStatus(i, "failed",
-      `检查失败：${esc(e.message || e)}。网页端依赖公共代理，网络受限时请以仓库 Actions 为准。`);
+    // 代理全部失败 → 降级展示仓库最近一次 Actions 检查结果
+    try {
+      const lc = await fetchLastCheck();
+      const when = lc.checked_at || "";
+      setStatus(i, lc.new_total > 0 ? "updated" : "none",
+        `代理不可用（${esc(e.message)}）<br>` +
+        `展示仓库最近检查（${esc(when)}）：<b>${esc(lc.message)}</b>` +
+        `<div class="small">该结果来自仓库 Actions 定时检查，非网页实时；稍后可重试手动检查。</div>`);
+    } catch (e2) {
+      setStatus(i, "failed",
+        `检查失败：${esc(e.message)}；且读取仓库最近检查记录也失败（${esc(e2.message)}）。` +
+        `请稍后重试，或以仓库 Actions 的定时结果为准。`);
+    }
   } finally {
     btn.disabled = false;
   }

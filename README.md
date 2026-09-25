@@ -19,7 +19,8 @@
 ├── index.html                            # 配置台前端（GitHub Pages）
 ├── requirements.txt
 ├── src/
-│   ├── config.json                       # 关注的源 + 推送配置（核心配置）
+│   ├── config.json                       # 关键词 + 源 + 推送配置（核心配置）
+│   ├── last_check.json                   # 最近一次检查结果（Actions 自动写，供网页端展示）
 │   ├── state.json                        # 运行状态（自动维护，勿手改）
 │   ├── crawler.py                        # 通用列表页爬虫（CSS 选择器驱动）
 │   ├── notify.py                         # WxPusher 推送
@@ -118,8 +119,9 @@ WXPUSHER_APP_TOKEN=AT_xxx WXPUSHER_UID=your_uid python src/main.py   # 带推送
 
 - **首次运行推送了一堆？** 不会。首次运行只记录基线（日志 `[init]`），不推送。
 - **为什么日志显示抓取 0 条？** 站点改版或选择器不对，检查 `item_selector`/`title_selector`。
-- **网页端「手动检查」提示失败？** 手动检查是纯前端经公共 CORS 代理抓取列表页实现的即时预览，
-  依赖第三方代理可用性与你的网络；失败时请稍后重试，或以仓库 Actions 的定时结果为准。
+- **网页端「手动检查」失败？** 手动检查是纯前端经公共 CORS 代理抓取列表页实现的即时预览。
+  代理不可用时，页面会自动降级展示仓库最近一次 Actions 检查结果（`src/last_check.json`）；
+  两者都不可用时再稍后重试，或以仓库 Actions 的定时结果为准。
 - **想换推送服务？** 目前内置 WxPusher；可在 `src/notify.py` 扩展其他 provider。
 - **时区**：定时表达式为 UTC，`0 */6 * * *` 对应北京时间 02:00 / 08:00 / 14:00 / 20:00。
 

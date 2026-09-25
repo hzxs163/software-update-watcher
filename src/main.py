@@ -26,6 +26,7 @@ from notify import resolve_push_config, send_wxpusher, build_message
 BASE_DIR = Path(__file__).resolve().parent
 CONFIG_PATH = BASE_DIR / "config.json"
 STATE_PATH = BASE_DIR / "state.json"
+LAST_CHECK_PATH = BASE_DIR / "last_check.json"
 SEEN_LIMIT = 100  # 每个源最多保留最近 100 条关键字
 
 
@@ -40,6 +41,11 @@ def load_json(path: Path, default):
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def now_local() -> str:
+    """运行环境的本地时间（Actions 中已设 TZ=Asia/Shanghai）。"""
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def seen_changed(old_state: dict, new_state: dict) -> bool:
@@ -71,6 +77,7 @@ def main() -> int:
 
     all_new: list[dict] = []
     now = now_iso()
+    src_stats = {}  # 各源统计，用于 last_check.json
 
     for source in sources:
         sid = source.get("id") or source.get("name", "source")
@@ -81,6 +88,7 @@ def main() -> int:
             items = parse_source(source)
         except Exception as exc:  # noqa: BLE001
             print(f"  [error] 抓取/解析失败: {exc}")
+            src_stats[sid] = {"name": name, "error": str(exc)}
             continue
 
         matched = [it for it in items if match_keywords(it["title"], global_keywords)]
@@ -98,6 +106,13 @@ def main() -> int:
             all_new.extend({"source": name, **it} for it in new_items)
         else:
             print(f"  [init] 首次运行，记录 {len(matched)} 条基线（本次不推送）")
+
+        src_stats[sid] = {
+            "name": name,
+            "fetched": len(items),
+            "matched": len(matched),
+            "new": len(new_items),
+        }
 
         # 合并关键字：新条目在前，历史在后，截断到 SEEN_LIMIT
         merged = list(dict.fromkeys(
@@ -118,17 +133,40 @@ def main() -> int:
     else:
         print("[state] 无变化，state.json 保持不变")
 
+    pushed = False
     if all_new:
         push_cfg = resolve_push_config(config)
         summary = f"软件站更新：{len(all_new)} 条新内容"
         html_content = build_message(all_new)
         if push_cfg["token"] and push_cfg["target_value"]:
             ok = send_wxpusher(push_cfg, summary, html_content)
+            pushed = ok
             print(f"[push] WxPusher 推送{'成功' if ok else '失败'}"
                   f"（{len(all_new)} 条新增）")
         else:
             print("[push] 未配置 WXPUSHER_APP_TOKEN / target，"
                   "跳过推送（新增条目见上方日志）")
+
+    # 写 last_check.json（每次运行都写，供网页端展示最近检查结果）
+    if all_new:
+        if pushed:
+            msg = f"有更新！{len(all_new)} 条新内容，已推送微信"
+        else:
+            msg = f"有更新！{len(all_new)} 条新内容（未配置推送密钥，未推送）"
+    else:
+        msg = "无更新"
+    last_check = {
+        "checked_at": now_local(),
+        "keywords": global_keywords,
+        "new_total": len(all_new),
+        "pushed": pushed,
+        "message": msg,
+        "sources": src_stats,
+    }
+    LAST_CHECK_PATH.write_text(
+        json.dumps(last_check, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
     print(f"[done] 检查完成，新增 {len(all_new)} 条")
     return 0
