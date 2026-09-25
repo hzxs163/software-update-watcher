@@ -3,33 +3,83 @@
 
 通过 CSS 选择器配置即可适配任意列表页（如 x6d、423Down 等），
 每个源在 config.json 中声明 item/title/date 选择器，无需改代码。
+
+内置反爬应对：
+  - 完整浏览器请求头（Referer 按站点自动生成）
+  - 对 429/502/503/504 及反爬验证页做指数退避重试（最多 3 次）
 """
 import re
-from urllib.parse import urljoin
+import time
+from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
 
-HEADERS = {
+_BASE_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     ),
+    "Accept": (
+        "text/html,application/xhtml+xml,application/xml;q=0.9,"
+        "image/avif,image/webp,*/*;q=0.8"
+    ),
     "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Upgrade-Insecure-Requests": "1",
+    "Cache-Control": "max-age=0",
+    "Connection": "keep-alive",
 }
 
 _HTML_TAG_RE = re.compile(r"<[^>]+>")
+_RETRY_STATUS = {429, 500, 502, 503, 504}
 
 
-def fetch_html(url: str, timeout: int = 30) -> str:
-    """拉取页面 HTML，自动处理编码。"""
-    resp = requests.get(url, headers=HEADERS, timeout=timeout)
-    resp.raise_for_status()
-    # 优先按响应头编码，乱码时回退到从内容嗅探
-    encoding = resp.apparent_encoding or resp.encoding
-    resp.encoding = encoding
-    return resp.text
+def _headers_for(url: str) -> dict:
+    """为指定页面生成带同源 Referer 的完整浏览器请求头。"""
+    origin = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
+    return {**_BASE_HEADERS, "Referer": origin + "/"}
+
+
+def _backoff_seconds(attempt: int) -> float:
+    return attempt * 5.0
+
+
+def fetch_html(url: str, timeout: int = 30, max_retries: int = 3) -> str:
+    """拉取页面 HTML，自动处理编码；对限流/网关错误做指数退避重试。
+
+    抛出的异常会说明是被反爬拦截还是网络错误。
+    """
+    last_exc = None
+    for attempt in range(1, max_retries + 1):
+        try:
+            resp = requests.get(url, headers=_headers_for(url), timeout=timeout)
+            if resp.status_code in _RETRY_STATUS:
+                last_exc = RuntimeError(f"HTTP {resp.status_code}")
+                print(f"  [retry] {url} -> {resp.status_code}，"
+                      f"{_backoff_seconds(attempt):.0f}s 后重试 ({attempt}/{max_retries})")
+                time.sleep(_backoff_seconds(attempt))
+                continue
+            resp.raise_for_status()
+
+            # 反爬验证页识别（如跳转到 /GE/CC/VALIDATOR 的 JS 验证页）
+            if "VALIDATOR" in resp.url or "VALIDATOR" in (resp.text or "")[:2000]:
+                last_exc = RuntimeError("被站点反爬验证页拦截（VALIDATOR）")
+                print(f"  [retry] {url} 触发反爬验证，"
+                      f"{_backoff_seconds(attempt):.0f}s 后重试 ({attempt}/{max_retries})")
+                time.sleep(_backoff_seconds(attempt))
+                continue
+
+            encoding = resp.apparent_encoding or resp.encoding
+            resp.encoding = encoding
+            return resp.text
+        except (requests.RequestException, ValueError) as exc:
+            last_exc = exc
+            print(f"  [retry] {url} 请求异常: {exc}，"
+                  f"{_backoff_seconds(attempt):.0f}s 后重试 ({attempt}/{max_retries})"
+                  if attempt < max_retries else f"  [error] {url} 请求异常: {exc}")
+            if attempt < max_retries:
+                time.sleep(_backoff_seconds(attempt))
+    raise last_exc
 
 
 def parse_source(source: dict) -> list[dict]:
