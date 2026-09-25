@@ -15,6 +15,7 @@
     --border: #e2e8f0;
     --danger: #dc2626;
     --ok: #059669;
+    --warn: #b45309;
     --radius: 12px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,28 +26,12 @@
   }
   header {
     background: linear-gradient(135deg, #164e63 0%, #0e7490 100%);
-    color: #fff; padding: 28px 24px 22px;
+    color: #fff; padding: 24px 24px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; flex-wrap: wrap;
   }
-  header h1 { font-size: 22px; letter-spacing: .5px; }
-  header p { opacity: .85; font-size: 13px; margin-top: 6px; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 20px 16px 60px; }
-  .layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
-  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
-
-  .card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 18px; margin-bottom: 18px;
-    box-shadow: 0 1px 3px rgba(15,23,42,.05);
-  }
-  .card h2 {
-    font-size: 15px; margin-bottom: 14px; display: flex;
-    align-items: center; gap: 8px;
-  }
-  .card h2 .count {
-    font-size: 12px; background: #e0f2fe; color: var(--brand-dark);
-    border-radius: 999px; padding: 1px 10px; font-weight: 600;
-  }
-
+  header h1 { font-size: 21px; letter-spacing: .5px; }
+  header p { opacity: .85; font-size: 13px; margin-top: 4px; }
   .btn {
     border: none; border-radius: 8px; cursor: pointer; font-size: 13px;
     padding: 8px 14px; transition: all .15s; font-weight: 500;
@@ -55,44 +40,106 @@
   .btn-primary:hover { background: var(--brand-dark); }
   .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
   .btn-ghost:hover { background: #f8fafc; color: var(--text); }
-  .btn-sm { padding: 4px 10px; font-size: 12px; }
+  .btn-light { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.35); }
+  .btn-light:hover { background: rgba(255,255,255,.24); }
+  .btn-sm { padding: 4px 12px; font-size: 12.5px; }
 
-  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px; margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.05);
+  }
+  .card h2 { font-size: 15px; margin-bottom: 14px; }
 
   .field { margin-bottom: 12px; }
   .field label { display: block; font-size: 12.5px; color: #475569; margin-bottom: 4px; font-weight: 500; }
-  .field input, .field textarea {
+  .field textarea {
     width: 100%; border: 1px solid var(--border); border-radius: 8px;
     padding: 8px 10px; font-size: 13px; font-family: inherit; background: #fff;
+    min-height: 72px; line-height: 1.7;
   }
-  .field textarea { min-height: 96px; line-height: 1.7; }
-  .field input:focus, .field textarea:focus { outline: 2px solid #67e8f9; border-color: #22d3ee; }
+  .field textarea:focus { outline: 2px solid #67e8f9; border-color: #22d3ee; }
   .field .hint { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; }
 
-  .toggle {
-    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
-    font-size: 12.5px; color: #475569; user-select: none;
+  /* 关键词卡片 */
+  .kw-card {
+    border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
+    margin-bottom: 12px; background: #fff; position: relative;
+    box-shadow: 0 1px 2px rgba(15,23,42,.04);
   }
-  .toggle input { width: auto; accent-color: var(--brand); }
+  .kw-card .kw-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .kw-card .kw-name {
+    font-size: 16px; font-weight: 700; color: var(--brand-dark);
+    background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 8px;
+    padding: 2px 12px; letter-spacing: .3px;
+  }
+  .kw-card .kw-meta { font-size: 12px; color: var(--muted); }
+  .kw-card .kw-del {
+    position: absolute; top: 10px; right: 12px; border: none; background: transparent;
+    color: #cbd5e1; font-size: 18px; cursor: pointer; line-height: 1; padding: 2px 6px;
+  }
+  .kw-card .kw-del:hover { color: var(--danger); }
+  .kw-card .kw-body { margin-top: 10px; display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+  .kw-card .kw-status {
+    flex: 1; min-width: 220px; font-size: 13px; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: #f8fafc; color: var(--muted);
+  }
+  .kw-status.checking { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+  .kw-status.first { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
+  .kw-status.none { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
+  .kw-status.updated { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+  .kw-status.failed { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
+  .kw-status .upd-list { margin-top: 6px; font-size: 12.5px; }
+  .kw-status .upd-list a { color: #0e7490; text-decoration: none; }
+  .kw-status .upd-list a:hover { text-decoration: underline; }
+  .kw-status .upd-list li { margin-bottom: 2px; }
+  .kw-status .small { opacity: .8; font-size: 11.5px; margin-top: 4px; }
+  .kw-card .kw-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 28px 0; border: 1px dashed var(--border); border-radius: 12px; }
+
+  /* 弹窗 */
+  .modal-mask {
+    position: fixed; inset: 0; background: rgba(15,23,42,.45); display: none;
+    align-items: flex-start; justify-content: center; padding: 40px 16px; z-index: 50;
+    overflow-y: auto;
+  }
+  .modal-mask.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: 14px; width: 100%; max-width: 640px;
+    padding: 22px; box-shadow: 0 20px 50px rgba(15,23,42,.25);
+  }
+  .modal h3 { font-size: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .modal h3 .close { border: none; background: transparent; font-size: 20px; cursor: pointer; color: var(--muted); }
+  .modal section { border-top: 1px solid var(--border); padding: 14px 0; }
+  .modal section h4 { font-size: 13.5px; margin-bottom: 10px; color: #334155; }
+  .modal .ops { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
 
   .src-item {
-    border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
-    margin-bottom: 10px; background: #fcfdfe;
+    border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
+    margin-bottom: 8px; background: #fcfdfe;
   }
   .src-item .top { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-  .src-item .name { font-size: 14px; font-weight: 600; }
+  .src-item .name { font-size: 13.5px; font-weight: 600; }
   .src-item .name .tag {
     font-size: 11px; background: var(--ok); color: #fff; border-radius: 4px;
-    padding: 1px 7px; margin-left: 8px; font-weight: 500; vertical-align: 2px;
+    padding: 1px 7px; margin-left: 8px; font-weight: 500; vertical-align: 1px;
   }
   .src-item .url { color: var(--brand-dark); font-size: 12px; word-break: break-all; }
-  .src-item .meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
-  .src-item .meta code {
-    background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px;
-    padding: 0 5px; font-family: "SF Mono", Consolas, monospace; font-size: 11px;
+  .src-item .meta { color: var(--muted); font-size: 11.5px; margin-top: 4px; }
+
+  .notice {
+    background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46;
+    border-radius: 8px; padding: 10px 12px; font-size: 12.5px; margin-top: 12px;
   }
+  .notice code, .src-item code, .modal code {
+    background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px;
+    padding: 0 5px; font-size: 11.5px; font-family: Consolas, monospace;
+  }
+  .foot-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 8px; }
 
   .toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -101,121 +148,77 @@
     z-index: 99; box-shadow: 0 8px 24px rgba(15,23,42,.3);
   }
   .toast.show { opacity: 1; }
-
-  .steps ol { padding-left: 20px; font-size: 13px; }
-  .steps li { margin-bottom: 8px; }
-  .steps code {
-    background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px;
-    padding: 1px 6px; font-size: 12px; font-family: Consolas, monospace;
-  }
-  .notice {
-    background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46;
-    border-radius: 8px; padding: 10px 12px; font-size: 12.5px; margin-top: 12px;
-  }
-  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 24px 0; }
 </style>
 </head>
 <body>
 <header>
-  <h1>软件更新监控 · 配置台</h1>
-  <p>首页设置关注关键词，命中关键词的新更新才会推送；源规则已内置，后续陆续添加即可</p>
+  <div>
+    <h1>软件更新监控 · 配置台</h1>
+    <p>设置关注关键词 → 生成卡片 → 点「手动检查」看是否有更新</p>
+  </div>
+  <button class="btn btn-light" id="btnSettings">⚙ 设置（源 / 推送）</button>
 </header>
 
 <div class="wrap">
-  <div class="layout">
-
-    <!-- 左：关键词 + 源 + 推送 -->
-    <div>
-      <div class="card">
-        <h2>① 关注关键词（全局）</h2>
-        <div class="field">
-          <textarea id="keywords" placeholder="CorelDRAW&#10;Bandicam&#10;Photoshop&#10;&#10;留空 = 关注全部更新"></textarea>
-          <div class="hint">每行一个或用逗号分隔；列表页出现<b>标题含任一关键词</b>的新条目时才推送。</div>
-        </div>
-        <div class="toolbar">
-          <button class="btn btn-primary" id="btnSaveKw">保存关键词</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>② 监控中的软件站源 <span class="count" id="srcCount">0</span></h2>
-        <div id="srcList"></div>
-        <div class="notice">
-          源的选择器规则已内置写死，无需配置。后续新增软件站，把「站名 + 列表页地址」告知豆包，
-          或直接在仓库 <code>src/config.json</code> 的 <code>sources</code> 里加一条即可。
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>③ 定时与推送</h2>
-        <div class="field">
-          <label>推送服务</label>
-          <select id="pushProvider">
-            <option value="wxpusher" selected>WxPusher（微信推送）</option>
-          </select>
-        </div>
-        <div class="grid2">
-          <div class="field">
-            <label>App Token</label>
-            <input id="pushToken" type="text" placeholder="AT_xxxx… 或 ${WXPUSHER_APP_TOKEN}">
-          </div>
-          <div class="field">
-            <label>收件人（UID 或 topic:数字）</label>
-            <input id="pushTarget" type="text" placeholder="c1Bcpqx… 或 topic:123">
-          </div>
-        </div>
-        <div class="field">
-          <label class="toggle">
-            <input type="checkbox" id="useEnvTemplate" checked>
-            导出时使用环境变量模板 ${WXPUSHER_APP_TOKEN} / ${WXPUSHER_UID}（推荐，避免密钥入库）
-          </label>
-        </div>
-        <div class="toolbar">
-          <button class="btn btn-primary" id="btnExport">导出 config.json</button>
-          <button class="btn btn-ghost" id="btnCopy">复制配置</button>
-        </div>
-        <div class="notice">
-          定时任务在仓库 Actions 中每 6 小时自动运行（可手动触发）。<br>
-          把导出的 config.json 覆盖仓库 <code>src/config.json</code> 并提交即可生效；
-          推送密钥建议配置为 GitHub Secrets：<code>WXPUSHER_APP_TOKEN</code>、<code>WXPUSHER_UID</code>。
-        </div>
-      </div>
+  <div class="card">
+    <h2>关注关键词</h2>
+    <div class="field">
+      <textarea id="keywords" placeholder="CorelDRAW&#10;Bandicam&#10;Photoshop&#10;&#10;留空 = 不生成卡片"></textarea>
+      <div class="hint">每行一个或用逗号分隔。保存后每个关键词生成一张卡片，可单独手动检查更新。</div>
     </div>
-
-    <!-- 右：说明 -->
-    <div>
-      <div class="card steps">
-        <h2>使用步骤</h2>
-        <ol>
-          <li>在本页顶部设置「关注关键词」，点保存。</li>
-          <li>点击「导出 config.json」，把内容保存为仓库中的 <code>src/config.json</code>。</li>
-          <li>在 GitHub 仓库 <b>Settings → Secrets and variables → Actions</b> 添加密钥：
-            <code>WXPUSHER_APP_TOKEN</code>（应用令牌）、<code>WXPUSHER_UID</code>（你的 UID）。</li>
-          <li>Actions 每 6 小时自动抓取；<b>首次运行只建立基线不推送</b>，之后命中关键词的新条目才推送微信。</li>
-          <li>也可到 Actions 页面手动触发「check-updates」立即检查。</li>
-        </ol>
-      </div>
-
-      <div class="card steps">
-        <h2>源怎么加</h2>
-        <ol>
-          <li>当前已内置「小刀娱乐网-绿色软件」等源，解析规则已写死。</li>
-          <li>新增源：在 <code>src/config.json</code> 的 <code>sources</code> 数组加一条
-            <code>{id, name, list_url, item_selector, title_selector, date_selector, max_items, enabled}</code>。</li>
-          <li>不同网站结构不同，选择器需按其页面调整；不确定时直接告知豆包帮你配置。</li>
-          <li>关键词是全局的：所有源统一按同一组关键词过滤。</li>
-        </ol>
-      </div>
-
-      <div class="card steps">
-        <h2>WxPusher 注册</h2>
-        <ol>
-          <li>打开 <code>https://wxpusher.zjiecode.com</code> 注册账号。</li>
-          <li>创建应用，得到 <b>App Token</b>（AT_ 开头）。</li>
-          <li>用微信扫码关注应用，在「用户管理」复制自己的 <b>UID</b>。</li>
-        </ol>
-      </div>
+    <div class="toolbar">
+      <button class="btn btn-primary" id="btnSaveKw">保存关键词，生成卡片</button>
     </div>
+  </div>
+
+  <div id="kwCards">
+    <div class="empty" id="kwEmpty">还没有关键词卡片 —— 在上方填写关键词并保存</div>
+  </div>
+
+  <div class="foot-note">
+    手动检查为网页端即时预览（经公共代理抓取列表页，与本机基线对比）；
+    正式推送仍由仓库 Actions 每 6 小时自动执行。首次检查只记录基线不提示更新。
+  </div>
+</div>
+
+<!-- 设置弹窗 -->
+<div class="modal-mask" id="settingsMask">
+  <div class="modal">
+    <h3>设置 <button class="close" id="btnCloseSettings">×</button></h3>
+
+    <section>
+      <h4>② 监控中的软件站源（规则已写死）</h4>
+      <div id="srcList"></div>
+      <div class="notice">
+        源的选择器规则已内置，无需配置。新增源：把「站名 + 列表页地址」告知豆包，
+        或直接在仓库 <code>src/config.json</code> 的 <code>sources</code> 加一条。
+      </div>
+    </section>
+
+    <section>
+      <h4>③ 定时与推送（WxPusher）</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field">
+          <label>App Token</label>
+          <input id="pushToken" type="text" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px" placeholder="AT_xxxx… 或 ${WXPUSHER_APP_TOKEN}">
+        </div>
+        <div class="field">
+          <label>收件人（UID 或 topic:数字）</label>
+          <input id="pushTarget" type="text" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px" placeholder="c1Bcpqx… 或 topic:123">
+        </div>
+      </div>
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#475569;cursor:pointer;margin-bottom:10px">
+        <input type="checkbox" id="useEnvTemplate" checked> 导出时用 ${WXPUSHER_APP_TOKEN} / ${WXPUSHER_UID} 模板（推荐，避免密钥入库）
+      </label>
+      <div class="toolbar">
+        <button class="btn btn-primary" id="btnExport">导出 config.json</button>
+        <button class="btn btn-ghost" id="btnCopy">复制配置</button>
+      </div>
+      <div class="notice">
+        导出后覆盖仓库 <code>src/config.json</code> 并提交即生效；密钥建议配 GitHub Secrets：
+        <code>WXPUSHER_APP_TOKEN</code>、<code>WXPUSHER_UID</code>。每 6 小时自动检查（可手动触发）。
+      </div>
+    </section>
   </div>
 </div>
 
@@ -223,9 +226,12 @@
 
 <script>
 "use strict";
-const LS_KEY = "sw-monitor-config-v2";
+const LS_KEY = "sw-monitor-config-v3";
+const SEEN_PREFIX = "sw-seen-v1:";
+const SEEN_TIME_PREFIX = "sw-seen-time:";
+const SEEN_LIMIT = 100;
 
-// 内置写死的源规则（与仓库 src/config.json 保持一致；实际监控以仓库配置为准）
+// 内置写死的源规则（与仓库 src/config.json 保持一致）
 const BUILTIN_SOURCES = [
   {
     id: "x6d-green",
@@ -259,18 +265,178 @@ function load() {
       }
     } catch (e) { /* 损坏则用默认 */ }
   }
-  cfg = { keywords: ["CorelDRAW"], sources: BUILTIN_SOURCES, push: { provider: "wxpusher", appToken: "", target: "" } };
+  cfg = { keywords: [], sources: BUILTIN_SOURCES, push: { provider: "wxpusher", appToken: "", target: "" } };
+}
+function loadSeen(kw) {
+  try { return JSON.parse(localStorage.getItem(SEEN_PREFIX + kw) || "[]"); }
+  catch (e) { return []; }
+}
+function saveSeen(kw, keys) {
+  localStorage.setItem(SEEN_PREFIX + kw, JSON.stringify(keys.slice(0, SEEN_LIMIT)));
+  localStorage.setItem(SEEN_TIME_PREFIX + kw, new Date().toLocaleString("zh-CN", { hour12: false }));
 }
 
 /* ---------- 渲染 ---------- */
 const $ = (s) => document.querySelector(s);
-function renderList() {
-  const box = $("#srcList");
-  document.getElementById("srcCount").textContent = cfg.sources.length;
-  if (!cfg.sources.length) {
-    box.innerHTML = '<div class="empty">暂无源，请在仓库 src/config.json 中添加</div>';
+
+function renderCards() {
+  const box = $("#kwCards");
+  const kws = cfg.keywords || [];
+  if (!kws.length) {
+    box.innerHTML = '<div class="empty" id="kwEmpty">还没有关键词卡片 —— 在上方填写关键词并保存</div>';
     return;
   }
+  box.innerHTML = "";
+  kws.forEach((kw, i) => {
+    const last = localStorage.getItem(SEEN_TIME_PREFIX + kw);
+    const div = document.createElement("div");
+    div.className = "kw-card";
+    div.innerHTML = `
+      <button class="kw-del" data-del="${i}" title="删除该关键词卡片">×</button>
+      <div class="kw-head">
+        <span class="kw-name">${esc(kw)}</span>
+        <span class="kw-meta">标题包含该词的新条目 → 推送提醒</span>
+      </div>
+      <div class="kw-body">
+        <div class="kw-status" id="kw-status-${i}">
+          ${last ? `上次检查：${esc(last)}` : "尚未检查"}
+        </div>
+        <button class="btn btn-primary kw-btn" id="kw-btn-${i}" data-check="${i}">手动检查</button>
+      </div>`;
+    box.appendChild(div);
+  });
+}
+
+function setStatus(i, cls, html) {
+  const el = document.getElementById(`kw-status-${i}`);
+  if (!el) return;
+  el.className = "kw-status " + cls;
+  el.innerHTML = html;
+}
+
+function esc(s) {
+  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function parseKeywords(raw) {
+  return [...new Set(String(raw || "").split(/[\n,，、;；]/).map((k) => k.trim()).filter(Boolean))];
+}
+
+/* ---------- 手动检查 ---------- */
+function fetchViaProxy(url, timeoutMs = 20000) {
+  const proxies = [
+    (u) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
+    (u) => "https://corsproxy.io/?url=" + encodeURIComponent(u),
+    (u) => "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u)
+  ];
+  return Promise.race(proxies.map((p) =>
+    fetch(p(url), { signal: AbortSignal.timeout(timeoutMs) }).then((r) => {
+      if (!r.ok) throw new Error("proxy " + r.status);
+      return r.text();
+    })
+  ));
+}
+
+function parseItems(html, source) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const els = doc.querySelectorAll(source.item_selector);
+  const items = [];
+  const max = Number(source.max_items || 30);
+  for (const el of Array.from(els).slice(0, max)) {
+    const a = el.querySelector(source.title_selector);
+    if (!a) continue;
+    const title = (a.textContent || "").trim();
+    const href = (a.getAttribute("href") || "").trim();
+    if (!title) continue;
+    const url = href ? new URL(href, source.list_url).href : "";
+    items.push({ key: href ? url : title, title, url });
+  }
+  return items;
+}
+
+async function manualCheck(i) {
+  const kw = cfg.keywords[i];
+  const btn = document.getElementById(`kw-btn-${i}`);
+  if (kw == null || !cfg.sources.length) return;
+  setStatus(i, "checking", "正在检查…（经公共代理抓取列表页，约几秒）");
+  btn.disabled = true;
+  try {
+    const merged = [];
+    for (const src of cfg.sources) {
+      if (src.enabled === false) continue;
+      const html = await fetchViaProxy(src.list_url);
+      merged.push(...parseItems(html, src));
+    }
+    // 按 key 去重
+    const seenKeys = new Set();
+    const items = merged.filter((it) => !seenKeys.has(it.key) && seenKeys.add(it.key));
+
+    const low = kw.toLowerCase();
+    const matched = items.filter((it) => it.title.toLowerCase().includes(low));
+    const keys = matched.map((it) => it.key);
+    const prev = loadSeen(kw);
+    const newItems = prev.length ? matched.filter((it) => !prev.includes(it.key)) : [];
+
+    if (!prev.length) {
+      saveSeen(kw, keys);
+      setStatus(i, "first",
+        `已记录基线：当前列表命中 <b>${keys.length}</b> 条（${esc(kw)}）。之后有新更新，下次检查会提示。`);
+    } else if (newItems.length) {
+      saveSeen(kw, dedup([...newItems.map((it) => it.key), ...prev]));
+      const list = newItems.slice(0, 5).map((it) =>
+        it.url ? `<li><a href="${esc(it.url)}" target="_blank">${esc(it.title)}</a></li>` : `<li>${esc(it.title)}</li>`
+      ).join("");
+      setStatus(i, "updated",
+        `🔔 <b>有更新！${newItems.length} 条新内容</b><ul class="upd-list">${list}</ul>` +
+        (newItems.length > 5 ? `<div class="small">……还有 ${newItems.length - 5} 条</div>` : ""));
+    } else {
+      saveSeen(kw, dedup([...keys, ...prev]));
+      const last = localStorage.getItem(SEEN_TIME_PREFIX + kw) || "";
+      setStatus(i, "none",
+        `无更新 —— 当前列表命中 <b>${keys.length}</b> 条，均与上次一致${last ? `（上次检查 ${esc(last)}）` : ""}`);
+    }
+  } catch (e) {
+    setStatus(i, "failed",
+      `检查失败：${esc(e.message || e)}。网页端依赖公共代理，网络受限时请以仓库 Actions 为准。`);
+  } finally {
+    btn.disabled = false;
+  }
+}
+function dedup(arr) { return [...new Set(arr)]; }
+
+/* ---------- 事件 ---------- */
+$("#btnSaveKw").onclick = () => {
+  cfg.keywords = parseKeywords($("#keywords").value);
+  persist();
+  renderCards();
+  toast(cfg.keywords.length ? `已保存 ${cfg.keywords.length} 个关键词，生成卡片` : "已清空关键词");
+};
+
+$("#kwCards").addEventListener("click", (e) => {
+  const checkBtn = e.target.closest("button[data-check]");
+  if (checkBtn) { manualCheck(Number(checkBtn.dataset.check)); return; }
+  const delBtn = e.target.closest("button[data-del]");
+  if (delBtn) {
+    const i = Number(delBtn.dataset.del);
+    const kw = cfg.keywords[i];
+    if (!confirm(`删除关键词「${kw}」的卡片？`)) return;
+    cfg.keywords.splice(i, 1);
+    persist(); renderCards();
+    toast("已删除卡片（基线数据保留，重新添加可恢复）");
+  }
+});
+
+/* ---------- 设置弹窗 ---------- */
+$("#btnSettings").onclick = () => {
+  renderSources(); renderPush();
+  $("#settingsMask").classList.add("show");
+};
+$("#btnCloseSettings").onclick = () => $("#settingsMask").classList.remove("show");
+$("#settingsMask").addEventListener("click", (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove("show"); });
+
+function renderSources() {
+  const box = $("#srcList");
+  if (!cfg.sources.length) { box.innerHTML = '<div class="empty">暂无源</div>'; return; }
   box.innerHTML = "";
   cfg.sources.forEach((s) => {
     const div = document.createElement("div");
@@ -280,32 +446,14 @@ function renderList() {
         <div class="name">${esc(s.name)}${s.enabled === false ? '<span class="tag" style="background:#94a3b8">停用</span>' : '<span class="tag">监控中</span>'}</div>
         <div class="url">${esc(s.list_url)}</div>
       </div>
-      <div class="meta">规则已内置：条目 <code>${esc(s.item_selector || "li")}</code> · 标题 <code>${esc(s.title_selector || "a")}</code> · 抓取 <code>${esc(String(s.max_items ?? 30))}</code> 条</div>`;
+      <div class="meta">规则内置：条目 <code>${esc(s.item_selector)}</code> · 标题 <code>${esc(s.title_selector)}</code> · 抓取 <code>${esc(String(s.max_items ?? 30))}</code> 条</div>`;
     box.appendChild(div);
   });
-}
-function renderKeywords() {
-  $("#keywords").value = Array.isArray(cfg.keywords) ? cfg.keywords.join("\n") : "";
 }
 function renderPush() {
   $("#pushToken").value = cfg.push.appToken || "";
   $("#pushTarget").value = cfg.push.target || "";
 }
-function esc(s) {
-  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-function parseKeywords(raw) {
-  return String(raw || "").split(/[\n,，、;；]/).map((k) => k.trim()).filter(Boolean);
-}
-
-/* ---------- 事件 ---------- */
-$("#btnSaveKw").onclick = () => {
-  cfg.keywords = parseKeywords($("#keywords").value);
-  persist();
-  toast(cfg.keywords.length ? "关键词已保存：" + cfg.keywords.join("、") : "关键词已清空，将关注全部更新");
-};
-
 $("#pushToken").addEventListener("input", (e) => { cfg.push.appToken = e.target.value; persist(); });
 $("#pushTarget").addEventListener("input", (e) => { cfg.push.target = e.target.value; persist(); });
 
@@ -328,7 +476,7 @@ function download(name, text) {
 $("#btnExport").onclick = () => {
   const c = buildExport();
   download("config.json", JSON.stringify(c, null, 2));
-  toast("已导出 config.json");
+  toast("已导出 config.json（含关键词与写死的源规则）");
 };
 $("#btnCopy").onclick = async () => {
   const text = JSON.stringify(buildExport(), null, 2);
@@ -346,7 +494,9 @@ function toast(msg) {
 }
 
 /* ---------- 初始化 ---------- */
-load(); renderList(); renderKeywords(); renderPush();
+load();
+$("#keywords").value = (cfg.keywords || []).join("\n");
+renderCards();
 </script>
 </body>
 </html>

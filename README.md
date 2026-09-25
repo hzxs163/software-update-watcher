@@ -1,7 +1,8 @@
 # 软件更新监控（Software Update Watcher）
 
 定时监控多个软件站列表页，检测到新发布/更新时通过 **WxPusher 推送微信提醒**。
-内置可视化配置台（GitHub Pages），在首页设置关注关键词即可，源的解析规则已写死。
+内置可视化配置台（GitHub Pages）：首页设置关注关键词生成卡片，可一键「手动检查」当前是否有更新；
+源规则与推送配置收在右上角「设置」中。
 
 - 默认每 **6 小时** 由 GitHub Actions 自动检查一次（也可手动触发）
 - 首次运行只建立基线、不推送；之后发现**命中关注关键词**的新条目才推送
@@ -31,8 +32,9 @@
    Settings → Pages → Source 选择 `Deploy from a branch` → `main` → `/ (root)`。
    访问 `https://<你的用户名>.github.io/<仓库名>/` 即配置台。
 
-2. **设置关注关键词与推送**：在配置台首页「关注关键词」填写要跟踪的软件名并保存，
-   填写 WxPusher 信息，点击「导出 config.json」，将内容覆盖仓库中 `src/config.json` 并提交。
+2. **设置关注关键词与推送**：在配置台首页「关注关键词」填写要跟踪的软件名并保存（生成卡片，
+   卡片上可点「手动检查」即时预览是否有更新）；右上角「设置」里填写 WxPusher 信息，
+   点击「导出 config.json」，将内容覆盖仓库中 `src/config.json` 并提交。
 
 3. **配置推送密钥**（推荐，避免密钥入库）：
    Settings → Secrets and variables → Actions → New repository secret：
@@ -116,6 +118,8 @@ WXPUSHER_APP_TOKEN=AT_xxx WXPUSHER_UID=your_uid python src/main.py   # 带推送
 
 - **首次运行推送了一堆？** 不会。首次运行只记录基线（日志 `[init]`），不推送。
 - **为什么日志显示抓取 0 条？** 站点改版或选择器不对，检查 `item_selector`/`title_selector`。
+- **网页端「手动检查」提示失败？** 手动检查是纯前端经公共 CORS 代理抓取列表页实现的即时预览，
+  依赖第三方代理可用性与你的网络；失败时请稍后重试，或以仓库 Actions 的定时结果为准。
 - **想换推送服务？** 目前内置 WxPusher；可在 `src/notify.py` 扩展其他 provider。
 - **时区**：定时表达式为 UTC，`0 */6 * * *` 对应北京时间 02:00 / 08:00 / 14:00 / 20:00。
 
