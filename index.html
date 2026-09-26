@@ -187,6 +187,37 @@
     <h3>设置 <button class="close" id="btnCloseSettings">×</button></h3>
 
     <section>
+      <h4>① GitHub 自动保存（让关键词直接生效）</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field">
+          <label>仓库 Owner</label>
+          <input id="ghOwner" type="text" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px" placeholder="hzxs163">
+        </div>
+        <div class="field">
+          <label>仓库名</label>
+          <input id="ghRepo" type="text" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px" placeholder="software-update-watcher">
+        </div>
+      </div>
+      <div class="field">
+        <label>GitHub 访问令牌（PAT，用于自动写入 src/config.json）</label>
+        <input id="ghToken" type="password" style="width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px" placeholder="github_pat_xxx… 或 ghp_xxx…">
+      </div>
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#475569;cursor:pointer;margin-bottom:10px">
+        <input type="checkbox" id="ghAutoPush" checked> 保存关键词后自动推送到仓库（下次定时检查生效）
+      </label>
+      <div class="toolbar">
+        <button class="btn btn-ghost" id="btnTestGh">测试连接</button>
+        <button class="btn btn-ghost" id="btnTriggerCheck">立即触发检查</button>
+      </div>
+      <div class="notice">
+        令牌仅保存在本浏览器 localStorage，页面无第三方脚本。建议用 <b>Fine-grained PAT</b>，
+        仅授权本仓库 <code>Contents: Read and write</code>（要用「立即触发检查」再加
+        <code>Workflows: Read and write</code>）。
+        <a href="https://github.com/settings/tokens?type=fine-grained" target="_blank">创建令牌 →</a>
+      </div>
+    </section>
+
+    <section>
       <h4>② 监控中的软件站源（规则已写死）</h4>
       <div id="srcList"></div>
       <div class="notice">
@@ -246,7 +277,11 @@ const BUILTIN_SOURCES = [
   }
 ];
 
-let cfg = { keywords: [], sources: BUILTIN_SOURCES, push: { provider: "wxpusher", appToken: "", target: "" } };
+let cfg = {
+  keywords: [], sources: BUILTIN_SOURCES,
+  push: { provider: "wxpusher", appToken: "", target: "" },
+  github: { owner: "hzxs163", repo: "software-update-watcher", token: "", autoPush: true }
+};
 
 /* ---------- 存储 ---------- */
 function persist() { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }
@@ -256,16 +291,23 @@ function load() {
     try {
       const c = JSON.parse(raw);
       if (c && Array.isArray(c.keywords)) {
+        const rp = repoFromPage();
         cfg = {
           keywords: c.keywords,
           sources: BUILTIN_SOURCES,
-          push: Object.assign({ provider: "wxpusher", appToken: "", target: "" }, c.push || {})
+          push: Object.assign({ provider: "wxpusher", appToken: "", target: "" }, c.push || {}),
+          github: Object.assign({ owner: rp.owner, repo: rp.repo, token: "", autoPush: true }, c.github || {})
         };
         return;
       }
     } catch (e) { /* 损坏则用默认 */ }
   }
-  cfg = { keywords: [], sources: BUILTIN_SOURCES, push: { provider: "wxpusher", appToken: "", target: "" } };
+  const rp = repoFromPage();
+  cfg = {
+    keywords: [], sources: BUILTIN_SOURCES,
+    push: { provider: "wxpusher", appToken: "", target: "" },
+    github: { owner: rp.owner, repo: rp.repo, token: "", autoPush: true }
+  };
 }
 function loadSeen(kw) {
   try { return JSON.parse(localStorage.getItem(SEEN_PREFIX + kw) || "[]"); }
@@ -474,11 +516,22 @@ async function manualCheck(i) {
 function dedup(arr) { return [...new Set(arr)]; }
 
 /* ---------- 事件 ---------- */
-$("#btnSaveKw").onclick = () => {
+$("#btnSaveKw").onclick = async () => {
   cfg.keywords = parseKeywords($("#keywords").value);
   persist();
   renderCards();
-  toast(cfg.keywords.length ? `已保存 ${cfg.keywords.length} 个关键词，生成卡片` : "已清空关键词");
+  const g = cfg.github || {};
+  if (g.autoPush !== false && g.token) {
+    toast("已保存，正在同步到仓库…");
+    try {
+      await pushConfigToRepo();
+      toast(`已保存并同步到仓库 ✓（${cfg.keywords.length} 个关键词），下次定时检查生效`);
+    } catch (e) {
+      toast("已保存到本地，同步仓库失败：" + e.message);
+    }
+  } else {
+    toast(cfg.keywords.length ? `已保存 ${cfg.keywords.length} 个关键词，生成卡片` : "已清空关键词");
+  }
 };
 
 $("#kwCards").addEventListener("click", (e) => {
@@ -497,7 +550,7 @@ $("#kwCards").addEventListener("click", (e) => {
 
 /* ---------- 设置弹窗 ---------- */
 $("#btnSettings").onclick = () => {
-  renderSources(); renderPush();
+  renderSources(); renderPush(); renderGithub();
   $("#settingsMask").classList.add("show");
 };
 $("#btnCloseSettings").onclick = () => $("#settingsMask").classList.remove("show");
@@ -525,6 +578,87 @@ function renderPush() {
 }
 $("#pushToken").addEventListener("input", (e) => { cfg.push.appToken = e.target.value; persist(); });
 $("#pushTarget").addEventListener("input", (e) => { cfg.push.target = e.target.value; persist(); });
+
+/* ---------- GitHub 自动保存 ---------- */
+function renderGithub() {
+  const g = cfg.github || {};
+  $("#ghOwner").value = g.owner || "hzxs163";
+  $("#ghRepo").value = g.repo || "software-update-watcher";
+  $("#ghToken").value = g.token || "";
+  $("#ghAutoPush").checked = g.autoPush !== false;
+}
+$("#ghOwner").addEventListener("input", (e) => { cfg.github.owner = e.target.value.trim(); persist(); });
+$("#ghRepo").addEventListener("input", (e) => { cfg.github.repo = e.target.value.trim(); persist(); });
+$("#ghToken").addEventListener("input", (e) => { cfg.github.token = e.target.value.trim(); persist(); });
+$("#ghAutoPush").addEventListener("change", (e) => { cfg.github.autoPush = e.target.checked; persist(); });
+
+function ghApiPath() {
+  const g = cfg.github || {};
+  return { owner: (g.owner || "hzxs163").trim(), repo: (g.repo || "software-update-watcher").trim() };
+}
+function b64utf8(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+async function pushConfigToRepo() {
+  const { owner, repo } = ghApiPath();
+  const token = (cfg.github || {}).token;
+  if (!token) throw new Error("未配置 GitHub 令牌");
+  const api = `https://api.github.com/repos/${owner}/${repo}/contents/src/config.json`;
+  const headers = { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" };
+  const getR = await fetch(api, { headers, signal: AbortSignal.timeout(15000) });
+  if (!getR.ok) throw new Error(`读取 config.json 失败 (HTTP ${getR.status})`);
+  const meta = await getR.json();
+  const putR = await fetch(api, {
+    method: "PUT",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: "chore: 配置台更新关注关键词",
+      content: b64utf8(JSON.stringify(buildExport(), null, 2)),
+      sha: meta.sha
+    }),
+    signal: AbortSignal.timeout(15000)
+  });
+  if (!putR.ok) throw new Error(`写入失败 (HTTP ${putR.status})`);
+  return true;
+}
+
+$("#btnTestGh").onclick = async () => {
+  const { owner, repo } = ghApiPath();
+  const token = (cfg.github || {}).token;
+  if (!token) { toast("请先填写 GitHub 令牌"); return; }
+  toast("测试中…");
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+      headers: { Authorization: "Bearer " + token },
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const d = await r.json();
+    toast("连接成功：" + d.full_name + (d.private ? "（私有）" : "（公开）"));
+  } catch (e) {
+    toast("连接失败：" + e.message + "（请检查令牌与仓库名）");
+  }
+};
+
+$("#btnTriggerCheck").onclick = async () => {
+  const { owner, repo } = ghApiPath();
+  const token = (cfg.github || {}).token;
+  if (!token) { toast("请先填写 GitHub 令牌"); return; }
+  toast("正在触发检查…");
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/check-updates.yml/dispatches`, {
+      method: "POST",
+      headers: { Authorization: "Bearer " + token, "Content-Type": "application/json", Accept: "application/vnd.github+json" },
+      body: JSON.stringify({ ref: "main" }),
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status + "（令牌需 Workflows 权限）");
+    toast("已触发检查，约 1 分钟后可在 Actions 查看");
+  } catch (e) {
+    toast("触发失败：" + e.message);
+  }
+};
 
 /* ---------- 导出 ---------- */
 function buildExport() {
