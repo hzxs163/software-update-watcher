@@ -310,11 +310,16 @@ function load() {
   };
 }
 function loadSeen(kw) {
-  try { return JSON.parse(localStorage.getItem(SEEN_PREFIX + kw) || "[]"); }
-  catch (e) { return []; }
+  // 兼容旧格式（key 数组）→ dict {key: title|null}
+  try {
+    const raw = JSON.parse(localStorage.getItem(SEEN_PREFIX + kw) || "[]");
+    if (Array.isArray(raw)) return Object.fromEntries(raw.map((k) => [k, null]));
+    if (raw && typeof raw === "object") return raw;
+    return {};
+  } catch (e) { return {}; }
 }
-function saveSeen(kw, keys) {
-  localStorage.setItem(SEEN_PREFIX + kw, JSON.stringify(keys.slice(0, SEEN_LIMIT)));
+function saveSeen(kw, map) {
+  localStorage.setItem(SEEN_PREFIX + kw, JSON.stringify(map));
   localStorage.setItem(SEEN_TIME_PREFIX + kw, new Date().toLocaleString("zh-CN", { hour12: false }));
 }
 
@@ -473,27 +478,37 @@ async function manualCheck(i) {
 
     const low = kw.toLowerCase();
     const matched = items.filter((it) => it.title.toLowerCase().includes(low));
-    const keys = matched.map((it) => it.key);
-    const prev = loadSeen(kw);
-    const newItems = prev.length ? matched.filter((it) => !prev.includes(it.key)) : [];
+    const prev = loadSeen(kw);   // dict {key: title|null}
+    const hasBase = Object.keys(prev).length > 0;
+    const newItems = [];
+    const updatedItems = [];
+    for (const it of matched) {
+      if (!(it.key in prev)) newItems.push(it);
+      else if (prev[it.key] && prev[it.key] !== it.title) updatedItems.push(it);
+    }
 
-    if (!prev.length) {
-      saveSeen(kw, keys);
+    if (!hasBase) {
+      saveSeen(kw, Object.fromEntries(matched.map((it) => [it.key, it.title])));
       setStatus(i, "first",
-        `已记录基线：当前列表命中 <b>${keys.length}</b> 条（${esc(kw)}）。之后有新更新，下次检查会提示。`);
-    } else if (newItems.length) {
-      saveSeen(kw, dedup([...newItems.map((it) => it.key), ...prev]));
-      const list = newItems.slice(0, 5).map((it) =>
+        `已记录基线：当前列表命中 <b>${matched.length}</b> 条（${esc(kw)}）。之后有新发布或标题更新会提示。`);
+    } else if (newItems.length || updatedItems.length) {
+      saveSeen(kw, Object.assign({}, prev, Object.fromEntries(matched.map((it) => [it.key, it.title]))));
+      const total = newItems.length + updatedItems.length;
+      const listSrc = [...newItems, ...updatedItems].slice(0, 5);
+      const list = listSrc.map((it) =>
         it.url ? `<li><a href="${esc(it.url)}" target="_blank">${esc(it.title)}</a></li>` : `<li>${esc(it.title)}</li>`
       ).join("");
+      const parts = [];
+      if (newItems.length) parts.push(`${newItems.length} 条新发布`);
+      if (updatedItems.length) parts.push(`${updatedItems.length} 条内容更新`);
       setStatus(i, "updated",
-        `🔔 <b>有更新！${newItems.length} 条新内容</b><ul class="upd-list">${list}</ul>` +
-        (newItems.length > 5 ? `<div class="small">……还有 ${newItems.length - 5} 条</div>` : ""));
+        `🔔 <b>有更新！${parts.join("，")}</b><ul class="upd-list">${list}</ul>` +
+        (total > 5 ? `<div class="small">……还有 ${total - 5} 条</div>` : ""));
     } else {
-      saveSeen(kw, dedup([...keys, ...prev]));
+      saveSeen(kw, Object.assign({}, prev, Object.fromEntries(matched.map((it) => [it.key, it.title]))));
       const last = localStorage.getItem(SEEN_TIME_PREFIX + kw) || "";
       setStatus(i, "none",
-        `无更新 —— 当前列表命中 <b>${keys.length}</b> 条，均与上次一致${last ? `（上次检查 ${esc(last)}）` : ""}`);
+        `无更新 —— 当前列表命中 <b>${matched.length}</b> 条，标题均与上次一致${last ? `（上次检查 ${esc(last)}）` : ""}`);
     }
   } catch (e) {
     // 代理全部失败 → 降级展示仓库最近一次 Actions 检查结果
