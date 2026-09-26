@@ -93,6 +93,18 @@
   .res-item .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
   .res-item .src-tag { background: #e0f2fe; color: var(--brand-dark); border-radius: 4px; padding: 1px 7px; font-size: 11px; }
 
+  /* 结果表格 */
+  .res-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(15,23,42,.05); }
+  .res-table th, .res-table td { padding: 10px 14px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .res-table thead th { background: #f8fafc; color: #334155; font-weight: 600; cursor: pointer; user-select: none; white-space: nowrap; }
+  .res-table thead th:hover { color: var(--brand); }
+  .res-table tbody tr:hover { background: #f0f9ff; }
+  .res-table tbody tr:last-child td { border-bottom: none; }
+  .res-table .c-name a { color: var(--brand-dark); text-decoration: none; font-weight: 500; }
+  .res-table .c-name a:hover { text-decoration: underline; }
+  .res-table .c-date { color: var(--muted); white-space: nowrap; }
+  .res-table .c-src { white-space: nowrap; }
+
   .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 28px 0; border: 1px dashed var(--border); border-radius: 12px; }
 
   .field { margin-bottom: 12px; }
@@ -330,7 +342,10 @@ const BUILTIN_SOURCES = [
     date_selector: "div.list-ca",
     date_prefix: "时间：",
     max_items: 30,
-    enabled: true
+    enabled: true,
+    // 站内搜索（覆盖全站历史记录，{keyword} 会被替换）
+    search_url: "https://www.x6d.com/daowangsousuo?q={keyword}",
+    search_date_prefix: "发布时间："
   }
 ];
 
@@ -449,6 +464,10 @@ function setStatus(i, cls, html) {
 }
 
 /* ---------- 聚合搜索 ---------- */
+let sortKey = "date";    // date / title / source
+let sortDir = "desc";    // asc / desc（日期默认最新在前）
+let lastFound = [], lastErrs = [], lastKw = "";
+
 async function doSearch() {
   const kw = $("#searchInput").value.trim();
   if (!kw) { toast("请输入要搜索的软件名"); return; }
@@ -467,8 +486,16 @@ async function doSearch() {
   const errs = [];
   for (const src of sources) {
     try {
-      const { kind, text } = await fetchViaProxies(src.list_url, 10000);
-      const parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseItems(text, src);
+      let parsed;
+      if (src.search_url) {
+        // 优先站内搜索：覆盖该站全部历史记录
+        const surl = src.search_url.replace("{keyword}", encodeURIComponent(kw));
+        const { kind, text } = await fetchViaProxies(surl, 12000);
+        parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseSearchItems(text, src);
+      } else {
+        const { kind, text } = await fetchViaProxies(src.list_url, 10000);
+        parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseItems(text, src);
+      }
       for (const it of parsed) {
         if (it.title.toLowerCase().includes(low)) {
           found.push({ title: it.title, url: it.url, date: it.date || "", sourceName: src.name });
@@ -479,26 +506,56 @@ async function doSearch() {
     }
   }
 
+  lastFound = found; lastErrs = errs; lastKw = kw;
   if (!found.length) {
     box.innerHTML = `<div class="empty">「${esc(kw)}」未找到相关软件` +
       (errs.length ? `<br><span class="small">部分源抓取失败：${esc(errs.join("、"))}（代理不可用，稍后重试）</span>` : "") +
       "</div>";
     return;
   }
+  renderResultTable();
+}
 
-  let html = `<div class="res-head">找到 <b>${found.length}</b> 条相关结果` +
-    (errs.length ? `<span class="small">（${esc(errs.join("、"))} 抓取失败，未计入）</span>` : "") + "</div>";
-  for (const it of found.slice(0, 50)) {
-    const link = it.url
-      ? `<a class="res-item" href="${esc(it.url)}" target="_blank" rel="noopener">`
-      : `<div class="res-item">`;
-    const date = it.date ? `<span class="meta">${esc(it.date)}</span>` : "";
-    html += `${link}
-      <span class="t">${esc(it.title)}</span>
-      <span style="display:flex;align-items:center;gap:8px">${date}<span class="src-tag">${esc(it.sourceName)}</span></span>
-    ${it.url ? "</a>" : "</div>"}`;
-  }
-  box.innerHTML = html;
+function renderResultTable() {
+  const sorted = sortResults(lastFound);
+  const arrow = (k) => (sortKey === k ? (sortDir === "desc" ? " ↓" : " ↑") : "");
+  const rows = sorted.map((it) => `
+    <tr>
+      <td class="c-name">${it.url ? `<a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a>` : esc(it.title)}</td>
+      <td class="c-date">${esc(it.date || "—")}</td>
+      <td class="c-src"><span class="src-tag">${esc(it.sourceName)}</span></td>
+    </tr>`).join("");
+  $("#searchResults").innerHTML = `
+    <div class="res-head">「${esc(lastKw)}」找到 <b>${lastFound.length}</b> 条结果（含全站历史，点击表头排序）` +
+    (lastErrs.length ? `<span class="small">（${esc(lastErrs.join("、"))} 抓取失败，未计入）</span>` : "") +
+    `</div>
+    <table class="res-table">
+      <thead>
+        <tr>
+          <th data-sort="title">名称${arrow("title")}</th>
+          <th data-sort="date">发布时间${arrow("date")}</th>
+          <th data-sort="source">站源${arrow("source")}</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="foot-note">点击列头切换排序；结果来自各站站内搜索与列表页即时抓取。</div>`;
+}
+
+function sortResults(list) {
+  const k = sortKey, d = sortDir;
+  return [...list].sort((a, b) => {
+    if (k === "date") {
+      const av = a.date || "", bv = b.date || "";
+      if (!av && !bv) return 0;
+      if (!av) return 1;   // 无日期恒排最后
+      if (!bv) return -1;
+      return d === "desc" ? (bv < av ? -1 : bv > av ? 1 : 0) : (av < bv ? -1 : av > bv ? 1 : 0);
+    }
+    const av = String(a[k] || "").toLowerCase(), bv = String(b[k] || "").toLowerCase();
+    const c = av < bv ? -1 : av > bv ? 1 : 0;
+    return d === "asc" ? c : -c;
+  });
 }
 
 /* ---------- 手动检查（设置弹窗内） ---------- */
@@ -546,6 +603,32 @@ function parseItems(html, source) {
     if (!title) continue;
     const url = href ? new URL(href, source.list_url).href : "";
     items.push({ key: href ? url : title, title, url });
+  }
+  return items;
+}
+
+// 站内搜索页解析（如 x6d 的 /daowangsousuo）：li.layui-clear > a.soft-title + div.list-ca
+function parseSearchItems(html, source) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const els = doc.querySelectorAll("li.layui-clear");
+  const items = [];
+  const max = Number(source.max_items || 30);
+  for (const el of Array.from(els).slice(0, max)) {
+    const a = el.querySelector(source.title_selector || "a.soft-title");
+    if (!a) continue;
+    const title = (a.textContent || "").trim();
+    const href = (a.getAttribute("href") || "").trim();
+    if (!title) continue;
+    const base = source.search_url || source.list_url;
+    const url = href ? new URL(href, base).href : "";
+    let date = "";
+    const ca = el.querySelector(source.date_selector || "div.list-ca");
+    if (ca) {
+      let txt = (ca.textContent || "").replace(source.search_date_prefix || "发布时间：", "").trim();
+      const m = txt.match(/\d{4}[-/年]\d{1,2}[-/月]\d{1,2}/);
+      date = m ? m[0] : "";
+    }
+    items.push({ key: url || title, title, url, date });
   }
   return items;
 }
@@ -794,6 +877,20 @@ $("#hotTags").addEventListener("click", (e) => {
   if (!btn) return;
   $("#searchInput").value = btn.dataset.kw;
   doSearch();
+});
+
+// 结果表格排序
+$("#searchResults").addEventListener("click", (e) => {
+  const th = e.target.closest("th[data-sort]");
+  if (!th || !lastFound.length) return;
+  const k = th.dataset.sort;
+  if (sortKey === k) {
+    sortDir = sortDir === "desc" ? "asc" : "desc";
+  } else {
+    sortKey = k;
+    sortDir = k === "date" ? "desc" : "asc";
+  }
+  renderResultTable();
 });
 
 $("#btnSettings").onclick = () => {
