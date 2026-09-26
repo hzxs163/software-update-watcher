@@ -13,6 +13,18 @@
       "date_prefix": "时间：",
       "max_items": 30,
       "enabled": true
+    },
+    {
+      "id": "423down",
+      "name": "423down",
+      "list_url": "https://www.423down.com",
+      "search_url": "https://www.423down.com/search/{keyword}",
+      "item_selector": "ul.excerpt li",
+      "title_selector": "h2 a",
+      "date_selector": "span.time",
+      "date_prefix": "",
+      "max_items": 50,
+      "enabled": true
     }
   ],
   "push": {
