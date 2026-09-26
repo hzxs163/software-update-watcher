@@ -29,6 +29,8 @@ CONFIG_PATH = BASE_DIR / "config.json"
 STATE_PATH = BASE_DIR / "state.json"
 LAST_CHECK_PATH = BASE_DIR / "last_check.json"
 SEEN_LIMIT = 100  # 每个源最多保留最近 100 条关键字
+INDEX_DIR = BASE_DIR / "index"   # 各源索引快照（前端搜索加速用）
+MAX_INDEX = 2000                  # 每个索引最多保留条目数（按日期倒序）
 
 
 def load_json(path: Path, default):
@@ -49,6 +51,36 @@ def now_local() -> str:
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
+def update_index(source: dict, items: list) -> bool:
+    """更新 {sid}.json 索引快照：按 URL 去重合并，日期倒序，截断保留最新。
+
+    返回是否写入（内容无变化时不写，避免无效提交）。
+    """
+    sid = source.get("id") or source.get("name", "source")
+    idx_path = INDEX_DIR / f"{sid}.json"
+    old = load_json(idx_path, {"updated_at": "", "items": []})
+    merged = {}
+    for it in old.get("items", []):
+        if it.get("url"):
+            merged[it["url"]] = it
+    for it in items:
+        if it.get("url"):
+            merged[it["url"]] = {
+                "title": it["title"], "url": it["url"], "date": it.get("date", "")
+            }
+    new_items = sorted(merged.values(), key=lambda x: x.get("date", ""),
+                       reverse=True)[:MAX_INDEX]
+    if old.get("items") != new_items:
+        INDEX_DIR.mkdir(parents=True, exist_ok=True)
+        idx_path.write_text(
+            json.dumps({"updated_at": now_local(), "items": new_items},
+                       ensure_ascii=False, indent=1) + "\n",
+            encoding="utf-8",
+        )
+        return True
+    return False
+
+
 def _fetch_source_items(source: dict, keywords: list) -> list:
     """抓取单个源。
 
@@ -62,6 +94,11 @@ def _fetch_source_items(source: dict, keywords: list) -> list:
         for kw in keywords:
             url = tpl.replace("{keyword}", quote(str(kw)))
             src = dict(source, list_url=url)
+            # 搜索页结构可能不同于列表页，支持 search_* 选择器覆盖
+            for k in ("item_selector", "title_selector", "date_selector"):
+                sk = "search_" + k
+                if source.get(sk):
+                    src[k] = source[sk]
             try:
                 all_items.extend(parse_source(src))
             except Exception as exc:  # noqa: BLE001
@@ -145,6 +182,17 @@ def main() -> int:
             all_new.extend({"source": name, "kind": e["kind"], **e["item"]} for e in new_items)
         else:
             print(f"  [init] 首次运行，记录 {len(matched)} 条基线（本次不推送）")
+
+        # 索引快照：普通源直接用列表页结果；search_url 源额外抓列表页（全量）
+        index_items = items
+        if source.get("search_url"):
+            try:
+                idx_src = dict(source, list_url=source.get("list_url") or "")
+                index_items = parse_source(idx_src)
+            except Exception as exc:  # noqa: BLE001
+                print(f"  [warn] 索引快照抓取失败({name}): {exc}")
+        if update_index(source, index_items):
+            print(f"  [index] {sid}.json 索引已更新（{len(index_items)} 条本轮）")
 
         src_stats[sid] = {
             "name": name,
