@@ -1,10 +1,8 @@
 {
   "sources": {
     "x6d-green": {
-      "seen": {
-        "https://www.x6d.com/i-wz-32612.html": "CorelDRAW Graphics Suite 2026 v27.2.0.135特别版"
-      },
-      "last_check": "2026-09-26T01:27:55+00:00",
+      "seen": {},
+      "last_check": "2026-09-26T15:23:09+00:00",
       "initialized": true
     },
     "423down": {
@@ -22,7 +20,7 @@
         "https://www.423down.com/8648.html": "CorelDRAW 2018 20.0.0.633 免激活特别版",
         "https://www.423down.com/2232.html": "CorelDRAW  2017 19.1.0.419 免激活特别版"
       },
-      "last_check": "2026-09-26T01:27:55+00:00",
+      "last_check": "2026-09-26T15:23:09+00:00",
       "initialized": true
     },
     "gndown": {
@@ -43,7 +41,7 @@
         "https://www.gndown.com/9438.html": "CorelDRAW Technical Suite 2024 v25.2.1.313 中文破解版",
         "https://www.gndown.com/9360.html": "CorelDRAW Graphics Suite 2024 v25.2.1.313 中文破解版"
       },
-      "last_check": "2026-09-26T01:27:55+00:00",
+      "last_check": "2026-09-26T15:23:09+00:00",
       "initialized": true
     }
   }
