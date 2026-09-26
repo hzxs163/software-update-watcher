@@ -167,6 +167,32 @@ def parse_source(source: dict) -> list[dict]:
     return items
 
 
+def parse_source_pages(source: dict, max_pages: int = 3) -> list[dict]:
+    """抓取列表页前 max_pages 页并合并去重（用于索引快照的增量更新）。
+
+    pagination_tpl 示例：https://www.x6d.com/html/23-{n}.html（第 2 页起）。
+    """
+    tpl = (source.get("pagination_tpl") or "").strip()
+    pages = [source.get("list_url") or ""]
+    if tpl:
+        for n in range(2, 2 + max_pages - 1):
+            pages.append(tpl.replace("{n}", str(n)))
+    merged = {}
+    for u in pages:
+        if not u:
+            continue
+        try:
+            src = dict(source, list_url=u)
+            for it in parse_source(src):
+                if it.get("url"):
+                    merged[it["url"]] = {
+                        "title": it["title"], "url": it["url"], "date": it.get("date", "")
+                    }
+        except Exception:  # noqa: BLE001
+            continue
+    return list(merged.values())
+
+
 def _parse_html_items(soup, source: dict, item_selector: str, title_selector: str,
                       date_selector: str, date_prefix: str, max_items: int) -> list[dict]:
     items = []
