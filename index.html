@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>软件更新监控 · 配置台</title>
+<title>软件聚合搜索</title>
 <style>
   :root {
     --brand: #0e7490;
@@ -53,6 +53,48 @@
   }
   .card h2 { font-size: 15px; margin-bottom: 14px; }
 
+  /* 搜索区 */
+  .search-hero { text-align: center; padding: 26px 18px 22px; }
+  .search-hero .big-input {
+    width: 100%; max-width: 560px; font-size: 16px; padding: 12px 18px;
+    border: 2px solid var(--border); border-radius: 999px; outline: none;
+    transition: border-color .15s; background: #fff;
+  }
+  .search-hero .big-input:focus { border-color: var(--brand); }
+  .search-btn {
+    background: var(--brand); color: #fff; border: none; border-radius: 999px;
+    padding: 12px 26px; font-size: 14px; cursor: pointer; margin-left: 10px;
+    font-weight: 500;
+  }
+  .search-btn:hover { background: var(--brand-dark); }
+  .tab-row { margin-top: 16px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .tab-row .lbl { font-size: 12px; color: var(--muted); }
+  .tab, .hot {
+    border: 1px solid var(--border); background: #fff; color: #475569;
+    border-radius: 999px; padding: 6px 14px; font-size: 12.5px; cursor: pointer;
+    transition: all .15s;
+  }
+  .tab:hover, .hot:hover { border-color: var(--brand); color: var(--brand); }
+  .tab.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .hot { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
+  .hot:hover { background: #d1fae5; }
+
+  /* 搜索结果 */
+  .res-head { font-size: 13.5px; color: #334155; margin: 16px 0 10px; }
+  .res-head .small { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .res-item {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    border: 1px solid var(--border); background: #fff; border-radius: 10px;
+    padding: 12px 14px; margin-bottom: 8px; text-decoration: none; color: inherit;
+    transition: all .15s;
+  }
+  .res-item:hover { border-color: var(--brand); box-shadow: 0 2px 8px rgba(14,116,144,.1); }
+  .res-item .t { font-size: 14px; font-weight: 600; color: var(--brand-dark); }
+  .res-item .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .res-item .src-tag { background: #e0f2fe; color: var(--brand-dark); border-radius: 4px; padding: 1px 7px; font-size: 11px; }
+
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 28px 0; border: 1px dashed var(--border); border-radius: 12px; }
+
   .field { margin-bottom: 12px; }
   .field label { display: block; font-size: 12.5px; color: #475569; margin-bottom: 4px; font-weight: 500; }
   .field textarea {
@@ -64,7 +106,7 @@
   .field .hint { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
   .toolbar { display: flex; gap: 10px; flex-wrap: wrap; }
 
-  /* 关键词卡片 */
+  /* 关键词卡片（设置内） */
   .kw-card {
     border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
     margin-bottom: 12px; background: #fff; position: relative;
@@ -98,8 +140,6 @@
   .kw-status .upd-list li { margin-bottom: 2px; }
   .kw-status .small { opacity: .8; font-size: 11.5px; margin-top: 4px; }
   .kw-card .kw-btn:disabled { opacity: .55; cursor: not-allowed; }
-
-  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 28px 0; border: 1px dashed var(--border); border-radius: 12px; }
 
   /* 弹窗 */
   .modal-mask {
@@ -153,31 +193,34 @@
 <body>
 <header>
   <div>
-    <h1>软件更新监控 · 配置台</h1>
-    <p>设置关注关键词 → 生成卡片 → 点「手动检查」看是否有更新</p>
+    <h1>软件聚合搜索</h1>
+    <p>输入软件名，一键搜索各软件站；站源标签与热门词可直接点选</p>
   </div>
-  <button class="btn btn-light" id="btnSettings">⚙ 设置（源 / 推送）</button>
+  <button class="btn btn-light" id="btnSettings">⚙ 设置（监控 / 推送）</button>
 </header>
 
 <div class="wrap">
-  <div class="card">
-    <h2>关注关键词</h2>
-    <div class="field">
-      <textarea id="keywords" placeholder="CorelDRAW&#10;Bandicam&#10;Photoshop&#10;&#10;留空 = 不生成卡片"></textarea>
-      <div class="hint">每行一个或用逗号分隔。保存后每个关键词生成一张卡片，可单独手动检查更新。</div>
+  <div class="card search-hero">
+    <div>
+      <input class="big-input" id="searchInput" placeholder="输入软件名，如 CorelDRAW，回车搜索" autocomplete="off">
+      <button class="search-btn" id="btnSearch">搜索</button>
     </div>
-    <div class="toolbar">
-      <button class="btn btn-primary" id="btnSaveKw">保存关键词，生成卡片</button>
+    <div class="tab-row">
+      <span class="lbl">站源：</span>
+      <span id="sourceTabs"></span>
+    </div>
+    <div class="tab-row">
+      <span class="lbl">热门：</span>
+      <span id="hotTags"></span>
     </div>
   </div>
 
-  <div id="kwCards">
-    <div class="empty" id="kwEmpty">还没有关键词卡片 —— 在上方填写关键词并保存</div>
+  <div id="searchResults">
+    <div class="empty">输入关键词开始聚合搜索；可切换站源，或点击热门词快速查找</div>
   </div>
 
   <div class="foot-note">
-    手动检查为网页端即时预览（经公共代理抓取列表页，与本机基线对比）；代理不可用时自动展示仓库最近检查结果。
-    正式推送仍由仓库 Actions 每 6 小时自动执行。首次检查只记录基线不提示更新。
+    搜索为网页端即时抓取（经公共代理）；正式监控推送由仓库 Actions 每 6 小时执行，在右上角设置中配置。
   </div>
 </div>
 
@@ -187,7 +230,21 @@
     <h3>设置 <button class="close" id="btnCloseSettings">×</button></h3>
 
     <section>
-      <h4>① GitHub 自动保存（让关键词直接生效）</h4>
+      <h4>① 关注关键词（监控推送用）</h4>
+      <div class="field">
+        <textarea id="keywords" placeholder="CorelDRAW&#10;Bandicam&#10;Photoshop&#10;&#10;留空 = 不监控任何关键词"></textarea>
+        <div class="hint">每行一个或用逗号分隔。保存后生成卡片可手动检查；若已配置 GitHub 令牌会自动同步到仓库，定时检查按此推送。</div>
+      </div>
+      <div class="toolbar">
+        <button class="btn btn-primary" id="btnSaveKw">保存关键词</button>
+      </div>
+      <div id="kwCards" style="margin-top:12px">
+        <div class="empty">还没有关键词卡片 —— 保存后生成，可点「手动检查」看是否有更新</div>
+      </div>
+    </section>
+
+    <section>
+      <h4>② GitHub 自动保存（让关键词直接生效）</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div class="field">
           <label>仓库 Owner</label>
@@ -218,7 +275,7 @@
     </section>
 
     <section>
-      <h4>② 监控中的软件站源（规则已写死）</h4>
+      <h4>③ 监控中的软件站源（规则已写死）</h4>
       <div id="srcList"></div>
       <div class="notice">
         源的选择器规则已内置，无需配置。新增源：把「站名 + 列表页地址」告知豆包，
@@ -227,7 +284,7 @@
     </section>
 
     <section>
-      <h4>③ 定时与推送（WxPusher）</h4>
+      <h4>④ 定时与推送（WxPusher）</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div class="field">
           <label>App Token</label>
@@ -277,6 +334,9 @@ const BUILTIN_SOURCES = [
   }
 ];
 
+// 热门搜索关键词（预置，可改）
+const HOT_KEYWORDS = ["CorelDRAW", "Bandicam", "Photoshop", "Everything", "Bandizip", "Internet Download Manager", "Navicat", "Typora"];
+
 let cfg = {
   keywords: [], sources: BUILTIN_SOURCES,
   push: { provider: "wxpusher", appToken: "", target: "" },
@@ -325,12 +385,39 @@ function saveSeen(kw, map) {
 
 /* ---------- 渲染 ---------- */
 const $ = (s) => document.querySelector(s);
+function esc(s) {
+  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function parseKeywords(raw) {
+  return [...new Set(String(raw || "").split(/[\n,，、;；]/).map((k) => k.trim()).filter(Boolean))];
+}
 
+// 站源切换标签
+let activeSource = "all";
+function renderSourceTabs() {
+  const box = $("#sourceTabs");
+  const srcs = cfg.sources.filter((s) => s.enabled !== false);
+  let html = `<button class="tab${activeSource === "all" ? " active" : ""}" data-src="all">全部源</button>`;
+  for (const s of srcs) {
+    html += `<button class="tab${activeSource === s.id ? " active" : ""}" data-src="${esc(s.id)}">${esc(s.name)}</button>`;
+  }
+  box.innerHTML = html;
+}
+
+// 热门搜索关键词标签
+function renderHotTags() {
+  $("#hotTags").innerHTML = HOT_KEYWORDS.map(
+    (k) => `<button class="hot" data-kw="${esc(k)}">${esc(k)}</button>`
+  ).join("");
+}
+
+// 关键词卡片（设置弹窗内）
 function renderCards() {
   const box = $("#kwCards");
   const kws = cfg.keywords || [];
   if (!kws.length) {
-    box.innerHTML = '<div class="empty" id="kwEmpty">还没有关键词卡片 —— 在上方填写关键词并保存</div>';
+    box.innerHTML = '<div class="empty">还没有关键词卡片 —— 保存后生成，可点「手动检查」看是否有更新</div>';
     return;
   }
   box.innerHTML = "";
@@ -361,15 +448,60 @@ function setStatus(i, cls, html) {
   el.innerHTML = html;
 }
 
-function esc(s) {
-  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-function parseKeywords(raw) {
-  return [...new Set(String(raw || "").split(/[\n,，、;；]/).map((k) => k.trim()).filter(Boolean))];
+/* ---------- 聚合搜索 ---------- */
+async function doSearch() {
+  const kw = $("#searchInput").value.trim();
+  if (!kw) { toast("请输入要搜索的软件名"); return; }
+  const low = kw.toLowerCase();
+  const box = $("#searchResults");
+  box.innerHTML = `<div class="empty">正在搜索「${esc(kw)}」…</div>`;
+
+  const sources = cfg.sources.filter((s) =>
+    s.enabled !== false && (activeSource === "all" || s.id === activeSource));
+  if (!sources.length) {
+    box.innerHTML = '<div class="empty">当前没有可用的站源（在设置中查看）</div>';
+    return;
+  }
+
+  const found = [];
+  const errs = [];
+  for (const src of sources) {
+    try {
+      const { kind, text } = await fetchViaProxies(src.list_url, 10000);
+      const parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseItems(text, src);
+      for (const it of parsed) {
+        if (it.title.toLowerCase().includes(low)) {
+          found.push({ title: it.title, url: it.url, date: it.date || "", sourceName: src.name });
+        }
+      }
+    } catch (e) {
+      errs.push(src.name);
+    }
+  }
+
+  if (!found.length) {
+    box.innerHTML = `<div class="empty">「${esc(kw)}」未找到相关软件` +
+      (errs.length ? `<br><span class="small">部分源抓取失败：${esc(errs.join("、"))}（代理不可用，稍后重试）</span>` : "") +
+      "</div>";
+    return;
+  }
+
+  let html = `<div class="res-head">找到 <b>${found.length}</b> 条相关结果` +
+    (errs.length ? `<span class="small">（${esc(errs.join("、"))} 抓取失败，未计入）</span>` : "") + "</div>";
+  for (const it of found.slice(0, 50)) {
+    const link = it.url
+      ? `<a class="res-item" href="${esc(it.url)}" target="_blank" rel="noopener">`
+      : `<div class="res-item">`;
+    const date = it.date ? `<span class="meta">${esc(it.date)}</span>` : "";
+    html += `${link}
+      <span class="t">${esc(it.title)}</span>
+      <span style="display:flex;align-items:center;gap:8px">${date}<span class="src-tag">${esc(it.sourceName)}</span></span>
+    ${it.url ? "</a>" : "</div>"}`;
+  }
+  box.innerHTML = html;
 }
 
-/* ---------- 手动检查 ---------- */
+/* ---------- 手动检查（设置弹窗内） ---------- */
 function fetchViaProxies(url, timeoutMs = 10000) {
   // 免 key 公共 CORS 代理，逐个顺序尝试；HTML 或 markdown 两种返回格式
   const tries = [
@@ -530,70 +662,6 @@ async function manualCheck(i) {
 }
 function dedup(arr) { return [...new Set(arr)]; }
 
-/* ---------- 事件 ---------- */
-$("#btnSaveKw").onclick = async () => {
-  cfg.keywords = parseKeywords($("#keywords").value);
-  persist();
-  renderCards();
-  const g = cfg.github || {};
-  if (g.autoPush !== false && g.token) {
-    toast("已保存，正在同步到仓库…");
-    try {
-      await pushConfigToRepo();
-      toast(`已保存并同步到仓库 ✓（${cfg.keywords.length} 个关键词），下次定时检查生效`);
-    } catch (e) {
-      toast("已保存到本地，同步仓库失败：" + e.message);
-    }
-  } else {
-    toast(cfg.keywords.length ? `已保存 ${cfg.keywords.length} 个关键词，生成卡片` : "已清空关键词");
-  }
-};
-
-$("#kwCards").addEventListener("click", (e) => {
-  const checkBtn = e.target.closest("button[data-check]");
-  if (checkBtn) { manualCheck(Number(checkBtn.dataset.check)); return; }
-  const delBtn = e.target.closest("button[data-del]");
-  if (delBtn) {
-    const i = Number(delBtn.dataset.del);
-    const kw = cfg.keywords[i];
-    if (!confirm(`删除关键词「${kw}」的卡片？`)) return;
-    cfg.keywords.splice(i, 1);
-    persist(); renderCards();
-    toast("已删除卡片（基线数据保留，重新添加可恢复）");
-  }
-});
-
-/* ---------- 设置弹窗 ---------- */
-$("#btnSettings").onclick = () => {
-  renderSources(); renderPush(); renderGithub();
-  $("#settingsMask").classList.add("show");
-};
-$("#btnCloseSettings").onclick = () => $("#settingsMask").classList.remove("show");
-$("#settingsMask").addEventListener("click", (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove("show"); });
-
-function renderSources() {
-  const box = $("#srcList");
-  if (!cfg.sources.length) { box.innerHTML = '<div class="empty">暂无源</div>'; return; }
-  box.innerHTML = "";
-  cfg.sources.forEach((s) => {
-    const div = document.createElement("div");
-    div.className = "src-item";
-    div.innerHTML = `
-      <div class="top">
-        <div class="name">${esc(s.name)}${s.enabled === false ? '<span class="tag" style="background:#94a3b8">停用</span>' : '<span class="tag">监控中</span>'}</div>
-        <div class="url">${esc(s.list_url)}</div>
-      </div>
-      <div class="meta">规则内置：条目 <code>${esc(s.item_selector)}</code> · 标题 <code>${esc(s.title_selector)}</code> · 抓取 <code>${esc(String(s.max_items ?? 30))}</code> 条</div>`;
-    box.appendChild(div);
-  });
-}
-function renderPush() {
-  $("#pushToken").value = cfg.push.appToken || "";
-  $("#pushTarget").value = cfg.push.target || "";
-}
-$("#pushToken").addEventListener("input", (e) => { cfg.push.appToken = e.target.value; persist(); });
-$("#pushTarget").addEventListener("input", (e) => { cfg.push.target = e.target.value; persist(); });
-
 /* ---------- GitHub 自动保存 ---------- */
 function renderGithub() {
   const g = cfg.github || {};
@@ -711,10 +779,91 @@ function toast(msg) {
   toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
 }
 
+/* ---------- 事件 ---------- */
+$("#btnSearch").onclick = doSearch;
+$("#searchInput").addEventListener("keydown", (e) => { if (e.key === "Enter") doSearch(); });
+$("#sourceTabs").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-src]");
+  if (!btn) return;
+  activeSource = btn.dataset.src;
+  renderSourceTabs();
+  if ($("#searchInput").value.trim()) doSearch();
+});
+$("#hotTags").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-kw]");
+  if (!btn) return;
+  $("#searchInput").value = btn.dataset.kw;
+  doSearch();
+});
+
+$("#btnSettings").onclick = () => {
+  $("#keywords").value = (cfg.keywords || []).join("\n");
+  renderCards();
+  renderSources(); renderPush(); renderGithub();
+  $("#settingsMask").classList.add("show");
+};
+$("#btnCloseSettings").onclick = () => $("#settingsMask").classList.remove("show");
+$("#settingsMask").addEventListener("click", (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove("show"); });
+
+$("#btnSaveKw").onclick = async () => {
+  cfg.keywords = parseKeywords($("#keywords").value);
+  persist();
+  renderCards();
+  const g = cfg.github || {};
+  if (g.autoPush !== false && g.token) {
+    toast("已保存，正在同步到仓库…");
+    try {
+      await pushConfigToRepo();
+      toast(`已保存并同步到仓库 ✓（${cfg.keywords.length} 个关键词），下次定时检查生效`);
+    } catch (e) {
+      toast("已保存到本地，同步仓库失败：" + e.message);
+    }
+  } else {
+    toast(cfg.keywords.length ? `已保存 ${cfg.keywords.length} 个关键词，生成卡片` : "已清空关键词");
+  }
+};
+
+$("#kwCards").addEventListener("click", (e) => {
+  const checkBtn = e.target.closest("button[data-check]");
+  if (checkBtn) { manualCheck(Number(checkBtn.dataset.check)); return; }
+  const delBtn = e.target.closest("button[data-del]");
+  if (delBtn) {
+    const i = Number(delBtn.dataset.del);
+    const kw = cfg.keywords[i];
+    if (!confirm(`删除关键词「${kw}」的卡片？`)) return;
+    cfg.keywords.splice(i, 1);
+    persist(); renderCards();
+    toast("已删除卡片（基线数据保留，重新添加可恢复）");
+  }
+});
+
+function renderSources() {
+  const box = $("#srcList");
+  if (!cfg.sources.length) { box.innerHTML = '<div class="empty">暂无源</div>'; return; }
+  box.innerHTML = "";
+  cfg.sources.forEach((s) => {
+    const div = document.createElement("div");
+    div.className = "src-item";
+    div.innerHTML = `
+      <div class="top">
+        <div class="name">${esc(s.name)}${s.enabled === false ? '<span class="tag" style="background:#94a3b8">停用</span>' : '<span class="tag">监控中</span>'}</div>
+        <div class="url">${esc(s.list_url)}</div>
+      </div>
+      <div class="meta">规则内置：条目 <code>${esc(s.item_selector)}</code> · 标题 <code>${esc(s.title_selector)}</code> · 抓取 <code>${esc(String(s.max_items ?? 30))}</code> 条</div>`;
+    box.appendChild(div);
+  });
+}
+function renderPush() {
+  $("#pushToken").value = cfg.push.appToken || "";
+  $("#pushTarget").value = cfg.push.target || "";
+}
+$("#pushToken").addEventListener("input", (e) => { cfg.push.appToken = e.target.value.trim(); persist(); });
+$("#pushTarget").addEventListener("input", (e) => { cfg.push.target = e.target.value.trim(); persist(); });
+
 /* ---------- 初始化 ---------- */
 load();
-$("#keywords").value = (cfg.keywords || []).join("\n");
-renderCards();
+renderSourceTabs();
+renderHotTags();
 </script>
 </body>
 </html>
