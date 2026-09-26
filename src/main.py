@@ -96,14 +96,31 @@ def main() -> int:
             print(f"  [filter] 抓到 {len(items)} 条，命中关键词 {len(matched)} 条")
 
         info = state["sources"].get(sid, {})
-        seen = set(info.get("seen", []))
+        seen_raw = info.get("seen", {})
+        # 兼容旧格式（key 数组）→ {key: None}；None 表示无标题记录，仅做新条目检测
+        if isinstance(seen_raw, list):
+            seen = {k: None for k in seen_raw}
+        else:
+            seen = seen_raw if isinstance(seen_raw, dict) else {}
         is_init = info.get("initialized", False)
 
-        new_items = [it for it in matched if it["key"] not in seen]
+        # 双维度检测：新 URL = 新发布；URL 相同但标题变了 = 内容/版本更新
+        new_items = []
+        for it in matched:
+            if it["key"] not in seen:
+                new_items.append({"item": it, "kind": "new"})
+            else:
+                old_title = seen[it["key"]]
+                if old_title is not None and old_title != it["title"]:
+                    new_items.append({"item": it, "kind": "updated"})
         if is_init:
-            for it in new_items:
-                print(f"  [new] {it['title']} {it['url']}")
-            all_new.extend({"source": name, **it} for it in new_items)
+            for entry in new_items:
+                it = entry["item"]
+                tag = "[new]" if entry["kind"] == "new" else "[updated]"
+                print(f"  {tag} {it['title']} {it['url']}")
+                if entry["kind"] == "updated":
+                    print(f"        标题变化（{seen[it['key']]} -> {it['title']}），视为更新")
+            all_new.extend({"source": name, "kind": e["kind"], **e["item"]} for e in new_items)
         else:
             print(f"  [init] 首次运行，记录 {len(matched)} 条基线（本次不推送）")
 
@@ -114,12 +131,9 @@ def main() -> int:
             "new": len(new_items),
         }
 
-        # 合并关键字：新条目在前，历史在后，截断到 SEEN_LIMIT
-        merged = list(dict.fromkeys(
-            [it["key"] for it in new_items] + [it["key"] for it in matched]
-        ))[:SEEN_LIMIT]
+        # 记录最新标题作为基线（key -> title）
         state["sources"][sid] = {
-            "seen": merged,
+            "seen": {it["key"]: it["title"] for it in matched},
             "last_check": now,
             "initialized": True,
         }
@@ -136,7 +150,9 @@ def main() -> int:
     pushed = False
     if all_new:
         push_cfg = resolve_push_config(config)
-        summary = f"软件站更新：{len(all_new)} 条新内容"
+        n_new = sum(1 for e in all_new if e.get("kind") == "new")
+        n_upd = sum(1 for e in all_new if e.get("kind") == "updated")
+        summary = f"软件站更新：{n_new} 条新发布" + (f"，{n_upd} 条内容更新" if n_upd else "")
         html_content = build_message(all_new)
         if push_cfg["token"] and push_cfg["target_value"]:
             ok = send_wxpusher(push_cfg, summary, html_content)
@@ -149,10 +165,13 @@ def main() -> int:
 
     # 写 last_check.json（每次运行都写，供网页端展示最近检查结果）
     if all_new:
+        n_new = sum(1 for e in all_new if e.get("kind") == "new")
+        n_upd = sum(1 for e in all_new if e.get("kind") == "updated")
+        detail = f"{n_new} 条新发布" + (f"，{n_upd} 条内容更新" if n_upd else "")
         if pushed:
-            msg = f"有更新！{len(all_new)} 条新内容，已推送微信"
+            msg = f"有更新！{detail}，已推送微信"
         else:
-            msg = f"有更新！{len(all_new)} 条新内容（未配置推送密钥，未推送）"
+            msg = f"有更新！{detail}（未配置推送密钥，未推送）"
     else:
         msg = "无更新"
     last_check = {
