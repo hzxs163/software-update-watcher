@@ -61,13 +61,19 @@ def build_message(new_items: list[dict]) -> str:
         url = it.get("url", "")
         date = it.get("date", "")
         source = it.get("source", "")
+        kind = it.get("kind", "")
+        badge = ""
+        if kind == "updated":
+            badge = "<span style='background:#f59e0b;color:#fff;font-size:11px;padding:1px 6px;border-radius:4px'>内容更新</span> "
+        elif kind == "new":
+            badge = "<span style='background:#10b981;color:#fff;font-size:11px;padding:1px 6px;border-radius:4px'>新发布</span> "
         date_txt = f"（{date}）" if date else ""
         source_txt = f"<span style='color:#888888;font-size:12px'>{source}</span>" if source else ""
         if url:
-            lines.append(f"<p><b>{title}</b>{date_txt}<br/>"
+            lines.append(f"<p>{badge}<b>{title}</b>{date_txt}<br/>"
                          f"<a href='{url}'>{url}</a><br/>{source_txt}</p>")
         else:
-            lines.append(f"<p><b>{title}</b>{date_txt}<br/>{source_txt}</p>")
+            lines.append(f"<p>{badge}<b>{title}</b>{date_txt}<br/>{source_txt}</p>")
     if len(new_items) > 20:
         lines.append(f"<p style='color:#888888'>……另有 {len(new_items) - 20} 条，共 {len(new_items)} 条新增</p>")
     return "".join(lines)
