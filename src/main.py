@@ -20,7 +20,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from crawler import parse_source, match_keywords
+from crawler import parse_source, parse_source_pages, match_keywords
 from notify import resolve_push_config, send_wxpusher, build_message
 from urllib.parse import quote
 
@@ -30,7 +30,7 @@ STATE_PATH = BASE_DIR / "state.json"
 LAST_CHECK_PATH = BASE_DIR / "last_check.json"
 SEEN_LIMIT = 100  # 每个源最多保留最近 100 条关键字
 INDEX_DIR = BASE_DIR / "index"   # 各源索引快照（前端搜索加速用）
-MAX_INDEX = 2000                  # 每个索引最多保留条目数（按日期倒序）
+MAX_INDEX = 50000                 # 索引上限（全量索引，前端搜索加速用）
 
 
 def load_json(path: Path, default):
@@ -119,12 +119,51 @@ def seen_changed(old_state: dict, new_state: dict) -> bool:
     return False
 
 
+def build_full_index(sources: list[dict]) -> None:
+    """全量重建各源索引：抓取分页模板 2..full_pages（或动态到空页）。"""
+    from crawler import parse_source
+    for source in sources:
+        sid = source.get("id") or source.get("name", "source")
+        name = source.get("name", sid)
+        tpl = (source.get("pagination_tpl") or "").strip()
+        full_pages = int(source.get("full_pages", 0) or 0)
+        if not tpl or full_pages <= 0:
+            print(f"  [full] {name}: 无 pagination_tpl/full_pages 配置，跳过")
+            continue
+        print(f"  [full] {name}: 全量抓取 {full_pages} 页")
+        merged = {}
+        for n in list(range(1, full_pages + 1)):
+            url = source["list_url"] if n == 1 else tpl.replace("{n}", str(n))
+            try:
+                src = dict(source, list_url=url)
+                for it in parse_source(src):
+                    if it.get("url"):
+                        merged[it["url"]] = {
+                            "title": it["title"], "url": it["url"], "date": it.get("date", "")
+                        }
+            except Exception as exc:  # noqa: BLE001
+                print(f"  [full] 第 {n} 页失败: {exc}")
+        items = sorted(merged.values(), key=lambda x: x.get("date", ""), reverse=True)[:MAX_INDEX]
+        update_index(source, items)
+        print(f"  [full] {name} 完成：{len(items)} 条")
+
+
 def main() -> int:
     config = load_json(CONFIG_PATH, {"sources": [], "push": {}})
     old_state = load_json(STATE_PATH, {"sources": {}})
     state = json.loads(json.dumps(old_state))  # 深拷贝，避免误改
 
     # 全局关注关键词（config.json 顶层 keywords，适用于所有源；空 = 关注全部）
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--full-index", action="store_true",
+                        help="全量重建索引（抓取全站所有分页）")
+    args, _ = parser.parse_known_args()
+
+    if args.full_index:
+        build_full_index([s for s in config.get("sources", []) if s.get("enabled", True)])
+        print("[full-index] 全量索引重建完成")
+
     global_keywords = config.get("keywords") or []
     kw_txt = f"，全局关键词: {', '.join(str(k) for k in global_keywords)}" \
         if global_keywords else "，关注全部"
@@ -183,14 +222,12 @@ def main() -> int:
         else:
             print(f"  [init] 首次运行，记录 {len(matched)} 条基线（本次不推送）")
 
-        # 索引快照：普通源直接用列表页结果；search_url 源额外抓列表页（全量）
-        index_items = items
-        if source.get("search_url"):
-            try:
-                idx_src = dict(source, list_url=source.get("list_url") or "")
-                index_items = parse_source(idx_src)
-            except Exception as exc:  # noqa: BLE001
-                print(f"  [warn] 索引快照抓取失败({name}): {exc}")
+        # 索引快照：抓列表页前 3 页增量合并（--full-index 时全量重建）
+        try:
+            index_items = parse_source_pages(source, 3)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  [warn] 索引快照抓取失败({name}): {exc}")
+            index_items = items
         if update_index(source, index_items):
             print(f"  [index] {sid}.json 索引已更新（{len(index_items)} 条本轮）")
 
