@@ -350,18 +350,35 @@ const BUILTIN_SOURCES = [
   {
     id: "423down",
     name: "423down",
-    list_url: "https://www.423down.com",
-    item_selector: "ul.excerpt li",
+    list_url: "https://www.423down.com/page/2",
+    item_selector: "div.content-wrap ul.excerpt li",
     title_selector: "h2 a",
     date_selector: "span.time",
     date_prefix: "",
     max_items: 50,
     enabled: true,
-    // 站内搜索（WordPress 主题，覆盖全站历史记录）
+    // 站内搜索（WordPress 主题，覆盖全站历史记录；日期仅"月-日"，按标题年份补全）
     search_url: "https://www.423down.com/search/{keyword}",
     search_item_selector: "ul.excerpt li",
     search_title_selector: "h2 a",
     search_date_selector: "span.time",
+    search_date_prefix: ""
+  },
+  {
+    id: "gndown",
+    name: "绿软小站",
+    list_url: "https://www.gndown.com",
+    item_selector: "article.excerpt",
+    title_selector: "header h2 a",
+    date_selector: "div.meta time",
+    date_prefix: "",
+    max_items: 50,
+    enabled: true,
+    // 站内搜索（与列表页同结构，完整日期）
+    search_url: "https://search.gndown.com/?s={keyword}",
+    search_item_selector: "article.excerpt",
+    search_title_selector: "header h2 a",
+    search_date_selector: "div.meta time",
     search_date_prefix: ""
   }
 ];
@@ -483,7 +500,7 @@ function setStatus(i, cls, html) {
 /* ---------- 聚合搜索 ---------- */
 let sortKey = "date";    // date / title / source
 let sortDir = "desc";    // asc / desc（日期默认最新在前）
-let lastFound = [], lastErrs = [], lastKw = "";
+let lastFound = [], lastErrs = [], lastKw = "", lastIdxCount = 0, lastLiveCount = 0;
 
 async function doSearch() {
   const kw = $("#searchInput").value.trim();
@@ -501,11 +518,25 @@ async function doSearch() {
 
   const found = [];
   const errs = [];
+  let idxCount = 0, liveCount = 0;
   for (const src of sources) {
+    let idxHits = null;
+    // 通道1：仓库索引快照（GitHub Actions 每 6 小时更新，秒出）
+    try {
+      const idx = await fetchIndex(src.id);
+      const items = (idx.items || []).map((it) => ({
+        title: it.title, url: it.url, date: it.date || "", sourceName: src.name
+      }));
+      idxHits = items.filter((it) => it.title.toLowerCase().includes(low));
+      found.push(...idxHits);
+    } catch (e) {
+      errs.push(src.name + "(索引)");
+    }
+    if (idxHits && idxHits.length) { idxCount += idxHits.length; continue; }
+    // 通道2：补充实时站内搜索/列表页（索引无命中或不可用时，覆盖全站历史）
     try {
       let parsed;
       if (src.search_url) {
-        // 优先站内搜索：覆盖该站全部历史记录
         const surl = src.search_url.replace("{keyword}", encodeURIComponent(kw));
         const { kind, text } = await fetchViaProxies(surl, 12000);
         parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseSearchItems(text, src);
@@ -513,20 +544,25 @@ async function doSearch() {
         const { kind, text } = await fetchViaProxies(src.list_url, 10000);
         parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseItems(text, src);
       }
+      const seenUrls = new Set(found.map((f) => f.url));
+      let added = 0;
       for (const it of parsed) {
-        if (it.title.toLowerCase().includes(low)) {
+        if (it.title.toLowerCase().includes(low) && !seenUrls.has(it.url)) {
           found.push({ title: it.title, url: it.url, date: it.date || "", sourceName: src.name });
+          added++;
         }
       }
-    } catch (e) {
-      errs.push(src.name);
+      liveCount += added;
+    } catch (e2) {
+      errs.push(src.name + "(实时)");
     }
   }
+  liveCount = found.length - idxCount;
 
-  lastFound = found; lastErrs = errs; lastKw = kw;
+  lastFound = found; lastErrs = errs; lastKw = kw; lastIdxCount = idxCount; lastLiveCount = liveCount;
   if (!found.length) {
     box.innerHTML = `<div class="empty">「${esc(kw)}」未找到相关软件` +
-      (errs.length ? `<br><span class="small">部分源抓取失败：${esc(errs.join("、"))}（代理不可用，稍后重试）</span>` : "") +
+      (errs.length ? `<br><span class="small">部分源抓取失败：${esc(errs.join("、"))}（索引或代理不可用，稍后重试）</span>` : "") +
       "</div>";
     return;
   }
@@ -542,8 +578,11 @@ function renderResultTable() {
       <td class="c-date">${esc(it.date || "—")}</td>
       <td class="c-src"><span class="src-tag">${esc(it.sourceName)}</span></td>
     </tr>`).join("");
+  const srcNote = lastIdxCount
+    ? `<span class="small">（${lastIdxCount} 条来自索引缓存，${lastLiveCount} 条实时抓取补充）</span>`
+    : `<span class="small">（全部为实时抓取；首次运行后仓库会生成索引缓存提速）</span>`;
   $("#searchResults").innerHTML = `
-    <div class="res-head">「${esc(lastKw)}」找到 <b>${lastFound.length}</b> 条结果（含全站历史，点击表头排序）` +
+    <div class="res-head">「${esc(lastKw)}」找到 <b>${lastFound.length}</b> 条结果（含全站历史，点击表头排序）${srcNote}` +
     (lastErrs.length ? `<span class="small">（${esc(lastErrs.join("、"))} 抓取失败，未计入）</span>` : "") +
     `</div>
     <table class="res-table">
@@ -576,6 +615,17 @@ function sortResults(list) {
 }
 
 /* ---------- 手动检查（设置弹窗内） ---------- */
+// 读取仓库索引快照（GitHub Actions 生成，前端搜索优先通道）
+async function fetchIndex(sid) {
+  const { owner, repo } = repoFromPage();
+  const r = await fetch(
+    `https://raw.githubusercontent.com/${owner}/${repo}/main/src/index/${encodeURIComponent(sid)}.json`,
+    { signal: AbortSignal.timeout(8000) }
+  );
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  return await r.json();
+}
+
 function fetchViaProxies(url, timeoutMs = 10000) {
   // 免 key 公共 CORS 代理，逐个顺序尝试；HTML 或 markdown 两种返回格式
   const tries = [
@@ -645,20 +695,25 @@ function parseSearchItems(html, source) {
     const ca = el.querySelector(dateSel);
     if (ca) {
       let txt = (ca.textContent || "").replace(source.search_date_prefix || "", "").trim();
-      date = normDate(txt);
+      // 标题中的版本年份（如 CorelDRAW 2019）用于补全只有月-日的日期
+      const ym = title.match(/(19|20)\d{2}/);
+      date = normDate(txt, ym ? Number(ym[0]) : undefined);
     }
     items.push({ key: url || title, title, url, date });
   }
   return items;
 }
 
-// 日期归一化为 YYYY-MM-DD；只有月-日的（如 09-20）按当前年份补全
-function normDate(txt) {
+// 日期归一化为 YYYY-MM-DD；只有月-日的（如 09-20）用标题版本年份补全（423down 等）
+function normDate(txt, fallbackYear) {
   let t = String(txt || "").replace(/[年/.]/g, "-").replace(/月/g, "-").trim();
   const m1 = t.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
   if (m1) return m1[1] + "-" + m1[2].padStart(2, "0") + "-" + m1[3].padStart(2, "0");
   const m2 = t.match(/(\d{1,2})-(\d{1,2})/);
-  if (m2) return new Date().getFullYear() + "-" + m2[1].padStart(2, "0") + "-" + m2[2].padStart(2, "0");
+  if (m2) {
+    const y = fallbackYear || new Date().getFullYear();
+    return y + "-" + m2[1].padStart(2, "0") + "-" + m2[2].padStart(2, "0");
+  }
   return "";
 }
 
