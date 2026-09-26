@@ -346,11 +346,28 @@ const BUILTIN_SOURCES = [
     // 站内搜索（覆盖全站历史记录，{keyword} 会被替换）
     search_url: "https://www.x6d.com/daowangsousuo?q={keyword}",
     search_date_prefix: "发布时间："
+  },
+  {
+    id: "423down",
+    name: "423down",
+    list_url: "https://www.423down.com",
+    item_selector: "ul.excerpt li",
+    title_selector: "h2 a",
+    date_selector: "span.time",
+    date_prefix: "",
+    max_items: 50,
+    enabled: true,
+    // 站内搜索（WordPress 主题，覆盖全站历史记录）
+    search_url: "https://www.423down.com/search/{keyword}",
+    search_item_selector: "ul.excerpt li",
+    search_title_selector: "h2 a",
+    search_date_selector: "span.time",
+    search_date_prefix: ""
   }
 ];
 
 // 热门搜索关键词（预置，可改）
-const HOT_KEYWORDS = ["CorelDRAW", "Bandicam", "Photoshop", "Everything", "Bandizip", "Internet Download Manager", "Navicat", "Typora"];
+const HOT_KEYWORDS = ["CorelDRAW", "Bandicam", "Photoshop", "Everything", "Bandizip", "IDM", "Navicat", "Typora"];
 
 let cfg = {
   keywords: [], sources: BUILTIN_SOURCES,
@@ -607,14 +624,17 @@ function parseItems(html, source) {
   return items;
 }
 
-// 站内搜索页解析（如 x6d 的 /daowangsousuo）：li.layui-clear > a.soft-title + div.list-ca
+// 站内搜索页解析（选择器由源配置，如 x6d 的 li.layui-clear、423down 的 ul.excerpt li）
 function parseSearchItems(html, source) {
   const doc = new DOMParser().parseFromString(html, "text/html");
-  const els = doc.querySelectorAll("li.layui-clear");
+  const itemSel = source.search_item_selector || "li.layui-clear";
+  const titleSel = source.search_title_selector || source.title_selector || "a.soft-title";
+  const dateSel = source.search_date_selector || source.date_selector || "div.list-ca";
+  const els = doc.querySelectorAll(itemSel);
   const items = [];
   const max = Number(source.max_items || 30);
   for (const el of Array.from(els).slice(0, max)) {
-    const a = el.querySelector(source.title_selector || "a.soft-title");
+    const a = el.querySelector(titleSel);
     if (!a) continue;
     const title = (a.textContent || "").trim();
     const href = (a.getAttribute("href") || "").trim();
@@ -622,15 +642,24 @@ function parseSearchItems(html, source) {
     const base = source.search_url || source.list_url;
     const url = href ? new URL(href, base).href : "";
     let date = "";
-    const ca = el.querySelector(source.date_selector || "div.list-ca");
+    const ca = el.querySelector(dateSel);
     if (ca) {
-      let txt = (ca.textContent || "").replace(source.search_date_prefix || "发布时间：", "").trim();
-      const m = txt.match(/\d{4}[-/年]\d{1,2}[-/月]\d{1,2}/);
-      date = m ? m[0] : "";
+      let txt = (ca.textContent || "").replace(source.search_date_prefix || "", "").trim();
+      date = normDate(txt);
     }
     items.push({ key: url || title, title, url, date });
   }
   return items;
+}
+
+// 日期归一化为 YYYY-MM-DD；只有月-日的（如 09-20）按当前年份补全
+function normDate(txt) {
+  let t = String(txt || "").replace(/[年/.]/g, "-").replace(/月/g, "-").trim();
+  const m1 = t.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m1) return m1[1] + "-" + m1[2].padStart(2, "0") + "-" + m1[3].padStart(2, "0");
+  const m2 = t.match(/(\d{1,2})-(\d{1,2})/);
+  if (m2) return new Date().getFullYear() + "-" + m2[1].padStart(2, "0") + "-" + m2[2].padStart(2, "0");
+  return "";
 }
 
 // Jina Reader 返回 markdown，解析其中的 [标题](链接) 条目
