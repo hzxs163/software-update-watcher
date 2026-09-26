@@ -12,7 +12,9 @@
       "date_selector": "div.list-ca",
       "date_prefix": "时间：",
       "max_items": 30,
-      "enabled": true
+      "enabled": true,
+      "pagination_tpl": "https://www.x6d.com/html/23-{n}.html",
+      "full_pages": 356
     },
     {
       "id": "423down",
@@ -25,7 +27,9 @@
       "date_selector": "span.time",
       "date_prefix": "",
       "max_items": 50,
-      "enabled": true
+      "enabled": true,
+      "pagination_tpl": "https://www.423down.com/page/{n}",
+      "full_pages": 600
     },
     {
       "id": "gndown",
@@ -37,7 +41,9 @@
       "date_selector": "div.meta time",
       "date_prefix": "",
       "max_items": 50,
-      "enabled": true
+      "enabled": true,
+      "pagination_tpl": "https://www.gndown.com/page/{n}",
+      "full_pages": 209
     }
   ],
   "push": {
