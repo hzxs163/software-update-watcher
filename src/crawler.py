@@ -12,6 +12,7 @@
 import json
 import re
 import time
+from datetime import datetime
 from urllib.parse import urljoin, urlparse, quote
 
 import requests
@@ -179,7 +180,12 @@ def _parse_html_items(soup, source: dict, item_selector: str, title_selector: st
             continue
 
         link = urljoin(source["list_url"], href)
-        date = _extract_date(el, date_selector, date_prefix)
+        # 标题中的版本年份（如 CorelDRAW 2019）用于补全只有月-日的日期
+        title_year = None
+        _ym = re.search(r"(19|20)\d{2}", title)
+        if _ym:
+            title_year = int(_ym.group(0))
+        date = _extract_date(el, date_selector, date_prefix, title_year)
 
         key = link if href else f"{title}|{date}"
         items.append({"key": key, "title": title, "url": link, "date": date})
@@ -207,7 +213,8 @@ def _looks_like_markdown(text: str) -> bool:
     return len(links) >= 3
 
 
-def _extract_date(item_el, date_selector: str, date_prefix: str) -> str:
+def _extract_date(item_el, date_selector: str, date_prefix: str,
+                  fallback_year: int | None = None) -> str:
     if not date_selector:
         return ""
     el = item_el.select_one(date_selector)
@@ -215,9 +222,16 @@ def _extract_date(item_el, date_selector: str, date_prefix: str) -> str:
         return ""
     text = el.get_text(strip=True)
     text = text.replace(date_prefix, "").strip()
-    # 只保留类似 2026-09-25 / 2026/09/25 的日期部分
+    # 完整日期：2026-09-25 / 2026/09/25 / 2026年09月25日
     m = re.search(r"\d{4}[-/年]\d{1,2}[-/月]\d{1,2}", text)
-    return m.group(0) if m else text
+    if m:
+        return m.group(0)
+    # 只有月-日（如 09-20）：优先用标题版本年份，否则用当前年（423down 等站点）
+    m2 = re.search(r"(\d{1,2})[-/月.](\d{1,2})", text)
+    if m2:
+        y = fallback_year or datetime.now().year
+        return f"{y}-{int(m2.group(1)):02d}-{int(m2.group(2)):02d}"
+    return text
 
 
 def clean_text(raw: str) -> str:
