@@ -62,15 +62,18 @@ def _is_validator_page(url: str, text: str) -> bool:
 
 
 # 进程级直连失败计数：连续失败达到阈值后降级跳过直连（站点 WAF 封 IP 时不再空耗重试）
-_DIRECT_FAIL_STREAK = {"n": 0}
+# 降级后每 25 次调用自动探测一次直连：WAF 冷却后自动切回快速直连
+_DIRECT_FAIL_STREAK = {"n": 0, "calls": 0}
 
 
 def fetch_html(url: str, timeout: int = 30) -> str:
     """多通道拉取页面文本（HTML 或 markdown），任一通道成功即返回。"""
     errors = []
+    _DIRECT_FAIL_STREAK["calls"] += 1
 
-    # 通道1：直连（带浏览器头 + 重试）；连续失败 3 次后本次进程降级跳过
-    if _DIRECT_FAIL_STREAK["n"] < 3:
+    # 通道1：直连（带浏览器头 + 重试）；连续失败 3 次后降级，每 25 页探测恢复
+    probe = _DIRECT_FAIL_STREAK["n"] < 3 or _DIRECT_FAIL_STREAK["calls"] % 25 == 0
+    if probe:
         try:
             text = _fetch_direct(url, timeout)
             _DIRECT_FAIL_STREAK["n"] = 0
@@ -80,7 +83,7 @@ def fetch_html(url: str, timeout: int = 30) -> str:
             _DIRECT_FAIL_STREAK["n"] += 1
             errors.append(f"直连: {exc}")
     else:
-        errors.append("直连已降级（连续失败>=3，跳过直连）")
+        errors.append("直连已降级（跳过，每25页自动探测恢复）")
 
     # 通道2：公共 CORS 代理
     for builder in _PROXY_BUILDERS:
