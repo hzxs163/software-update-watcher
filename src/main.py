@@ -22,6 +22,7 @@ from pathlib import Path
 
 from crawler import parse_source, match_keywords
 from notify import resolve_push_config, send_wxpusher, build_message
+from urllib.parse import quote
 
 BASE_DIR = Path(__file__).resolve().parent
 CONFIG_PATH = BASE_DIR / "config.json"
@@ -46,6 +47,27 @@ def now_iso() -> str:
 def now_local() -> str:
     """运行环境的本地时间（Actions 中已设 TZ=Asia/Shanghai）。"""
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def _fetch_source_items(source: dict, keywords: list) -> list:
+    """抓取单个源。
+
+    若源配置了 search_url 模板（如 https://www.423down.com/search/{keyword}）：
+      对每个关注关键词逐个站内搜索，覆盖该站全站历史记录；
+    否则抓取 list_url 列表页，由调用方按关键词过滤。
+    """
+    tpl = (source.get("search_url") or "").strip()
+    if tpl and keywords:
+        all_items = []
+        for kw in keywords:
+            url = tpl.replace("{keyword}", quote(str(kw)))
+            src = dict(source, list_url=url)
+            try:
+                all_items.extend(parse_source(src))
+            except Exception as exc:  # noqa: BLE001
+                print(f"  [error] 搜索「{kw}」失败: {exc}")
+        return all_items
+    return parse_source(source)
 
 
 def seen_changed(old_state: dict, new_state: dict) -> bool:
@@ -85,7 +107,7 @@ def main() -> int:
         print(f"[check] {name} -> {source.get('list_url')}")
 
         try:
-            items = parse_source(source)
+            items = _fetch_source_items(source, global_keywords)
         except Exception as exc:  # noqa: BLE001
             print(f"  [error] 抓取/解析失败: {exc}")
             src_stats[sid] = {"name": name, "error": str(exc)}
