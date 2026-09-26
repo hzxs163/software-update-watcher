@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-26 01:28:32",
+  "checked_at": "2026-09-26 01:31:28",
   "keywords": [
     "CorelDRAW"
   ],
@@ -17,13 +17,13 @@
       "name": "423down",
       "fetched": 12,
       "matched": 12,
-      "new": 12
+      "new": 0
     },
     "gndown": {
       "name": "绿软小站",
       "fetched": 15,
       "matched": 15,
-      "new": 15
+      "new": 0
     }
   }
 }
