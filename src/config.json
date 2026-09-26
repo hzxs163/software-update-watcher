@@ -17,11 +17,24 @@
     {
       "id": "423down",
       "name": "423down",
-      "list_url": "https://www.423down.com",
+      "list_url": "https://www.423down.com/page/2",
       "search_url": "https://www.423down.com/search/{keyword}",
-      "item_selector": "ul.excerpt li",
+      "item_selector": "div.content-wrap ul.excerpt li",
+      "search_item_selector": "ul.excerpt li",
       "title_selector": "h2 a",
       "date_selector": "span.time",
+      "date_prefix": "",
+      "max_items": 50,
+      "enabled": true
+    },
+    {
+      "id": "gndown",
+      "name": "绿软小站",
+      "list_url": "https://www.gndown.com",
+      "search_url": "https://search.gndown.com/?s={keyword}",
+      "item_selector": "article.excerpt",
+      "title_selector": "header h2 a",
+      "date_selector": "div.meta time",
       "date_prefix": "",
       "max_items": 50,
       "enabled": true
