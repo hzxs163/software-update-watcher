@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-09-28 02:40:21",
+  "checked_at": "2026-09-28 12:25:19",
   "keywords": [
     "CorelDRAW"
   ],
-  "new_total": 0,
+  "new_total": 12,
   "pushed": false,
-  "message": "无更新",
+  "message": "有更新！12 条新发布（未配置推送密钥，未推送）",
   "sources": {
     "x6d-green": {
       "name": "小刀娱乐网-绿色软件",
@@ -15,9 +15,9 @@
     },
     "423down": {
       "name": "423down",
-      "fetched": 0,
-      "matched": 0,
-      "new": 0
+      "fetched": 12,
+      "matched": 12,
+      "new": 12
     },
     "gndown": {
       "name": "绿软小站",
