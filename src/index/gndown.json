@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-09-30 17:16:56",
+ "updated_at": "2026-10-01 03:09:51",
  "items": [
   {
    "title": "WindowTabs(给窗口增加多页标签工具) 2026.10.01 中文绿色版",
@@ -54,6 +54,91 @@
   {
    "title": "Floorp Browser(基于Firefox火狐浏览器) v12.19.0 官方便携版",
    "url": "https://www.gndown.com/14431.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "酷安APP手机客户端 v16.6.4(2609291) 去广告去更新版 v2",
+   "url": "https://www.gndown.com/7553.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Drvinstall(驱动管理工具多线程版) v9.2026.10.101 中文绿色版",
+   "url": "https://www.gndown.com/3675.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Win11 v25H2(26200.9550) 不忘初心精简版",
+   "url": "https://www.gndown.com/15570.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Win11 v25H2(26200.9550) 不忘初心游戏版",
+   "url": "https://www.gndown.com/15569.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Hex Editor Neo(十六进制编辑器) v8.25.01.9585 多语便携版",
+   "url": "https://www.gndown.com/8210.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Any Video Downloader(视频下载工具) Pro v10.4.24 便携版",
+   "url": "https://www.gndown.com/9476.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Visual Studio Code(微软轻量级免费代码编辑器) v1.140.0",
+   "url": "https://www.gndown.com/1742.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Syncovery Premium(数据同步备份工具) v12.8.6.86",
+   "url": "https://www.gndown.com/12339.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Electerm(跨平台SSH桌面终端) v5.5.56 中文绿色版",
+   "url": "https://www.gndown.com/1713.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Brave Browser(快速私密网页浏览器) v1.96.60 中文绿色版",
+   "url": "https://www.gndown.com/8529.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Win11 LTSC 2024(26100.9550) 不忘初心版",
+   "url": "https://www.gndown.com/3416.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "Final2x(AI图片无损放大工具) v4.1.0 中文绿色版",
+   "url": "https://www.gndown.com/4973.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "FluxDown(多协议下载管理器) v0.5.0 多语便携版",
+   "url": "https://www.gndown.com/10982.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "CoolUtils Total Mail Converter Pro v11.1.0.820 多语便携版",
+   "url": "https://www.gndown.com/8837.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "CoolUtils Total Outlook Converter Pro v5.1.1.669 多语便携版",
+   "url": "https://www.gndown.com/8840.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "R-Wipe & Clean(清除无用垃圾文件) v20.0.2578 便携版",
+   "url": "https://www.gndown.com/4626.html",
+   "date": "2026-10-01"
+  },
+  {
+   "title": "NTLite(操作系统定制工具) v2026.09.12311",
+   "url": "https://www.gndown.com/2226.html",
    "date": "2026-10-01"
   },
   {
@@ -154,11 +239,6 @@
   {
    "title": "EmEditor(Windows文本编辑器) v26.2.9 多语便携版 & 安装版",
    "url": "https://www.gndown.com/504.html",
-   "date": "2026-09-30"
-  },
-  {
-   "title": "酷安APP手机客户端 v16.6.4(2609291) 去广告去更新版",
-   "url": "https://www.gndown.com/7553.html",
    "date": "2026-09-30"
   },
   {
@@ -382,11 +462,6 @@
    "date": "2026-09-29"
   },
   {
-   "title": "Drvinstall(驱动管理工具多线程版) v9.2026.9.2818 中文绿色版",
-   "url": "https://www.gndown.com/3675.html",
-   "date": "2026-09-29"
-  },
-  {
    "title": "Adobe Premiere Pro 2026(PR2026直装版) v26.5.2.5 中文直装版",
    "url": "https://www.gndown.com/16016.html",
    "date": "2026-09-29"
@@ -444,16 +519,6 @@
   {
    "title": "Win11 v26H2(26300.9457) 不忘初心精简版",
    "url": "https://www.gndown.com/1085.html",
-   "date": "2026-09-28"
-  },
-  {
-   "title": "Win11 v25H2(26200.9457) 不忘初心精简版",
-   "url": "https://www.gndown.com/15570.html",
-   "date": "2026-09-28"
-  },
-  {
-   "title": "Win11 v25H2(26200.9457) 不忘初心游戏版",
-   "url": "https://www.gndown.com/15569.html",
    "date": "2026-09-28"
   },
   {
@@ -529,11 +594,6 @@
   {
    "title": "Ungoogled-Chromium v154.0.8037.57-1.1 中文绿色版",
    "url": "https://www.gndown.com/12342.html",
-   "date": "2026-09-28"
-  },
-  {
-   "title": "Hex Editor Neo(十六进制编辑器) v8.25.00.9580 多语便携版",
-   "url": "https://www.gndown.com/8210.html",
    "date": "2026-09-28"
   },
   {
@@ -622,11 +682,6 @@
    "date": "2026-09-27"
   },
   {
-   "title": "Any Video Downloader(视频下载工具) Pro v10.4.23 便携版",
-   "url": "https://www.gndown.com/9476.html",
-   "date": "2026-09-27"
-  },
-  {
    "title": "MuPDF(轻量级PDF阅读器编辑器) v1.28.5 中文绿色版",
    "url": "https://www.gndown.com/2562.html",
    "date": "2026-09-27"
@@ -634,16 +689,6 @@
   {
    "title": "Dopamine(免费Windows音乐播放器) v3.0.11 中文绿色版",
    "url": "https://www.gndown.com/3015.html",
-   "date": "2026-09-27"
-  },
-  {
-   "title": "Visual Studio Code(微软轻量级免费代码编辑器) v1.139.1",
-   "url": "https://www.gndown.com/1742.html",
-   "date": "2026-09-27"
-  },
-  {
-   "title": "Syncovery Premium(数据同步备份工具) v12.8.0.80",
-   "url": "https://www.gndown.com/12339.html",
    "date": "2026-09-27"
   },
   {
@@ -817,11 +862,6 @@
    "date": "2026-09-25"
   },
   {
-   "title": "Electerm(跨平台SSH桌面终端) v5.5.35 中文绿色版",
-   "url": "https://www.gndown.com/1713.html",
-   "date": "2026-09-25"
-  },
-  {
    "title": "Tabby(Windows终端模拟器) v1.0.237 中文绿色版",
    "url": "https://www.gndown.com/2977.html",
    "date": "2026-09-25"
@@ -839,11 +879,6 @@
   {
    "title": "Beyond Compare(文件比较工具) v5.2.6.32528 多语便携版",
    "url": "https://www.gndown.com/6348.html",
-   "date": "2026-09-25"
-  },
-  {
-   "title": "Brave Browser(快速私密网页浏览器) v1.96.59 中文绿色版",
-   "url": "https://www.gndown.com/8529.html",
    "date": "2026-09-25"
   },
   {
