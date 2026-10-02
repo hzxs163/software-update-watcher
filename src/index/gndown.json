@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-01 22:09:21",
+ "updated_at": "2026-10-02 03:11:58",
  "items": [
   {
    "title": "YT Downloader(下载YouTube视频工具) v10.6.31 便携版",
@@ -49,6 +49,86 @@
   {
    "title": "Adobe Lightroom安卓版(手机调色软件) v11.6.0 修改版",
    "url": "https://www.gndown.com/5552.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "FluxDown(多协议下载管理器) v0.5.2 多语便携版",
+   "url": "https://www.gndown.com/10982.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "QOwnNotes(跨平台笔记应用程序) v26.10.0 中文绿色版",
+   "url": "https://www.gndown.com/1264.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "FreeTube(开源YouTube客户端) v0.25.3 Build 7833 多语便携版",
+   "url": "https://www.gndown.com/6908.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "Photo Supreme(图片管理软件) v2026.4.3.9680 便携版",
+   "url": "https://www.gndown.com/6959.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "NAPS2(多功能文档扫描工具) v8.4.0 多语便携版",
+   "url": "https://www.gndown.com/14663.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "Duplicate Files Search & Link(查找重复文件) v10.8.3 多语便携版",
+   "url": "https://www.gndown.com/13109.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "IDM下载器(Internet Download Manager) v6.43.12 仿官方安装版",
+   "url": "https://www.gndown.com/8766.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "IDM下载器(Internet Download Manager) v6.43.12 中文绿色版",
+   "url": "https://www.gndown.com/491.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "ASCOMP Secure Eraser(数据擦除软件) Pro v7.105 多语便携版",
+   "url": "https://www.gndown.com/7535.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "CoolUtils Total PDF Printer(PDF打印软件) v4.1.0.71 多语便携版",
+   "url": "https://www.gndown.com/14624.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "CoolUtils Total PDF Converter v6.5.0.208 多语便携版",
+   "url": "https://www.gndown.com/8824.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "Agisoft Metashape(3D建模软件) Pro v2.4.0.23256 多语便携版",
+   "url": "https://www.gndown.com/14452.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "nomacs(免费可商用图像查看器) v3.22.4 多语便携版",
+   "url": "https://www.gndown.com/3096.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "RarmaRadio(全球广播收听工具) v2.78.1 多语便携版",
+   "url": "https://www.gndown.com/6479.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "ServerBox(Linux服务器工具箱) v1.0.1719 中文绿色版",
+   "url": "https://www.gndown.com/15059.html",
+   "date": "2026-10-02"
+  },
+  {
+   "title": "WSL Manager(WSL可视化图形管理工具) v2.5.0 中文绿色版",
+   "url": "https://www.gndown.com/3178.html",
    "date": "2026-10-02"
   },
   {
@@ -167,11 +247,6 @@
    "date": "2026-10-01"
   },
   {
-   "title": "FluxDown(多协议下载管理器) v0.5.1 多语便携版",
-   "url": "https://www.gndown.com/10982.html",
-   "date": "2026-10-01"
-  },
-  {
    "title": "CoolUtils Total Mail Converter Pro v11.1.0.820 多语便携版",
    "url": "https://www.gndown.com/8837.html",
    "date": "2026-10-01"
@@ -262,18 +337,8 @@
    "date": "2026-09-30"
   },
   {
-   "title": "QOwnNotes(跨平台笔记应用程序) v26.9.14 中文绿色版",
-   "url": "https://www.gndown.com/1264.html",
-   "date": "2026-09-30"
-  },
-  {
    "title": "K-Lite Mega/FULL Codec Pack(视频解码器) v20.0.0 / 20.0.4 Beta",
    "url": "https://www.gndown.com/1931.html",
-   "date": "2026-09-30"
-  },
-  {
-   "title": "FreeTube(开源YouTube客户端) v0.25.3 Build 7832 多语便携版",
-   "url": "https://www.gndown.com/6908.html",
    "date": "2026-09-30"
   },
   {
@@ -284,11 +349,6 @@
   {
    "title": "CoolUtils Total Excel Converter(Excel转换工具) v7.1.0.168 多语便携版",
    "url": "https://www.gndown.com/8849.html",
-   "date": "2026-09-30"
-  },
-  {
-   "title": "Photo Supreme(图片管理软件) v2026.4.3.9670 便携版",
-   "url": "https://www.gndown.com/6959.html",
    "date": "2026-09-30"
   },
   {
