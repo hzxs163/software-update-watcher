@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-04 16:11:16",
+ "updated_at": "2026-10-05 03:04:28",
  "items": [
   {
    "title": "SQLite Expert(数据库管理工具) Professional v6.2.4.738 便携版",
@@ -12,7 +12,7 @@
    "date": "2026-10-05"
   },
   {
-   "title": "Text Editor Pro(文本代码编辑器) v37.3.0 中文绿色版",
+   "title": "Text Editor Pro(文本代码编辑器) v37.3.1 中文绿色版",
    "url": "https://www.gndown.com/1710.html",
    "date": "2026-10-05"
   },
@@ -49,6 +49,66 @@
   {
    "title": "Fort Firewall(开源免费Windows防火墙工具) v3.20.0",
    "url": "https://www.gndown.com/1664.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "FreeTube(开源YouTube客户端) v0.25.3 Build 7845 多语便携版",
+   "url": "https://www.gndown.com/6908.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "Advanced Renamer(文件重命名工具) v4.27 多语便携版",
+   "url": "https://www.gndown.com/6205.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "XYplorer(多标签文件管理器) v28.40.0300 64-bit 多语便携版",
+   "url": "https://www.gndown.com/408.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "DaVinci Resolve Studio(达芬奇调色软件) v21.1.1.10 中文直装版",
+   "url": "https://www.gndown.com/6999.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "Spotify(正版流媒体音乐平台) v1.3.1.223 多语便携版",
+   "url": "https://www.gndown.com/7999.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "FanControl(电脑风扇转速控制软件) v282 中文绿色版",
+   "url": "https://www.gndown.com/6687.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "DaVinci Fusion Studio(动画特效合成软件) v21.1.1.11 中文直装版",
+   "url": "https://www.gndown.com/11216.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "Readest(跨平台电子书阅读器) v0.12.12 多语便携版",
+   "url": "https://www.gndown.com/14673.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "Fast Video Downloader(视频下载器) v4.0.0.83 多语便携版",
+   "url": "https://www.gndown.com/7370.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "Screenpresso(截图屏幕录像软件) Pro v2.3.7.0 多语便携版",
+   "url": "https://www.gndown.com/2335.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "DLNow Video Downloader v1.56.2026.09.28 多语便携版",
+   "url": "https://www.gndown.com/7345.html",
+   "date": "2026-10-05"
+  },
+  {
+   "title": "DBeaver(数据库管理工具) v26.2.2 中文绿色版",
+   "url": "https://www.gndown.com/1781.html",
    "date": "2026-10-05"
   },
   {
@@ -387,11 +447,6 @@
    "date": "2026-10-02"
   },
   {
-   "title": "FreeTube(开源YouTube客户端) v0.25.3 Build 7833 多语便携版",
-   "url": "https://www.gndown.com/6908.html",
-   "date": "2026-10-02"
-  },
-  {
    "title": "Photo Supreme(图片管理软件) v2026.4.3.9680 便携版",
    "url": "https://www.gndown.com/6959.html",
    "date": "2026-10-02"
@@ -627,11 +682,6 @@
    "date": "2026-10-01"
   },
   {
-   "title": "Advanced Renamer(文件重命名工具) v4.26 多语便携版",
-   "url": "https://www.gndown.com/6205.html",
-   "date": "2026-10-01"
-  },
-  {
    "title": "rimage_gui(批量无损压缩图片) v3.1.0 中文绿色版",
    "url": "https://www.gndown.com/15267.html",
    "date": "2026-09-30"
@@ -704,11 +754,6 @@
   {
    "title": "WPS Office 2023 专业增强版 v12.1.0.28505 永久激活版(09.29)",
    "url": "https://www.gndown.com/3683.html",
-   "date": "2026-09-30"
-  },
-  {
-   "title": "XYplorer(多标签文件管理器) v28.40.0200 64-bit 多语便携版",
-   "url": "https://www.gndown.com/408.html",
    "date": "2026-09-30"
   },
   {
@@ -927,11 +972,6 @@
    "date": "2026-09-29"
   },
   {
-   "title": "DaVinci Resolve Studio(达芬奇调色软件) v21.1.0.17 中文直装版",
-   "url": "https://www.gndown.com/6999.html",
-   "date": "2026-09-29"
-  },
-  {
    "title": "MemoryCleaner(内存清理工具) v3.0.0 中文绿色版",
    "url": "https://www.gndown.com/12303.html",
    "date": "2026-09-29"
@@ -1012,11 +1052,6 @@
    "date": "2026-09-28"
   },
   {
-   "title": "Spotify(正版流媒体音乐平台) v1.3.0.277 多语便携版",
-   "url": "https://www.gndown.com/7999.html",
-   "date": "2026-09-28"
-  },
-  {
    "title": "Dawn Launcher(快速启动工具) v3.0.9 中文绿色版",
    "url": "https://www.gndown.com/548.html",
    "date": "2026-09-28"
@@ -1089,11 +1124,6 @@
   {
    "title": "Dopamine(免费Windows音乐播放器) v3.0.11 中文绿色版",
    "url": "https://www.gndown.com/3015.html",
-   "date": "2026-09-27"
-  },
-  {
-   "title": "FanControl(电脑风扇转速控制软件) v281 中文绿色版",
-   "url": "https://www.gndown.com/6687.html",
    "date": "2026-09-27"
   },
   {
