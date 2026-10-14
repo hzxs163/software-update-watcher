@@ -80,6 +80,19 @@ def sort_items(items: list) -> list:
                                         x.get("title") or ""), reverse=True)
 
 
+def sanitize_future_date(item: dict, today: str) -> dict:
+    """清掉「未来日期」——这类值只可能来自旧版本的年份推断 bug（曾出现 2027-10-09）。
+
+    新代码不会再把日期推外推到未来，但索引是跨运行合并的，旧数据得在这里洗掉；
+    宁可留空，也不留一个看起来像「预告」的错误日期。
+    """
+    d = item.get("date") or ""
+    if d and d > today:
+        item = dict(item)
+        item["date"] = ""
+    return item
+
+
 def update_index(source: dict, items: list) -> bool:
     """更新 {sid}.json 索引快照：按 URL 去重合并，日期倒序，截断保留最新。
 
@@ -88,15 +101,16 @@ def update_index(source: dict, items: list) -> bool:
     sid = source.get("id") or source.get("name", "source")
     idx_path = INDEX_DIR / f"{sid}.json"
     old = load_json(idx_path, {"updated_at": "", "items": []})
+    today = datetime.now(_local_tz()).strftime("%Y-%m-%d")
     merged = {}
     for it in old.get("items", []):
         if it.get("url"):
-            merged[it["url"]] = it
+            merged[it["url"]] = sanitize_future_date(it, today)
     for it in items:
         if it.get("url"):
-            merged[it["url"]] = {
+            merged[it["url"]] = sanitize_future_date({
                 "title": it["title"], "url": it["url"], "date": it.get("date", "")
-            }
+            }, today)
     new_items = sort_items(list(merged.values()))[:MAX_INDEX]
     if old.get("items") != new_items:
         INDEX_DIR.mkdir(parents=True, exist_ok=True)
@@ -193,6 +207,8 @@ def parse_args(argv=None):
                    help="全量重建索引（抓取全站所有分页，耗时较长）")
     p.add_argument("--source", help="只处理指定源 id（默认处理全部启用的源）")
     p.add_argument("--pages", type=int, help="索引本轮最多抓取的页数（配合 --full-index 分批跑）")
+    p.add_argument("--index-pages", type=int, default=3,
+                   help="常规运行时列表页抓取的页数上限（默认 %(default)s）")
     p.add_argument("--workers", type=int, default=DEFAULT_WORKERS,
                    help="同站内分页/关键词并发数（默认 %(default)s）")
     p.add_argument("--no-index", action="store_true", help="跳过索引快照（只做更新检测）")
@@ -291,15 +307,19 @@ def main(argv=None) -> int:
         else:
             print(f"  [init] 首次运行，记录 {len(matched)} 条基线（本次不推送）")
 
-        # 索引快照：抓列表页前 3 页增量合并（--full-index 时全量重建）
+        # 索引快照 = 列表页前 N 页 ∪ 本轮关键词搜索结果。
+        # 后者是关键：深层列表页会被站点掐 IP（实测 x6d 约 195 页、423down 约 157 页起
+        # 返回连接重置/302 死循环），而站内搜索一次就给出该关键词的全站历史。
+        # 前端搜索因此不再依赖「实时公共代理是否争气」——冷门关键词也能从索引直接出全量。
         if not args.no_index:
             try:
-                index_items = parse_source_pages(source, 3, args.workers)
+                index_items = parse_source_pages(source, args.index_pages, args.workers)
             except Exception as exc:  # noqa: BLE001
                 print(f"  [warn] 索引快照抓取失败({name}): {exc}")
-                index_items = items
+                index_items = []
+            index_items = index_items + items
             if update_index(source, index_items):
-                print(f"  [index] {sid}.json 索引已更新（本轮解析 {len(index_items)} 条）")
+                print(f"  [index] {sid}.json 索引已更新（本轮并入 {len(index_items)} 条）")
 
         new_seen = merge_seen(old_seen, matched)
         state["sources"][sid] = {"seen": new_seen, "last_check": now,

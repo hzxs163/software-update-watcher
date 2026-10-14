@@ -195,6 +195,40 @@ def test_title_change_is_reported_as_updated(env):
     assert lc["new_total"] == 1 and "1 条内容更新" in lc["message"]
 
 
+def test_update_index_clears_legacy_future_dates(tmp_path, monkeypatch):
+    """旧版本年份推断 bug 会在索引里留下 2027-10-09 这类未来日期，合并时洗掉。"""
+    monkeypatch.setattr(suw, "INDEX_DIR", tmp_path)
+    src = {"id": "demo"}
+    (tmp_path / "demo.json").write_text(json.dumps({"items": [
+        {"title": "未来的条目", "url": "https://x/9", "date": "2027-10-09"},
+        {"title": "正常条目", "url": "https://x/8", "date": "2025-01-01"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    suw.update_index(src, [])
+    items = json.loads((tmp_path / "demo.json").read_text(encoding="utf-8"))["items"]
+    by_url = {i["url"]: i for i in items}
+    assert by_url["https://x/9"]["date"] == "", "未来日期应被清空"
+    assert by_url["https://x/8"]["date"] == "2025-01-01", "正常日期不动"
+
+
+def test_index_merges_keyword_search_results(env):
+    """索引必须并入站内搜索结果：深层列表页会被站点掐掉，站内搜索才是全站历史。
+
+    这条直接对应线上症状——「搜 CorelDRAW，423down 只有 1 条」，
+    因为索引里只有列表页前几页顺带出现的那条。
+    """
+    search_only = [{"key": "https://demo/9999", "title": "CorelDRAW 2026 v27 全站历史条目",
+                    "url": "https://demo/9999", "date": "2026-08-01"}]
+    list_only = [{"title": "别的软件", "url": "https://demo/1", "date": "2026-10-01"}]
+    env["monkeypatch"].setattr(suw, "parse_keyword_search",
+                               lambda s, k, w=4: list(search_only))
+    env["monkeypatch"].setattr(suw, "parse_source_pages", lambda s, n=3, w=4: list(list_only))
+    assert suw.main([]) == 0
+    idx = json.loads((env["tmp"] / "index" / "demo.json").read_text(encoding="utf-8"))["items"]
+    urls = {i["url"] for i in idx}
+    assert "https://demo/9999" in urls, "站内搜索命中的历史条目应进索引"
+    assert "https://demo/1" in urls, "列表页条目也应保留"
+
+
 def test_health_alert_fires_once_per_episode(env):
     """连续失败到阈值推一次告警；再次恢复推一条恢复通知；期间不重复轰炸。"""
     sent = []
