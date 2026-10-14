@@ -2,6 +2,7 @@
   "keywords": [
     "CorelDRAW"
   ],
+  "exclude_keywords": [],
   "sources": [
     {
       "id": "x6d-green",
@@ -14,28 +15,35 @@
       "max_items": 30,
       "enabled": true,
       "pagination_tpl": "https://www.x6d.com/html/23-{n}.html",
-      "full_pages": 356
+      "full_pages": 356,
+      "search_url": "https://www.x6d.com/daowangsousuo?q={keyword}",
+      "search_item_selector": "ul.list-ul li.layui-clear",
+      "search_title_selector": "a.soft-title",
+      "search_date_selector": "div.list-ca",
+      "search_date_prefix": "发布时间："
     },
     {
       "id": "423down",
       "name": "423down",
       "list_url": "https://www.423down.com/page/2",
-      "search_url": "https://www.423down.com/search/{keyword}",
       "item_selector": "div.content-wrap ul.excerpt li",
-      "search_item_selector": "ul.excerpt li",
       "title_selector": "h2 a",
       "date_selector": "span.time",
       "date_prefix": "",
       "max_items": 50,
       "enabled": true,
       "pagination_tpl": "https://www.423down.com/page/{n}",
-      "full_pages": 600
+      "full_pages": 600,
+      "search_url": "https://www.423down.com/search/{keyword}",
+      "search_item_selector": "ul.excerpt li",
+      "search_title_selector": "h2 a",
+      "search_date_selector": "span.time",
+      "search_date_prefix": ""
     },
     {
       "id": "gndown",
       "name": "绿软小站",
       "list_url": "https://www.gndown.com",
-      "search_url": "https://search.gndown.com/?s={keyword}",
       "item_selector": "article.excerpt",
       "title_selector": "header h2 a",
       "date_selector": "div.meta time",
@@ -43,7 +51,12 @@
       "max_items": 50,
       "enabled": true,
       "pagination_tpl": "https://www.gndown.com/page/{n}",
-      "full_pages": 209
+      "full_pages": 209,
+      "search_url": "https://search.gndown.com/?s={keyword}",
+      "search_item_selector": "article.excerpt",
+      "search_title_selector": "header h2 a",
+      "search_date_selector": "div.meta time",
+      "search_date_prefix": ""
     }
   ],
   "push": {
