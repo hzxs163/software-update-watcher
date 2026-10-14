@@ -1,0 +1,4 @@
+# 统一换行符：仓库内一律 LF，避免 Windows 上 checkout 出 CRLF 造成无意义 diff
+* text=auto eol=lf
+*.png binary
+*.jpg binary

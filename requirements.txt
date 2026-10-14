@@ -1,3 +1,4 @@
-requests>=2.31
-beautifulsoup4>=4.12
-lxml>=5.0
+# 运行时依赖（版本锁定到已验证的主版本区间，避免上游大版本突变把定时任务打挂）
+# 注：原 requirements 里的 lxml 从未被代码使用（BeautifulSoup 用的是内置 html.parser），已移除
+requests>=2.31,<3
+beautifulsoup4>=4.12,<5
