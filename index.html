@@ -653,24 +653,36 @@ function sortResults(list) {
 }
 
 /* ---------- 手动检查（设置弹窗内） ---------- */
-// 读取仓库索引快照（GitHub Actions 生成，前端搜索加速通道）
-// 带一次重试：公网到 GitHub 抖动很常见，单次超时会误报「索引不可用」。
-// 不加 ?t= 缓存串：索引 6 小时才更新一次，绕开 CDN 只会让每次搜索都打源站、
-// 白白增加失败面（实测本机 raw 抖动时两种写法都是全挂）。
-async function fetchIndex(sid, tries = 2) {
+// 读取仓库里的 JSON 文件：raw.githubusercontent（快）→ api.github.com/contents（兜底）。
+// 为什么要兜底：国内网络下 raw 经常整段不可达（实测同一分钟里 raw 全挂而
+// api.github.com 正常），只靠 raw 的话索引通道形同不存在，搜索就只剩代理运气。
+// 索引/配置/最近检查结果三个文件共用这一条路径，不再各写一份解码逻辑。
+async function ghFileJson(relPath) {
   const { owner, repo } = repoFromPage();
-  const url = `https://raw.githubusercontent.com/${owner}/${repo}/main/src/index/${encodeURIComponent(sid)}.json`;
-  let lastErr;
-  for (let i = 0; i < tries; i++) {
+  let lastErr = null;
+  for (let i = 0; i < 2; i++) {
     try {
-      const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
-      if (!r.ok) throw new Error("HTTP " + r.status);
+      const r = await fetch(
+        `https://raw.githubusercontent.com/${owner}/${repo}/main/${relPath}`,
+        { signal: AbortSignal.timeout(10000) });
+      if (!r.ok) throw new Error("raw HTTP " + r.status);
       return await r.json();
-    } catch (e) {
-      lastErr = e;
-    }
+    } catch (e) { lastErr = e; }
   }
-  throw lastErr || new Error("索引不可用");
+  const r = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/contents/${relPath}?ref=main`,
+    { headers: { Accept: "application/vnd.github+json" }, signal: AbortSignal.timeout(12000) });
+  if (!r.ok) {
+    throw new Error((lastErr ? lastErr.message + " / " : "") + "api HTTP " + r.status);
+  }
+  const d = await r.json();
+  const bytes = Uint8Array.from(atob(d.content), (c) => c.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+
+// 仓库索引快照（GitHub Actions 生成，前端搜索加速通道）
+function fetchIndex(sid) {
+  return ghFileJson(`src/index/${encodeURIComponent(sid)}.json`);
 }
 
 // 免 key 公共 CORS 代理：可靠性与速度都很飘（实测同一目标，raw 超时而 get 7ms 返回）。
@@ -858,18 +870,9 @@ function repoFromPage() {
   return { owner: "hzxs163", repo: "software-update-watcher" };
 }
 
-// 降级通道：读取仓库 last_check.json（公开仓库免认证），展示最近一次 Actions 结果
-async function fetchLastCheck() {
-  const { owner, repo } = repoFromPage();
-  const r = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/contents/src/last_check.json`,
-    { signal: AbortSignal.timeout(10000) }
-  );
-  if (!r.ok) throw new Error("暂无仓库检查记录");
-  const d = await r.json();
-  const bin = atob(d.content);
-  const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
-  return JSON.parse(new TextDecoder().decode(bytes));
+// 降级通道：读取仓库 last_check.json，展示最近一次 Actions 结果
+function fetchLastCheck() {
+  return ghFileJson("src/last_check.json");
 }
 
 async function manualCheck(i) {
@@ -957,12 +960,7 @@ function dedup(arr) { return [...new Set(arr)]; }
 // 仓库 src/config.json 是源规则的唯一真源；内置 BUILTIN_SOURCES 仅作拉取失败时的兜底
 async function loadRepoConfig() {
   try {
-    const { owner, repo } = repoFromPage();
-    const r = await fetch(
-      `https://raw.githubusercontent.com/${owner}/${repo}/main/src/config.json`,
-      { signal: AbortSignal.timeout(8000) });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const c = await r.json();
+    const c = await ghFileJson("src/config.json");
     if (Array.isArray(c.sources) && c.sources.length) cfg.sources = c.sources;
     if (Array.isArray(c.exclude_keywords)) cfg.exclude_keywords = c.exclude_keywords;
     if (Array.isArray(c.keywords) && !(cfg.keywords || []).length) cfg.keywords = c.keywords;
