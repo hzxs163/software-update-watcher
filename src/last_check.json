@@ -1,27 +1,36 @@
 {
-  "checked_at": "2026-10-14 02:46:06",
+  "checked_at": "2026-10-14 18:53:32",
+  "checked_at_tz": "Asia/Shanghai",
   "keywords": [
     "CorelDRAW"
   ],
   "new_total": 0,
   "pushed": false,
-  "message": "无更新",
+  "message": "无更新（1/3 个源抓取失败：小刀娱乐网-绿色软件）",
+  "all_sources_failed": false,
+  "failed_sources": [
+    "小刀娱乐网-绿色软件"
+  ],
   "sources": {
     "x6d-green": {
       "name": "小刀娱乐网-绿色软件",
-      "error": "所有抓取通道均失败: 直连: HTTP 502；代理 api.allorigins.win: HTTP 522；代理 api.codetabs.com: HTTP 522；代理 cors.eu.org: HTTP 429；代理 thingproxy.freeboard.io: HTTPSConnectionPool(host='thingproxy.freeboard.io', port=443): Max retries exceeded with url: /fetch/https://www.x6d.com/html/23.html (Caused by NameResolutionError(\"HTTPSConnection(host='thingproxy.freeboard.io', port=443): Failed to resolve 'thingproxy.freeboard.io' ([Errno -2] Name or service not known)\"))；jina: HTTP 200"
+      "error": "站内搜索全部失败: 所有抓取通道均失败: 直连: HTTP 502；代理 api.allorigins.win: HTTP 522；代理 api.codetabs.com: HTTP 522；代理 cors.eu.org: HTTP 429；jina: 返回200但正文过短(<500字节)",
+      "fail_streak": 1,
+      "kept_seen": 0
     },
     "423down": {
       "name": "423down",
       "fetched": 12,
       "matched": 12,
-      "new": 0
+      "new": 0,
+      "seen_total": 12
     },
     "gndown": {
       "name": "绿软小站",
       "fetched": 15,
       "matched": 15,
-      "new": 0
+      "new": 0,
+      "seen_total": 15
     }
   }
 }
