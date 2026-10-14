@@ -654,16 +654,16 @@ function sortResults(list) {
 
 /* ---------- 手动检查（设置弹窗内） ---------- */
 // 读取仓库索引快照（GitHub Actions 生成，前端搜索加速通道）
-// 带一次性重试：公网到 GitHub 抖动很常见，单次 8s 超时会误报「索引不可用」；
-// ?t= 用于绕开 raw 的 5 分钟 CDN 缓存，Actions 刚提交完也能立刻看到新索引。
+// 带一次重试：公网到 GitHub 抖动很常见，单次超时会误报「索引不可用」。
+// 不加 ?t= 缓存串：索引 6 小时才更新一次，绕开 CDN 只会让每次搜索都打源站、
+// 白白增加失败面（实测本机 raw 抖动时两种写法都是全挂）。
 async function fetchIndex(sid, tries = 2) {
   const { owner, repo } = repoFromPage();
-  const base = `https://raw.githubusercontent.com/${owner}/${repo}/main/src/index/${encodeURIComponent(sid)}.json`;
+  const url = `https://raw.githubusercontent.com/${owner}/${repo}/main/src/index/${encodeURIComponent(sid)}.json`;
   let lastErr;
   for (let i = 0; i < tries; i++) {
     try {
-      const r = await fetch(base + "?t=" + Date.now(),
-        { signal: AbortSignal.timeout(10000), cache: "no-store" });
+      const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if (!r.ok) throw new Error("HTTP " + r.status);
       return await r.json();
     } catch (e) {
