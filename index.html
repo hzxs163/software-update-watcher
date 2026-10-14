@@ -290,8 +290,9 @@
       <h4>③ 监控中的软件站源（规则已写死）</h4>
       <div id="srcList"></div>
       <div class="notice">
-        源的选择器规则已内置，无需配置。新增源：把「站名 + 列表页地址」告知豆包，
-        或直接在仓库 <code>src/config.json</code> 的 <code>sources</code> 加一条。
+        源规则以仓库 <code>src/config.json</code> 为准（本页启动时读取，内置规则仅兜底）。
+        新增源：在该文件的 <code>sources</code> 里加一条（含列表页与站内搜索两套选择器），
+        或直接用本页「导出 config.json」覆盖后提交。
       </div>
     </section>
 
@@ -343,9 +344,14 @@ const BUILTIN_SOURCES = [
     date_prefix: "时间：",
     max_items: 30,
     enabled: true,
-    // 站内搜索（覆盖全站历史记录，{keyword} 会被替换）
+    // 站内搜索（覆盖全站历史记录；搜索页容器是 ul.list-ul，与列表页 ul.list-soft 不同）
     search_url: "https://www.x6d.com/daowangsousuo?q={keyword}",
-    search_date_prefix: "发布时间："
+    search_item_selector: "ul.list-ul li.layui-clear",
+    search_title_selector: "a.soft-title",
+    search_date_selector: "div.list-ca",
+    search_date_prefix: "发布时间：",
+    pagination_tpl: "https://www.x6d.com/html/23-{n}.html",
+    full_pages: 356
   },
   {
     id: "423down",
@@ -362,7 +368,9 @@ const BUILTIN_SOURCES = [
     search_item_selector: "ul.excerpt li",
     search_title_selector: "h2 a",
     search_date_selector: "span.time",
-    search_date_prefix: ""
+    search_date_prefix: "",
+    pagination_tpl: "https://www.423down.com/page/{n}",
+    full_pages: 600
   },
   {
     id: "gndown",
@@ -379,7 +387,9 @@ const BUILTIN_SOURCES = [
     search_item_selector: "article.excerpt",
     search_title_selector: "header h2 a",
     search_date_selector: "div.meta time",
-    search_date_prefix: ""
+    search_date_prefix: "",
+    pagination_tpl: "https://www.gndown.com/page/{n}",
+    full_pages: 209
   }
 ];
 
@@ -393,7 +403,16 @@ let cfg = {
 };
 
 /* ---------- 存储 ---------- */
-function persist() { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }
+// 本地只存「用户自己填的东西」：关键词、推送、GitHub 令牌。
+// 源规则一律以仓库 src/config.json 为准（loadRepoConfig），避免两边各存一份而漂移。
+function persist() {
+  localStorage.setItem(LS_KEY, JSON.stringify({
+    keywords: cfg.keywords || [],
+    exclude_keywords: cfg.exclude_keywords || [],
+    push: cfg.push || {},
+    github: cfg.github || {}
+  }));
+}
 function load() {
   const raw = localStorage.getItem(LS_KEY);
   if (raw) {
@@ -436,7 +455,12 @@ function saveSeen(kw, map) {
 const $ = (s) => document.querySelector(s);
 function esc(s) {
   return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+// 抓取到的链接属外部不可信内容：只放行 http/https，挡掉 javascript:/data: 这类注入
+function safeUrl(u) {
+  const s = String(u || "").trim();
+  return /^https?:\/\//i.test(s) ? s : "";
 }
 function parseKeywords(raw) {
   return [...new Set(String(raw || "").split(/[\n,，、;；]/).map((k) => k.trim()).filter(Boolean))];
@@ -501,13 +525,15 @@ function setStatus(i, cls, html) {
 let sortKey = "date";    // date / title / source
 let sortDir = "desc";    // asc / desc（日期默认最新在前）
 let lastFound = [], lastErrs = [], lastKw = "", lastIdxCount = 0, lastLiveCount = 0;
+let searchSeq = 0;   // 防止连点/切源时旧结果覆盖新结果
 
 async function doSearch() {
   const kw = $("#searchInput").value.trim();
   if (!kw) { toast("请输入要搜索的软件名"); return; }
   const low = kw.toLowerCase();
   const box = $("#searchResults");
-  box.innerHTML = `<div class="empty">正在搜索「${esc(kw)}」…</div>`;
+  const seq = ++searchSeq;
+  box.innerHTML = `<div class="empty">正在搜索「${esc(kw)}」…（各源并行：索引缓存 + 站内搜索）</div>`;
 
   const sources = cfg.sources.filter((s) =>
     s.enabled !== false && (activeSource === "all" || s.id === activeSource));
@@ -516,48 +542,20 @@ async function doSearch() {
     return;
   }
 
-  const found = [];
-  const errs = [];
+  // 各源并行，单个源内部索引与实时搜索也并行；整体耗时 ≈ 最慢的那一个
+  const results = await Promise.all(sources.map((s) => collectFromSource(s, kw, low)));
+  if (seq !== searchSeq) return;  // 已被更晚发起的搜索取代
+
+  const found = [], errs = [];
   let idxCount = 0, liveCount = 0;
-  for (const src of sources) {
-    let idxHits = null;
-    // 通道1：仓库索引快照（GitHub Actions 每 6 小时更新，秒出）
-    try {
-      const idx = await fetchIndex(src.id);
-      const items = (idx.items || []).map((it) => ({
-        title: it.title, url: it.url, date: it.date || "", sourceName: src.name
-      }));
-      idxHits = items.filter((it) => it.title.toLowerCase().includes(low));
-      found.push(...idxHits);
-    } catch (e) {
-      errs.push(src.name + "(索引)");
-    }
-    if (idxHits && idxHits.length) { idxCount += idxHits.length; continue; }
-    // 通道2：补充实时站内搜索/列表页（索引无命中或不可用时，覆盖全站历史）
-    try {
-      let parsed;
-      if (src.search_url) {
-        const surl = src.search_url.replace("{keyword}", encodeURIComponent(kw));
-        const { kind, text } = await fetchViaProxies(surl, 12000);
-        parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseSearchItems(text, src);
-      } else {
-        const { kind, text } = await fetchViaProxies(src.list_url, 10000);
-        parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseItems(text, src);
-      }
-      const seenUrls = new Set(found.map((f) => f.url));
-      let added = 0;
-      for (const it of parsed) {
-        if (it.title.toLowerCase().includes(low) && !seenUrls.has(it.url)) {
-          found.push({ title: it.title, url: it.url, date: it.date || "", sourceName: src.name });
-          added++;
-        }
-      }
-      liveCount += added;
-    } catch (e2) {
-      errs.push(src.name + "(实时)");
-    }
+  const byUrl = new Map();
+  for (const r of results) {
+    errs.push(...r.errs);
+    idxCount += r.idxCount;
+    liveCount += r.liveCount;
+    for (const it of r.items) if (!byUrl.has(it.url)) byUrl.set(it.url, it);
   }
-  liveCount = found.length - idxCount;
+  found.push(...byUrl.values());
 
   lastFound = found; lastErrs = errs; lastKw = kw; lastIdxCount = idxCount; lastLiveCount = liveCount;
   if (!found.length) {
@@ -569,15 +567,55 @@ async function doSearch() {
   renderResultTable();
 }
 
+// 单个源：索引缓存与站内搜索**都查**（早期版本索引一命中就跳过实时，导致结果远少于站点实际数量）
+async function collectFromSource(src, kw, low) {
+  const errs = [];
+  let idxHits = [], liveHits = [];
+
+  const idxP = fetchIndex(src.id).then((idx) => {
+    idxHits = (idx.items || [])
+      .map((it) => ({ title: it.title, url: safeUrl(it.url), date: it.date || "", sourceName: src.name }))
+      .filter((it) => it.url && String(it.title || "").toLowerCase().includes(low));
+  }).catch(() => { errs.push(src.name + "(索引)"); });
+
+  const liveP = liveSearch(src, kw, low).then((list) => { liveHits = list; })
+    .catch(() => { errs.push(src.name + "(实时)"); });
+
+  await Promise.all([idxP, liveP]);
+
+  const byUrl = new Map();
+  for (const it of idxHits) byUrl.set(it.url, it);
+  let extra = 0;
+  for (const it of liveHits) {
+    if (!byUrl.has(it.url)) { byUrl.set(it.url, it); extra++; }
+    else if (!byUrl.get(it.url).date && it.date) byUrl.get(it.url).date = it.date;
+  }
+  return { items: [...byUrl.values()], idxCount: byUrl.size - extra, liveCount: extra, errs };
+}
+
+// 实时通道：站内搜索/列表页（fetchSourceItems 内部已做多代理竞速）
+async function liveSearch(src, kw, low) {
+  const parsed = await fetchSourceItems(src, kw);
+  return parsed
+    .map((it) => ({ title: it.title, url: safeUrl(it.url), date: it.date || "", sourceName: src.name }))
+    .filter((it) => it.url && String(it.title || "").toLowerCase().includes(low));
+}
+
 function renderResultTable() {
   const sorted = sortResults(lastFound);
   const arrow = (k) => (sortKey === k ? (sortDir === "desc" ? " ↓" : " ↑") : "");
-  const rows = sorted.map((it) => `
+  const rows = sorted.map((it) => {
+    const u = safeUrl(it.url);
+    const nameCell = u
+      ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(it.title)}</a>`
+      : esc(it.title);
+    return `
     <tr>
-      <td class="c-name">${it.url ? `<a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a>` : esc(it.title)}</td>
+      <td class="c-name">${nameCell}</td>
       <td class="c-date">${esc(it.date || "—")}</td>
       <td class="c-src"><span class="src-tag">${esc(it.sourceName)}</span></td>
-    </tr>`).join("");
+    </tr>`;
+  }).join("");
   const srcNote = lastIdxCount
     ? `<span class="small">（${lastIdxCount} 条来自索引缓存，${lastLiveCount} 条实时抓取补充）</span>`
     : `<span class="small">（全部为实时抓取；首次运行后仓库会生成索引缓存提速）</span>`;
@@ -595,7 +633,7 @@ function renderResultTable() {
       </thead>
       <tbody>${rows}</tbody>
     </table>
-    <div class="foot-note">点击列头切换排序；结果来自各站站内搜索与列表页即时抓取。</div>`;
+    <div class="foot-note">点击列头切换排序；结果 = 仓库索引缓存（Actions 每 6 小时更新）+ 各站站内搜索即时抓取，两者合并去重。</div>`;
 }
 
 function sortResults(list) {
@@ -615,46 +653,93 @@ function sortResults(list) {
 }
 
 /* ---------- 手动检查（设置弹窗内） ---------- */
-// 读取仓库索引快照（GitHub Actions 生成，前端搜索优先通道）
-async function fetchIndex(sid) {
+// 读取仓库索引快照（GitHub Actions 生成，前端搜索加速通道）
+// 带一次性重试：公网到 GitHub 抖动很常见，单次 8s 超时会误报「索引不可用」；
+// ?t= 用于绕开 raw 的 5 分钟 CDN 缓存，Actions 刚提交完也能立刻看到新索引。
+async function fetchIndex(sid, tries = 2) {
   const { owner, repo } = repoFromPage();
-  const r = await fetch(
-    `https://raw.githubusercontent.com/${owner}/${repo}/main/src/index/${encodeURIComponent(sid)}.json`,
-    { signal: AbortSignal.timeout(8000) }
-  );
-  if (!r.ok) throw new Error("HTTP " + r.status);
-  return await r.json();
+  const base = `https://raw.githubusercontent.com/${owner}/${repo}/main/src/index/${encodeURIComponent(sid)}.json`;
+  let lastErr;
+  for (let i = 0; i < tries; i++) {
+    try {
+      const r = await fetch(base + "?t=" + Date.now(),
+        { signal: AbortSignal.timeout(10000), cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return await r.json();
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error("索引不可用");
 }
 
-function fetchViaProxies(url, timeoutMs = 10000) {
-  // 免 key 公共 CORS 代理，逐个顺序尝试；HTML 或 markdown 两种返回格式
-  const tries = [
-    { name: "allorigins-raw", fn: (u) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u), kind: "html" },
-    { name: "allorigins-get", fn: (u) => "https://api.allorigins.win/get?url=" + encodeURIComponent(u), kind: "allorigins-get" },
-    { name: "codetabs", fn: (u) => "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u), kind: "html" },
-    { name: "jina-reader", fn: (u) => "https://r.jina.ai/" + u, kind: "markdown" },
-    { name: "cors.eu.org", fn: (u) => "https://cors.eu.org/" + u, kind: "html" },
-    { name: "thingproxy", fn: (u) => "https://thingproxy.freeboard.io/fetch/" + u, kind: "html" }
-  ];
-  const errors = [];
-  return (async () => {
-    for (const t of tries) {
-      try {
-        const r = await fetch(t.fn(url), { signal: AbortSignal.timeout(timeoutMs) });
-        if (!r.ok) { errors.push(`${t.name}:${r.status}`); continue; }
-        const text = await r.text();
-        if (!text || text.length < 300) { errors.push(`${t.name}:空响应`); continue; }
-        if (t.kind === "allorigins-get") {
-          const j = JSON.parse(text);
-          return { kind: "html", text: j.contents || "" };
-        }
-        return { kind: t.kind, text };
-      } catch (e) {
-        errors.push(`${t.name}:${e.name === "TimeoutError" ? "超时" : "连接失败"}`);
-      }
-    }
-    throw new Error("代理均不可用（" + errors.join(" / ") + "）");
-  })();
+// 免 key 公共 CORS 代理：可靠性与速度都很飘（实测同一目标，raw 超时而 get 7ms 返回）。
+// 全并行同时打 5 家会把代理和自己都打爆（实测连索引请求都开始超时），
+// 所以错峰竞速：第 1 家立刻发，其余每隔 1.2s 补一家，谁先解析出条目谁赢，其余立即 abort。
+const PROXY_CHANNELS = [
+  { name: "allorigins-get", fn: (u) => "https://api.allorigins.win/get?url=" + encodeURIComponent(u), kind: "allorigins-get" },
+  { name: "codetabs", fn: (u) => "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(u), kind: "html" },
+  { name: "allorigins-raw", fn: (u) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u), kind: "html" },
+  { name: "jina-reader", fn: (u) => "https://r.jina.ai/" + u, kind: "markdown" }
+];
+const PROXY_STAGGER_MS = 1200;
+
+function fetchViaProxies(url, opts = {}) {
+  const timeoutMs = opts.timeoutMs || 9000;
+  // 默认只看长度；调用方可传入「解析后确有条目」的校验，避免把代理的错误页当成功
+  const validate = opts.validate || ((kind, text) => text && text.length >= 300);
+  const ctrls = [];
+  return new Promise((resolve, reject) => {
+    let alive = PROXY_CHANNELS.length;
+    const errs = [];
+    let settled = false;
+    const abortAll = () => ctrls.forEach((c) => { try { c.abort(); } catch (e) { /* 已结束 */ } });
+    const fail = (msg) => {
+      if (settled) return;
+      if (--alive === 0) { abortAll(); reject(new Error("代理均不可用（" + errs.join(" / ") + "）")); }
+    };
+    PROXY_CHANNELS.forEach((ch, idx) => {
+      const ctrl = new AbortController();
+      ctrls.push(ctrl);
+      setTimeout(() => {
+        const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+        fetch(ch.fn(url), { signal: ctrl.signal })
+          .then(async (r) => {
+            clearTimeout(timer);
+            if (!r.ok) throw new Error("HTTP" + r.status);
+            let text = await r.text();
+            if (ch.kind === "allorigins-get") {
+              const j = JSON.parse(text);
+              text = j.contents || "";
+            }
+            if (!validate(ch.kind, text)) throw new Error("无可用条目");
+            return { kind: ch.kind === "allorigins-get" ? "html" : ch.kind, text };
+          })
+          .then((res) => { settled = true; abortAll(); resolve(res); })
+          .catch((e) => {
+            clearTimeout(timer);
+            const why = (e && (e.name === "AbortError" ? "超时" : e.message)) || "连接失败";
+            errs.push(ch.name + ":" + why);
+            fail();
+          });
+      }, idx * PROXY_STAGGER_MS);
+    });
+  });
+}
+
+// 抓一个源的条目：配了 search_url 走站内搜索（覆盖全站历史），否则抓列表页
+async function fetchSourceItems(src, kw) {
+  const useSearch = !!src.search_url;
+  const url = useSearch
+    ? src.search_url.replace("{keyword}", encodeURIComponent(kw))
+    : src.list_url;
+  const parse = (kind, text) => kind === "markdown"
+    ? parseMarkdownLinks(text)
+    : (useSearch ? parseSearchItems(text, src) : parseItems(text, src));
+  const { kind, text } = await fetchViaProxies(url, {
+    validate: (k, t) => parse(k, t).length > 0
+  });
+  return parse(kind, text);
 }
 
 function parseItems(html, source) {
@@ -669,9 +754,26 @@ function parseItems(html, source) {
     const href = (a.getAttribute("href") || "").trim();
     if (!title) continue;
     const url = href ? new URL(href, source.list_url).href : "";
-    items.push({ key: href ? url : title, title, url });
+    items.push({ key: href ? url : title, title, url, date: readDate(el, source, title) });
   }
   return items;
+}
+
+// 与 Python 侧 _extract_date 对齐：优先 <time datetime>，再取文本并归一化为 YYYY-MM-DD
+function readDate(el, source, title) {
+  const sel = (source.date_selector || "").trim();
+  if (!sel) return "";
+  const node = el.querySelector(sel);
+  if (!node) return "";
+  const attr = (node.getAttribute("datetime") || "").trim();
+  const ym = String(title || "").match(/(19|20)\d{2}/);
+  const year = ym ? Number(ym[0]) : undefined;
+  if (attr) {
+    const n = normDate(attr, year);
+    if (n) return n;
+  }
+  const txt = (node.textContent || "").replace(source.date_prefix || "", "").trim();
+  return normDate(txt, year);
 }
 
 // 站内搜索页解析（选择器由源配置，如 x6d 的 li.layui-clear、423down 的 ul.excerpt li）
@@ -761,16 +863,23 @@ async function manualCheck(i) {
   const kw = cfg.keywords[i];
   const btn = document.getElementById(`kw-btn-${i}`);
   if (kw == null || !cfg.sources.length) return;
-  setStatus(i, "checking", "正在检查…（经公共代理抓取列表页，约几秒）");
+  setStatus(i, "checking", "正在检查…（各源并行，经公共代理走站内搜索，约 5-20 秒）");
   btn.disabled = true;
   try {
+    // 各源并行抓取；个别源失败不影响整体（与 Actions 侧一致：有 search_url 走站内搜索）
+    const enabled = cfg.sources.filter((s) => s.enabled !== false);
+    const settled = await Promise.allSettled(enabled.map((src) => fetchSourceItems(src, kw)));
     const merged = [];
-    for (const src of cfg.sources) {
-      if (src.enabled === false) continue;
-      const { kind, text } = await fetchViaProxies(src.list_url);
-      const parsed = kind === "markdown" ? parseMarkdownLinks(text) : parseItems(text, src);
-      merged.push(...parsed);
+    const srcErrs = [];
+    settled.forEach((r, idx) => {
+      if (r.status === "fulfilled") merged.push(...r.value);
+      else srcErrs.push(enabled[idx].name);
+    });
+    if (!merged.length && srcErrs.length) {
+      throw new Error(srcErrs.join("、") + " 均抓取失败（公共代理不可用）");
     }
+    const partial = srcErrs.length
+      ? `<br><span class="small">部分源实时抓取失败：${esc(srcErrs.join("、"))}（结果可能不全）</span>` : "";
     // 按 key 去重
     const seenKeys = new Set();
     const items = merged.filter((it) => !seenKeys.has(it.key) && seenKeys.add(it.key));
@@ -789,25 +898,28 @@ async function manualCheck(i) {
     if (!hasBase) {
       saveSeen(kw, Object.fromEntries(matched.map((it) => [it.key, it.title])));
       setStatus(i, "first",
-        `已记录基线：当前列表命中 <b>${matched.length}</b> 条（${esc(kw)}）。之后有新发布或标题更新会提示。`);
+        `已记录基线：当前列表命中 <b>${matched.length}</b> 条（${esc(kw)}）。之后有新发布或标题更新会提示。` + partial);
     } else if (newItems.length || updatedItems.length) {
       saveSeen(kw, Object.assign({}, prev, Object.fromEntries(matched.map((it) => [it.key, it.title]))));
       const total = newItems.length + updatedItems.length;
       const listSrc = [...newItems, ...updatedItems].slice(0, 5);
-      const list = listSrc.map((it) =>
-        it.url ? `<li><a href="${esc(it.url)}" target="_blank">${esc(it.title)}</a></li>` : `<li>${esc(it.title)}</li>`
-      ).join("");
+      const list = listSrc.map((it) => {
+        const u = safeUrl(it.url);
+        return u
+          ? `<li><a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(it.title)}</a></li>`
+          : `<li>${esc(it.title)}</li>`;
+      }).join("");
       const parts = [];
       if (newItems.length) parts.push(`${newItems.length} 条新发布`);
       if (updatedItems.length) parts.push(`${updatedItems.length} 条内容更新`);
       setStatus(i, "updated",
         `🔔 <b>有更新！${parts.join("，")}</b><ul class="upd-list">${list}</ul>` +
-        (total > 5 ? `<div class="small">……还有 ${total - 5} 条</div>` : ""));
+        (total > 5 ? `<div class="small">……还有 ${total - 5} 条</div>` : "") + partial);
     } else {
       saveSeen(kw, Object.assign({}, prev, Object.fromEntries(matched.map((it) => [it.key, it.title]))));
       const last = localStorage.getItem(SEEN_TIME_PREFIX + kw) || "";
       setStatus(i, "none",
-        `无更新 —— 当前列表命中 <b>${matched.length}</b> 条，标题均与上次一致${last ? `（上次检查 ${esc(last)}）` : ""}`);
+        `无更新 —— 当前列表命中 <b>${matched.length}</b> 条，标题均与上次一致${last ? `（上次检查 ${esc(last)}）` : ""}` + partial);
     }
   } catch (e) {
     // 代理全部失败 → 降级展示仓库最近一次 Actions 检查结果
@@ -829,6 +941,26 @@ async function manualCheck(i) {
 }
 function dedup(arr) { return [...new Set(arr)]; }
 
+// 仓库 src/config.json 是源规则的唯一真源；内置 BUILTIN_SOURCES 仅作拉取失败时的兜底
+async function loadRepoConfig() {
+  try {
+    const { owner, repo } = repoFromPage();
+    const r = await fetch(
+      `https://raw.githubusercontent.com/${owner}/${repo}/main/src/config.json`,
+      { signal: AbortSignal.timeout(8000) });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const c = await r.json();
+    if (Array.isArray(c.sources) && c.sources.length) cfg.sources = c.sources;
+    if (Array.isArray(c.exclude_keywords)) cfg.exclude_keywords = c.exclude_keywords;
+    if (Array.isArray(c.keywords) && !(cfg.keywords || []).length) cfg.keywords = c.keywords;
+    renderSourceTabs();
+    return true;
+  } catch (e) {
+    console.warn("读取仓库 config.json 失败，使用内置源规则兜底：", e.message);
+    return false;
+  }
+}
+
 /* ---------- GitHub 自动保存 ---------- */
 function renderGithub() {
   const g = cfg.github || {};
@@ -847,13 +979,24 @@ function ghApiPath() {
   return { owner: (g.owner || "hzxs163").trim(), repo: (g.repo || "software-update-watcher").trim() };
 }
 function b64utf8(str) {
-  return btoa(unescape(encodeURIComponent(str)));
+  // 不用已废弃的 unescape()：按 UTF-8 字节编码，中文关键词才不会变乱码
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  bytes.forEach((b) => { bin += String.fromCharCode(b); });
+  return btoa(bin);
 }
 
 async function pushConfigToRepo() {
   const { owner, repo } = ghApiPath();
   const token = (cfg.github || {}).token;
   if (!token) throw new Error("未配置 GitHub 令牌");
+  const body = JSON.stringify(buildExport(), null, 2);
+  // 第二道闸：真要提交的内容里出现任何令牌样子的字符串，直接拒绝写入公开仓库
+  const leaked = findSecret(body);
+  if (leaked) {
+    throw new Error("导出内容里检测到疑似密钥（" + leaked +
+      "），已拒绝提交。请在「④ 定时与推送」勾选用 ${ENV} 模板，把密钥放 GitHub Secrets。");
+  }
   const api = `https://api.github.com/repos/${owner}/${repo}/contents/src/config.json`;
   const headers = { Authorization: "Bearer " + token, Accept: "application/vnd.github+json" };
   const getR = await fetch(api, { headers, signal: AbortSignal.timeout(15000) });
@@ -864,7 +1007,7 @@ async function pushConfigToRepo() {
     headers: { ...headers, "Content-Type": "application/json" },
     body: JSON.stringify({
       message: "chore: 配置台更新关注关键词",
-      content: b64utf8(JSON.stringify(buildExport(), null, 2)),
+      content: b64utf8(body),
       sha: meta.sha
     }),
     signal: AbortSignal.timeout(15000)
@@ -911,14 +1054,41 @@ $("#btnTriggerCheck").onclick = async () => {
 };
 
 /* ---------- 导出 ---------- */
+// 源字段白名单：只有这些键会被写进仓库，避免本地 cfg 里的令牌等杂项被顺带导出
+const SOURCE_KEYS = [
+  "id", "name", "list_url", "search_url", "item_selector", "title_selector",
+  "date_selector", "date_prefix", "max_items", "enabled", "pagination_tpl",
+  "full_pages", "search_item_selector", "search_title_selector",
+  "search_date_selector", "search_date_prefix"
+];
+const SECRET_RE = /(gh[pousr]_[A-Za-z0-9]{6,}|github_pat_[A-Za-z0-9_]{6,}|AT_[A-Za-z0-9]{6,})/;
+function findSecret(text) {
+  const m = SECRET_RE.exec(String(text || ""));
+  return m ? m[0].slice(0, 12) + "…" : null;
+}
+function pickSourceFields(s) {
+  const out = {};
+  for (const k of SOURCE_KEYS) if (s[k] !== undefined) out[k] = s[k];
+  return out;
+}
 function buildExport() {
-  const c = JSON.parse(JSON.stringify(cfg));
-  const useEnv = $("#useEnvTemplate").checked;
+  // 白名单导出：输出里永远不含 cfg.github（那里面有 GitHub PAT）
+  const useEnv = !$("#useEnvTemplate") || $("#useEnvTemplate").checked;
+  const push = {
+    provider: (cfg.push || {}).provider || "wxpusher",
+    appToken: (cfg.push || {}).appToken || "",
+    target: (cfg.push || {}).target || ""
+  };
   if (useEnv) {
-    c.push.appToken = "${WXPUSHER_APP_TOKEN}";
-    c.push.target = "${WXPUSHER_UID}";
+    push.appToken = "${WXPUSHER_APP_TOKEN}";
+    push.target = "${WXPUSHER_UID}";
   }
-  return c;
+  return {
+    keywords: (cfg.keywords || []).slice(),
+    exclude_keywords: (cfg.exclude_keywords || []).slice(),
+    sources: (cfg.sources || []).map(pickSourceFields),
+    push
+  };
 }
 function download(name, text) {
   const a = document.createElement("a");
@@ -1045,6 +1215,7 @@ $("#pushTarget").addEventListener("input", (e) => { cfg.push.target = e.target.v
 load();
 renderSourceTabs();
 renderHotTags();
+loadRepoConfig();
 </script>
 </body>
 </html>
