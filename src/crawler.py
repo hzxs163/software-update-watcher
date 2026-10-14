@@ -41,6 +41,8 @@ _BASE_HEADERS = {
 _MD_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 _RETRY_STATUS = {429, 500, 502, 503, 504}
 _MIN_USEFUL_LEN = 500
+_ASSET_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico", ".svg", ".bmp",
+               ".css", ".js", ".json", ".xml", ".mp4", ".m3u8")
 
 # 免 key 公共 CORS 代理（构造完整请求 URL）
 # 注：thingproxy.freeboard.io 域名已失效（DNS 解析不到），故移除。
@@ -394,16 +396,41 @@ def _parse_html_items(soup, source: dict, item_selector: str, title_selector: st
 
 
 def _parse_markdown_items(text: str, base_url: str, max_items: int) -> list[dict]:
-    """解析 markdown 链接条目：[标题](https://...)。"""
+    """解析 markdown 链接条目：[标题](https://...)。
+
+    Jina Reader 这类 markdown 通道会把配图链接、带 title 的链接一并给出，
+    直接收进条目会污染基线（实测 423down 混进 *.png 与 `URL "标题"` 形态的脏 key），
+    所以这里过滤掉非网页资源并要求链接不含空白/引号。
+    """
     items = []
     for m in list(_MD_LINK_RE.finditer(text))[:max_items]:
         title = m.group(1).strip()
-        href = m.group(2).strip()
+        href = _clean_md_href(m.group(2))
         if not title or not href or href.startswith(("data:", "mailto:", "#")):
             continue
+        if _is_asset_href(href):
+            continue
         link = urljoin(base_url, href)
+        if not link.lower().startswith(("http://", "https://")):
+            continue
         items.append({"key": link, "title": title, "url": link, "date": ""})
     return items
+
+
+def _clean_md_href(raw: str) -> str:
+    """markdown 允许 [文本](URL "标题")；把尾部 title 与尖括号剥掉。"""
+    h = str(raw or "").strip().strip("<>")
+    if not h:
+        return ""
+    parts = h.split()
+    h = parts[0] if parts else ""
+    return h.strip('"\'')
+
+
+def _is_asset_href(href: str) -> bool:
+    """图片/样式/脚本等资源链接不是软件条目。"""
+    path = urlparse(href).path.lower()
+    return path.endswith(_ASSET_EXTS)
 
 
 def _looks_like_markdown(text: str) -> bool:

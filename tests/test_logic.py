@@ -237,6 +237,21 @@ def test_resolve_push_config_bad_topic_is_safe():
     assert notify.send_wxpusher(cfg, "s", "c") is False
 
 
+def test_parse_markdown_items_skips_assets_and_strips_md_title():
+    """Jina/markdown 通道实测会给出配图链接和 [标题](URL "尾部标题")，
+    直接收进基线会产生 *.png 与带引号的脏 key。"""
+    md = (
+        '![Image 1: CorelDRAW Graphics Suite 2026](https://x.com/wp/a.png "cover")\n'
+        '[CorelDRAW 2026 (v27.2.0.135) 中文直装版](https://x.com/13364.html "详情")\n'
+        '[样式](https://x.com/theme.css)\n'
+        '[锚点](#top)\n'
+    )
+    items = crawler._parse_markdown_items(md, "https://x.com/list", 30)
+    assert [i["url"] for i in items] == ["https://x.com/13364.html"]
+    assert items[0]["key"] == "https://x.com/13364.html"
+    assert items[0]["title"].startswith("CorelDRAW 2026")
+
+
 # ---------- 仓库里的真实 config.json 形状检查（防手改打错） ----------
 def _repo_config():
     return json.loads((Path(__file__).resolve().parents[1] / "src" /

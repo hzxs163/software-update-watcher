@@ -819,16 +819,29 @@ function normDate(txt, fallbackYear) {
   return "";
 }
 
-// Jina Reader 返回 markdown，解析其中的 [标题](链接) 条目
+// Jina Reader 返回 markdown，解析其中的 [标题](链接) 条目。
+// 与 Python 侧 _parse_markdown_items 保持一致：剥掉 [文本](URL "标题") 的尾部标题、
+// 丢弃图片等资源链接，否则基线里会混进 *.png 和带引号的脏 key。
+const ASSET_EXT = /\.(png|jpe?g|gif|webp|ico|svg|bmp|css|js|json|xml|mp4|m3u8)(\?|#|$)/i;
+function cleanMdHref(raw) {
+  let h = String(raw || "").trim().replace(/^<|>$/g, "");
+  if (!h) return "";
+  h = h.split(/\s+/)[0];
+  return h.replace(/^["']|["']$/g, "");
+}
 function parseMarkdownLinks(text) {
   const items = [];
   const re = /\[([^\]]+)\]\(([^)]+)\)/g;
   let m;
   while ((m = re.exec(text)) !== null) {
     const title = m[1].trim();
-    const href = m[2].trim();
-    if (!title || !href || href.startsWith("data:")) continue;
-    items.push({ key: href, title, url: href });
+    const href = cleanMdHref(m[2]);
+    if (!title || !href || href.startsWith("data:") || href.startsWith("mailto:") || href.startsWith("#")) continue;
+    let url = href;
+    try { url = new URL(href, location.href).href; } catch (e) { /* 保留原值 */ }
+    if (!/^https?:\/\//i.test(url)) continue;
+    if (ASSET_EXT.test(new URL(url).pathname)) continue;
+    items.push({ key: url, title, url, date: "" });
   }
   return items;
 }
