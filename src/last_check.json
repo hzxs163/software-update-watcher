@@ -1,21 +1,22 @@
 {
-  "checked_at": "2026-10-15 18:34:14",
+  "checked_at": "2026-10-15 23:59:59",
   "checked_at_tz": "Asia/Shanghai",
   "keywords": [
     "CorelDRAW"
   ],
   "new_total": 0,
   "pushed": false,
-  "message": "无更新",
+  "message": "无更新（1/3 个源抓取失败：小刀娱乐网-绿色软件）",
   "all_sources_failed": false,
-  "failed_sources": [],
+  "failed_sources": [
+    "小刀娱乐网-绿色软件"
+  ],
   "sources": {
     "x6d-green": {
       "name": "小刀娱乐网-绿色软件",
-      "fetched": 10,
-      "matched": 10,
-      "new": 10,
-      "seen_total": 10
+      "error": "站内搜索全部失败: 所有抓取通道均失败: 直连: HTTP 502；代理 api.allorigins.win: HTTP 522；代理 api.codetabs.com: HTTP 522；代理 cors.eu.org: HTTP 429；jina: 返回200但正文过短(<500字节)",
+      "fail_streak": 1,
+      "kept_seen": 10
     },
     "423down": {
       "name": "423down",
