@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-18 10:11:15",
+ "updated_at": "2026-10-18 18:07:47",
  "items": [
   {
    "title": "艾泰计算器APP HiPER_Calc_PRO v12.1.3 build 286 修改版",
@@ -32,8 +32,18 @@
    "date": "2026-10-18"
   },
   {
+   "title": "ToDoList(开源待办事项列表) v9.2.11.0 中文绿色版",
+   "url": "https://www.gndown.com/1751.html",
+   "date": "2026-10-18"
+  },
+  {
    "title": "TheAeroClock(免费桌面时钟软件) v9.41 多语便携版",
    "url": "https://www.gndown.com/6665.html",
+   "date": "2026-10-18"
+  },
+  {
+   "title": "Subtitle Workshop(字幕编辑软件) v6.3.8 多语便携版",
+   "url": "https://www.gndown.com/5876.html",
    "date": "2026-10-18"
   },
   {
@@ -42,8 +52,33 @@
    "date": "2026-10-18"
   },
   {
+   "title": "Shark007 Codecs(多媒体编解码器套件) v20.9.6 便携版",
+   "url": "https://www.gndown.com/6170.html",
+   "date": "2026-10-18"
+  },
+  {
+   "title": "Q-Dir(四窗口文件管理器) v12.81 多语便携版",
+   "url": "https://www.gndown.com/2234.html",
+   "date": "2026-10-18"
+  },
+  {
    "title": "PowerDirector安卓版(威力导演安卓版) v16.7.3 b2610141 修改版",
    "url": "https://www.gndown.com/7588.html",
+   "date": "2026-10-18"
+  },
+  {
+   "title": "OpenSpeedy(免费游戏变速工具) v3.3.17 中文绿色版",
+   "url": "https://www.gndown.com/14569.html",
+   "date": "2026-10-18"
+  },
+  {
+   "title": "Office Tool Plus(Office下载安装工具) v11.8.50.0 中文绿色版",
+   "url": "https://www.gndown.com/1452.html",
+   "date": "2026-10-18"
+  },
+  {
+   "title": "Notepad4(文本编辑器) v26.10r6392 简体中文绿色版",
+   "url": "https://www.gndown.com/1312.html",
    "date": "2026-10-18"
   },
   {
@@ -87,6 +122,11 @@
    "date": "2026-10-18"
   },
   {
+   "title": "Fort Firewall(开源免费Windows防火墙工具) v3.20.6",
+   "url": "https://www.gndown.com/1664.html",
+   "date": "2026-10-18"
+  },
+  {
    "title": "Drvinstall(驱动管理工具多线程版) v9.2026.10.1717 中文绿色版",
    "url": "https://www.gndown.com/3675.html",
    "date": "2026-10-18"
@@ -97,8 +137,18 @@
    "date": "2026-10-18"
   },
   {
+   "title": "BleachBit(系统垃圾清理工具) v6.0.6 多语便携版",
+   "url": "https://www.gndown.com/13994.html",
+   "date": "2026-10-18"
+  },
+  {
    "title": "AutoHideDesktopIcons(桌面图标管理工具) v7.11 多语便携版",
    "url": "https://www.gndown.com/12597.html",
+   "date": "2026-10-18"
+  },
+  {
+   "title": "AnyDesk远程工具(远程桌面软件) v9.8.2 多语便携版",
+   "url": "https://www.gndown.com/1015.html",
    "date": "2026-10-18"
   },
   {
@@ -114,6 +164,11 @@
   {
    "title": "Advanced SystemCare 20 Pro v20.0.1.256 多语便携版",
    "url": "https://www.gndown.com/6608.html",
+   "date": "2026-10-18"
+  },
+  {
+   "title": "Advanced Installer(安装包制作工具) v24.1 多语便携版",
+   "url": "https://www.gndown.com/1217.html",
    "date": "2026-10-18"
   },
   {
@@ -442,11 +497,6 @@
    "date": "2026-10-16"
   },
   {
-   "title": "AnyDesk远程工具(远程桌面软件) v9.8.2 多语便携版",
-   "url": "https://www.gndown.com/1015.html",
-   "date": "2026-10-16"
-  },
-  {
    "title": "7-Zip解压缩软件 v26.04 官方简体中文版 & 解NSIS脚本版",
    "url": "https://www.gndown.com/1130.html",
    "date": "2026-10-16"
@@ -574,11 +624,6 @@
   {
    "title": "FreeTube(开源YouTube客户端) v0.25.3 Build 7891 多语便携版",
    "url": "https://www.gndown.com/6908.html",
-   "date": "2026-10-15"
-  },
-  {
-   "title": "Fort Firewall(开源免费Windows防火墙工具) v3.20.5",
-   "url": "https://www.gndown.com/1664.html",
    "date": "2026-10-15"
   },
   {
@@ -1017,11 +1062,6 @@
    "date": "2026-10-12"
   },
   {
-   "title": "Q-Dir(四窗口文件管理器) v12.79 多语便携版",
-   "url": "https://www.gndown.com/2234.html",
-   "date": "2026-10-12"
-  },
-  {
    "title": "PdfPageCounter(统计PDF页数工具) v0.8 中文绿色版",
    "url": "https://www.gndown.com/3696.html",
    "date": "2026-10-12"
@@ -1132,11 +1172,6 @@
    "date": "2026-10-12"
   },
   {
-   "title": "BleachBit(系统垃圾清理工具) v6.0.5 多语便携版",
-   "url": "https://www.gndown.com/13994.html",
-   "date": "2026-10-12"
-  },
-  {
    "title": "玩酷之家PE启动U盘制作工具 v13.0.2026.10.11 中文绿色版",
    "url": "https://www.gndown.com/8600.html",
    "date": "2026-10-11"
@@ -1169,11 +1204,6 @@
   {
    "title": "SmartSystemMenu(窗口置顶工具) v2.34.0 中文绿色版",
    "url": "https://www.gndown.com/5461.html",
-   "date": "2026-10-11"
-  },
-  {
-   "title": "Shark007 Codecs(多媒体编解码器套件) v20.9.5 便携版",
-   "url": "https://www.gndown.com/6170.html",
    "date": "2026-10-11"
   },
   {
@@ -1522,11 +1552,6 @@
    "date": "2026-10-08"
   },
   {
-   "title": "ToDoList(开源待办事项列表) v9.2.10.0 中文绿色版",
-   "url": "https://www.gndown.com/1751.html",
-   "date": "2026-10-08"
-  },
-  {
    "title": "Tenorshare 4DDiG(一站式数据恢复工具) v11.0.3.10",
    "url": "https://www.gndown.com/14240.html",
    "date": "2026-10-08"
@@ -1754,11 +1779,6 @@
   {
    "title": "Screenpresso(截图屏幕录像软件) Pro v2.3.7.0 多语便携版",
    "url": "https://www.gndown.com/2335.html",
-   "date": "2026-10-05"
-  },
-  {
-   "title": "OpenSpeedy(免费游戏变速工具) v3.3.16 中文绿色版",
-   "url": "https://www.gndown.com/14569.html",
    "date": "2026-10-05"
   },
   {
