@@ -1,6 +1,46 @@
 {
- "updated_at": "2026-10-21 18:51:56",
+ "updated_at": "2026-10-22 00:20:15",
  "items": [
+  {
+   "title": "Zen Browser(基于Firefox引擎浏览器) v1.23.4b (2026-10-20)",
+   "url": "https://www.gndown.com/15019.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Visual Studio Code(微软轻量级免费代码编辑器) v1.143.0",
+   "url": "https://www.gndown.com/1742.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Vim(支持多种编程语言编辑器) v9.2.1217 中文绿色版",
+   "url": "https://www.gndown.com/1917.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "PuTTY(开源SSH和Telnet客户端软件) v0.85 中文绿色第2版",
+   "url": "https://www.gndown.com/1345.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Process Lasso(进程优化工具) v18.4.0.48 / 18.5.0.49 多语便携版",
+   "url": "https://www.gndown.com/5721.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "OCCT电脑硬件基准测试(烤鸡测试软件) v17.1.10 便携版",
+   "url": "https://www.gndown.com/662.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Any Video Downloader(视频下载工具) Pro v10.4.29 便携版",
+   "url": "https://www.gndown.com/9476.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "7-Zip解压缩软件 v26.05 官方简体中文版 & 解NSIS脚本版",
+   "url": "https://www.gndown.com/1130.html",
+   "date": "2026-10-22"
+  },
   {
    "title": "谷歌浏览器Google Chrome v156.0.8078.48 官方正式版",
    "url": "https://www.gndown.com/229.html",
@@ -72,6 +112,11 @@
    "date": "2026-10-21"
   },
   {
+   "title": "VideoProc Converter AI(视频转换软件) v8.13 多语便携版",
+   "url": "https://www.gndown.com/7030.html",
+   "date": "2026-10-21"
+  },
+  {
    "title": "U盘歌单管理器(适用于车载音乐U盘) v5.5.3 中文绿色版",
    "url": "https://www.gndown.com/14161.html",
    "date": "2026-10-21"
@@ -112,11 +157,6 @@
    "date": "2026-10-21"
   },
   {
-   "title": "Process Lasso(进程优化工具) v18.4.0.48 / 18.5.0.47 多语便携版",
-   "url": "https://www.gndown.com/5721.html",
-   "date": "2026-10-21"
-  },
-  {
    "title": "PowerToys微软免费工具集(自定义系统工具) v0.102.2933.0",
    "url": "https://www.gndown.com/396.html",
    "date": "2026-10-21"
@@ -129,6 +169,16 @@
   {
    "title": "Photo Supreme(图片管理软件) v2026.4.3.9715 便携版",
    "url": "https://www.gndown.com/6959.html",
+   "date": "2026-10-21"
+  },
+  {
+   "title": "PDF-XChange Editor(PDF编辑器) Plus/Pro v11.1.1.0 多语便携版",
+   "url": "https://www.gndown.com/1170.html",
+   "date": "2026-10-21"
+  },
+  {
+   "title": "PDF-XChange Editor(PDF编辑器) Plus/Pro v11.1.1.0 中文直装版",
+   "url": "https://www.gndown.com/7447.html",
    "date": "2026-10-21"
   },
   {
@@ -717,11 +767,6 @@
    "date": "2026-10-18"
   },
   {
-   "title": "Any Video Downloader(视频下载工具) Pro v10.4.28 便携版",
-   "url": "https://www.gndown.com/9476.html",
-   "date": "2026-10-18"
-  },
-  {
    "title": "Advanced SystemCare 20 Pro v20.0.1.256 多语便携版",
    "url": "https://www.gndown.com/6608.html",
    "date": "2026-10-18"
@@ -744,11 +789,6 @@
   {
    "title": "七猫免费小说APP(海量小说阅读) v8.9(80900) 去广告修改版",
    "url": "https://www.gndown.com/3384.html",
-   "date": "2026-10-17"
-  },
-  {
-   "title": "Zen Browser(基于Firefox引擎浏览器) v1.23.3b (2026-10-16)",
-   "url": "https://www.gndown.com/15019.html",
    "date": "2026-10-17"
   },
   {
@@ -794,11 +834,6 @@
   {
    "title": "PeaZip(免费压缩文档管理工具) v11.4.0 多语便携版",
    "url": "https://www.gndown.com/1856.html",
-   "date": "2026-10-17"
-  },
-  {
-   "title": "OCCT电脑硬件基准测试(烤鸡测试软件) v17.1.9 便携版",
-   "url": "https://www.gndown.com/662.html",
    "date": "2026-10-17"
   },
   {
@@ -972,11 +1007,6 @@
    "date": "2026-10-16"
   },
   {
-   "title": "7-Zip解压缩软件 v26.04 官方简体中文版 & 解NSIS脚本版",
-   "url": "https://www.gndown.com/1130.html",
-   "date": "2026-10-16"
-  },
-  {
    "title": "静读天下APP v10.8(1008000) 免广告付费专业版",
    "url": "https://www.gndown.com/3883.html",
    "date": "2026-10-15"
@@ -1024,11 +1054,6 @@
   {
    "title": "WinSCP(SSH图形化SFTP客户端) v6.7 多语便携版",
    "url": "https://www.gndown.com/2053.html",
-   "date": "2026-10-15"
-  },
-  {
-   "title": "Visual Studio Code(微软轻量级免费代码编辑器) v1.142.0",
-   "url": "https://www.gndown.com/1742.html",
    "date": "2026-10-15"
   },
   {
@@ -1857,11 +1882,6 @@
    "date": "2026-10-08"
   },
   {
-   "title": "Vim(支持多种编程语言编辑器) v9.2.1169 中文绿色版",
-   "url": "https://www.gndown.com/1917.html",
-   "date": "2026-10-08"
-  },
-  {
    "title": "Tenorshare 4DDiG(一站式数据恢复工具) v11.0.3.10",
    "url": "https://www.gndown.com/14240.html",
    "date": "2026-10-08"
@@ -2254,16 +2274,6 @@
   {
    "title": "Universal Extractors(文件提取解压) 2026-10-01 多语便携版",
    "url": "https://www.gndown.com/6897.html",
-   "date": "2026-10-02"
-  },
-  {
-   "title": "PDF-XChange Editor(PDF编辑器) Plus/Pro v11.1.0.0 多语便携版",
-   "url": "https://www.gndown.com/1170.html",
-   "date": "2026-10-02"
-  },
-  {
-   "title": "PDF-XChange Editor(PDF编辑器) Plus/Pro v11.1.0.0 中文直装版",
-   "url": "https://www.gndown.com/7447.html",
    "date": "2026-10-02"
   },
   {
