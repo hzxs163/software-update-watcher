@@ -1,9 +1,14 @@
 {
- "updated_at": "2026-10-22 00:20:15",
+ "updated_at": "2026-10-22 10:31:37",
  "items": [
   {
    "title": "Zen Browser(基于Firefox引擎浏览器) v1.23.4b (2026-10-20)",
    "url": "https://www.gndown.com/15019.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Windows Firewall Control(防火墙软件) v6.37.0.0 多语便携版",
+   "url": "https://www.gndown.com/6787.html",
    "date": "2026-10-22"
   },
   {
@@ -17,6 +22,16 @@
    "date": "2026-10-22"
   },
   {
+   "title": "Telegram Desktop(桌面即时通讯客户端) v7.3.3 多语便携版",
+   "url": "https://www.gndown.com/5467.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Soluling(自动化本地化工具) v1.0.1117 汉化安装版",
+   "url": "https://www.gndown.com/15730.html",
+   "date": "2026-10-22"
+  },
+  {
    "title": "PuTTY(开源SSH和Telnet客户端软件) v0.85 中文绿色第2版",
    "url": "https://www.gndown.com/1345.html",
    "date": "2026-10-22"
@@ -27,13 +42,78 @@
    "date": "2026-10-22"
   },
   {
+   "title": "Photo Supreme(图片管理软件) v2026.4.3.9718 便携版",
+   "url": "https://www.gndown.com/6959.html",
+   "date": "2026-10-22"
+  },
+  {
    "title": "OCCT电脑硬件基准测试(烤鸡测试软件) v17.1.10 便携版",
    "url": "https://www.gndown.com/662.html",
    "date": "2026-10-22"
   },
   {
+   "title": "Notepad3(开源文本编辑器) v7.26.1021.1 断剑留痕绿色版",
+   "url": "https://www.gndown.com/2011.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "LeafView(轻量级图片查看器) v4.5.1 中文绿色版",
+   "url": "https://www.gndown.com/10613.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "KeePassXC(开源跨平台密码管理工具) v2.8.0 中文绿色版",
+   "url": "https://www.gndown.com/2254.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Find.Same.Images.OK(重复图像查找工具) v6.16 多语便携版",
+   "url": "https://www.gndown.com/12591.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Drawpile(免费开源协同绘图工具) v2.3.1 中文绿色版",
+   "url": "https://www.gndown.com/1173.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "Display Driver Uninstaller(驱动卸载工具) v18.1.6.2 多语便携版",
+   "url": "https://www.gndown.com/1824.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "DLNow Video Downloader v1.56.2026.10.21 多语便携版",
+   "url": "https://www.gndown.com/7345.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "CoolUtils Total XML Converter(XML转换工具) v3.2.0.221 多语便携版",
+   "url": "https://www.gndown.com/8863.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "CoolUtils Total HTML Converter v5.1.0.383 多语便携版",
+   "url": "https://www.gndown.com/8830.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "CoolUtils Total CSV Converter(CSV转换工具) v4.1.1.91 多语便携版",
+   "url": "https://www.gndown.com/8860.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "CoolUtils PDF Combine(PDF合并工具) Pro v4.2.0.205 多语便携版",
+   "url": "https://www.gndown.com/8843.html",
+   "date": "2026-10-22"
+  },
+  {
    "title": "Any Video Downloader(视频下载工具) Pro v10.4.29 便携版",
    "url": "https://www.gndown.com/9476.html",
+   "date": "2026-10-22"
+  },
+  {
+   "title": "AOMEI Backupper(傲梅轻松备份) v8.5.1 精简 & 完整便携版",
+   "url": "https://www.gndown.com/7158.html",
    "date": "2026-10-22"
   },
   {
@@ -127,11 +207,6 @@
    "date": "2026-10-21"
   },
   {
-   "title": "Telegram Desktop(桌面即时通讯客户端) v7.3.2 多语便携版",
-   "url": "https://www.gndown.com/5467.html",
-   "date": "2026-10-21"
-  },
-  {
    "title": "Syncthing(开源文件同步工具) v2.1.7 中文绿色版",
    "url": "https://www.gndown.com/3235.html",
    "date": "2026-10-21"
@@ -167,11 +242,6 @@
    "date": "2026-10-21"
   },
   {
-   "title": "Photo Supreme(图片管理软件) v2026.4.3.9715 便携版",
-   "url": "https://www.gndown.com/6959.html",
-   "date": "2026-10-21"
-  },
-  {
    "title": "PDF-XChange Editor(PDF编辑器) Plus/Pro v11.1.1.0 多语便携版",
    "url": "https://www.gndown.com/1170.html",
    "date": "2026-10-21"
@@ -189,11 +259,6 @@
   {
    "title": "LibreWolf(Firefox浏览器修改版) v158.0.1-1 官方便携版",
    "url": "https://www.gndown.com/7402.html",
-   "date": "2026-10-21"
-  },
-  {
-   "title": "LeafView(轻量级图片查看器) v4.5.0 中文绿色版",
-   "url": "https://www.gndown.com/10613.html",
    "date": "2026-10-21"
   },
   {
@@ -997,11 +1062,6 @@
    "date": "2026-10-16"
   },
   {
-   "title": "CoolUtils PDF Combine(PDF合并工具) Pro v4.2.0.204 多语便携版",
-   "url": "https://www.gndown.com/8843.html",
-   "date": "2026-10-16"
-  },
-  {
    "title": "BiliLive-tools(B站录播一站式工具) v4.0.0 中文绿色版",
    "url": "https://www.gndown.com/14182.html",
    "date": "2026-10-16"
@@ -1297,11 +1357,6 @@
    "date": "2026-10-14"
   },
   {
-   "title": "CoolUtils Total CSV Converter(CSV转换工具) v4.1.1.89 多语便携版",
-   "url": "https://www.gndown.com/8860.html",
-   "date": "2026-10-14"
-  },
-  {
    "title": "BandiView(图像查看转换器) v8.03 中文绿色版 & 安装版",
    "url": "https://www.gndown.com/10679.html",
    "date": "2026-10-14"
@@ -1384,11 +1439,6 @@
   {
    "title": "OpenShell(经典开始菜单软件) v4.4.198 / 4.4.202 中文直装版",
    "url": "https://www.gndown.com/5150.html",
-   "date": "2026-10-13"
-  },
-  {
-   "title": "Notepad3(开源文本编辑器) v7.26.1012.1 断剑留痕绿色版",
-   "url": "https://www.gndown.com/2011.html",
    "date": "2026-10-13"
   },
   {
@@ -1522,11 +1572,6 @@
    "date": "2026-10-12"
   },
   {
-   "title": "DLNow Video Downloader v1.56.2026.10.11 多语便携版",
-   "url": "https://www.gndown.com/7345.html",
-   "date": "2026-10-12"
-  },
-  {
    "title": "Crystal Info & Mark(硬盘检测工具) v1.0.26 多语便携版",
    "url": "https://www.gndown.com/910.html",
    "date": "2026-10-12"
@@ -1609,11 +1654,6 @@
   {
    "title": "Avidemux(视频无损剪辑器) v2.8.1 / 2.8.2.261009 多语便携版",
    "url": "https://www.gndown.com/1488.html",
-   "date": "2026-10-11"
-  },
-  {
-   "title": "AOMEI Backupper(傲梅轻松备份) v8.5.0 精简 & 完整便携版",
-   "url": "https://www.gndown.com/7158.html",
    "date": "2026-10-11"
   },
   {
@@ -1707,16 +1747,6 @@
    "date": "2026-10-10"
   },
   {
-   "title": "CoolUtils Total XML Converter(XML转换工具) v3.2.0.218 多语便携版",
-   "url": "https://www.gndown.com/8863.html",
-   "date": "2026-10-10"
-  },
-  {
-   "title": "CoolUtils Total HTML Converter v5.1.0.382 多语便携版",
-   "url": "https://www.gndown.com/8830.html",
-   "date": "2026-10-10"
-  },
-  {
    "title": "CoolUtils Total CAD Converter(CAD转换工具) v4.1.0.261 多语便携版",
    "url": "https://www.gndown.com/8831.html",
    "date": "2026-10-10"
@@ -1737,11 +1767,6 @@
    "date": "2026-10-09"
   },
   {
-   "title": "Windows Firewall Control(防火墙软件) v6.36.0.0 多语便携版",
-   "url": "https://www.gndown.com/6787.html",
-   "date": "2026-10-09"
-  },
-  {
    "title": "Ventoy(装机神器u盘启动工具) v1.1.18 中文绿色版",
    "url": "https://www.gndown.com/866.html",
    "date": "2026-10-09"
@@ -1749,11 +1774,6 @@
   {
    "title": "SyMenu(便携式菜单启动器) v8.16.9776 中文绿色版",
    "url": "https://www.gndown.com/10918.html",
-   "date": "2026-10-09"
-  },
-  {
-   "title": "Soluling(自动化本地化工具) v1.0.1113 汉化安装版",
-   "url": "https://www.gndown.com/15730.html",
    "date": "2026-10-09"
   },
   {
@@ -2534,11 +2554,6 @@
   {
    "title": "Double Commander(双面板文件管理器) v1.2.9 多语便携版",
    "url": "https://www.gndown.com/9682.html",
-   "date": "2026-09-28"
-  },
-  {
-   "title": "Display Driver Uninstaller(驱动卸载工具) v18.1.6.1 多语便携版",
-   "url": "https://www.gndown.com/1824.html",
    "date": "2026-09-28"
   },
   {
