@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-26 04:10:36",
+ "updated_at": "2026-10-26 10:22:08",
  "items": [
   {
    "title": "谷歌商店客户端 Google Play Store v53.4.34 官方版",
@@ -27,13 +27,38 @@
    "date": "2026-10-26"
   },
   {
-   "title": "Vim(支持多种编程语言编辑器) v9.2.1229 中文绿色版",
+   "title": "Windows PowerShell(命令行程序) v7.6.9 中文绿色版",
+   "url": "https://www.gndown.com/3324.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "Windows Manager 10/11(Win10/11优化大师) v2.4.4 多语便携版",
+   "url": "https://www.gndown.com/10070.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "Vim(支持多种编程语言编辑器) v9.2.1240 中文绿色版",
    "url": "https://www.gndown.com/1917.html",
    "date": "2026-10-26"
   },
   {
    "title": "Universal USB Installer(可启动U盘制作工具) v2.0.4.0 绿色版",
    "url": "https://www.gndown.com/5309.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "Ungoogled-Chromium v156.0.8078.47-1.1 中文绿色版",
+   "url": "https://www.gndown.com/12342.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "UltraVNC(开源免费桌面远程工具) v1.8.3.1 中文绿色版",
+   "url": "https://www.gndown.com/14853.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "Spotify(正版流媒体音乐平台) v1.3.4.258 多语便携版",
+   "url": "https://www.gndown.com/7999.html",
    "date": "2026-10-26"
   },
   {
@@ -47,8 +72,48 @@
    "date": "2026-10-26"
   },
   {
+   "title": "QOwnNotes(跨平台笔记应用程序) v26.10.12 中文绿色版",
+   "url": "https://www.gndown.com/1264.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "Notepad3(开源文本编辑器) v7.26.1025.1 断剑留痕绿色版",
+   "url": "https://www.gndown.com/2011.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "NAPS2(多功能文档扫描工具) v8.6.0 多语便携版",
+   "url": "https://www.gndown.com/14663.html",
+   "date": "2026-10-26"
+  },
+  {
    "title": "Motrix(aria2内核多线程下载工具) v2.0.1 中文绿色版",
    "url": "https://www.gndown.com/2676.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "MobaXterm(远程终极工具箱) v26.6 Build 5560 便携版",
+   "url": "https://www.gndown.com/6161.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "Microsoft .NET Runtime(.NET10.0下载) v10.0.14",
+   "url": "https://www.gndown.com/251.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "MassTube(YouTube视频下载工具) Ultra v22.1.7.229 多语便携版",
+   "url": "https://www.gndown.com/8506.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "K-Lite Mega/FULL Codec Pack(视频解码器) v20.1.0 / 20.1.3 Beta",
+   "url": "https://www.gndown.com/1931.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "Imagine Plus(图片压缩工具) v0.10.5 中文绿色版",
+   "url": "https://www.gndown.com/6915.html",
    "date": "2026-10-26"
   },
   {
@@ -62,8 +127,28 @@
    "date": "2026-10-26"
   },
   {
+   "title": "FileOptimizer(文件压缩优化软件) v18.00.2889 多语便携版",
+   "url": "https://www.gndown.com/2068.html",
+   "date": "2026-10-26"
+  },
+  {
    "title": "DesktopSnowOK(桌面下雪效果工具) v7.22 多语便携版",
    "url": "https://www.gndown.com/15015.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "DLNow Video Downloader v1.56.2026.10.24 多语便携版",
+   "url": "https://www.gndown.com/7345.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "CoolUtils Total Movie Converter(视频转换软件) v4.1.0.95 多语便携版",
+   "url": "https://www.gndown.com/8906.html",
+   "date": "2026-10-26"
+  },
+  {
+   "title": "CoolUtils Total Audio Converter(音频转换软件) v6.1.0.323 多语便携版",
+   "url": "https://www.gndown.com/8904.html",
    "date": "2026-10-26"
   },
   {
@@ -119,11 +204,6 @@
   {
    "title": "REAPER(数字音频工作站软件) v7.83 多语便携版",
    "url": "https://www.gndown.com/6025.html",
-   "date": "2026-10-25"
-  },
-  {
-   "title": "QOwnNotes(跨平台笔记应用程序) v26.10.11 中文绿色版",
-   "url": "https://www.gndown.com/1264.html",
    "date": "2026-10-25"
   },
   {
@@ -322,18 +402,8 @@
    "date": "2026-10-24"
   },
   {
-   "title": "Notepad3(开源文本编辑器) v7.26.1023.1 断剑留痕绿色版",
-   "url": "https://www.gndown.com/2011.html",
-   "date": "2026-10-24"
-  },
-  {
    "title": "NTWind WinCam(专业屏幕录制软件) v4.3 多语便携版",
    "url": "https://www.gndown.com/1374.html",
-   "date": "2026-10-24"
-  },
-  {
-   "title": "K-Lite Mega/FULL Codec Pack(视频解码器) v20.1.0 / 20.1.2 Beta",
-   "url": "https://www.gndown.com/1931.html",
    "date": "2026-10-24"
   },
   {
@@ -459,11 +529,6 @@
   {
    "title": "Windows Server 2022官方正式版26年10月版(微软原版ISO镜像)",
    "url": "https://www.gndown.com/11612.html",
-   "date": "2026-10-23"
-  },
-  {
-   "title": "Windows PowerShell(命令行程序) v7.6.8 中文绿色版",
-   "url": "https://www.gndown.com/3324.html",
    "date": "2026-10-23"
   },
   {
@@ -737,11 +802,6 @@
    "date": "2026-10-22"
   },
   {
-   "title": "DLNow Video Downloader v1.56.2026.10.21 多语便携版",
-   "url": "https://www.gndown.com/7345.html",
-   "date": "2026-10-22"
-  },
-  {
    "title": "CoolUtils Total XML Converter(XML转换工具) v3.2.0.221 多语便携版",
    "url": "https://www.gndown.com/8863.html",
    "date": "2026-10-22"
@@ -957,11 +1017,6 @@
    "date": "2026-10-20"
   },
   {
-   "title": "Ungoogled-Chromium v155.0.8059.84-1.1 中文绿色版",
-   "url": "https://www.gndown.com/12342.html",
-   "date": "2026-10-20"
-  },
-  {
    "title": "Social Media Downloader(社交媒体下载工具) v8.5.33 便携版",
    "url": "https://www.gndown.com/13141.html",
    "date": "2026-10-20"
@@ -1034,11 +1089,6 @@
   {
    "title": "FlashPad(便携式笔记工具) v1.7.3 中文绿色版",
    "url": "https://www.gndown.com/1491.html",
-   "date": "2026-10-20"
-  },
-  {
-   "title": "FileOptimizer(文件压缩优化软件) v17.30.2881 多语便携版",
-   "url": "https://www.gndown.com/2068.html",
    "date": "2026-10-20"
   },
   {
@@ -1147,11 +1197,6 @@
    "date": "2026-10-19"
   },
   {
-   "title": "Spotify(正版流媒体音乐平台) v1.3.3.264 多语便携版",
-   "url": "https://www.gndown.com/7999.html",
-   "date": "2026-10-19"
-  },
-  {
    "title": "SSD Fresh(固态硬盘优化工具) v16.02.76570 多语便携版",
    "url": "https://www.gndown.com/7888.html",
    "date": "2026-10-19"
@@ -1174,11 +1219,6 @@
   {
    "title": "Multi Commander(文件管理器) v16.6.0.3230 多语便携版",
    "url": "https://www.gndown.com/2113.html",
-   "date": "2026-10-19"
-  },
-  {
-   "title": "MassTube(YouTube视频下载工具) Ultra v22.1.7.228 多语便携版",
-   "url": "https://www.gndown.com/8506.html",
    "date": "2026-10-19"
   },
   {
@@ -1219,11 +1259,6 @@
   {
    "title": "DBeaver(数据库管理工具) v26.2.3 中文绿色版",
    "url": "https://www.gndown.com/1781.html",
-   "date": "2026-10-19"
-  },
-  {
-   "title": "CoolUtils Total Audio Converter(音频转换软件) v6.1.0.322 多语便携版",
-   "url": "https://www.gndown.com/8904.html",
    "date": "2026-10-19"
   },
   {
@@ -1434,11 +1469,6 @@
   {
    "title": "Wondershare Recoverit(万兴数据恢复软件) Pro v15.0.1.15",
    "url": "https://www.gndown.com/7985.html",
-   "date": "2026-10-16"
-  },
-  {
-   "title": "Windows Manager 10/11(Win10/11优化大师) v2.4.3 多语便携版",
-   "url": "https://www.gndown.com/10070.html",
    "date": "2026-10-16"
   },
   {
@@ -1747,11 +1777,6 @@
    "date": "2026-10-14"
   },
   {
-   "title": "Microsoft .NET Runtime(.NET10.0下载) v10.0.13",
-   "url": "https://www.gndown.com/251.html",
-   "date": "2026-10-14"
-  },
-  {
    "title": "Kdenlive(开源非线性视频编辑器) v26.08.2 中文绿色版",
    "url": "https://www.gndown.com/1771.html",
    "date": "2026-10-14"
@@ -1854,11 +1879,6 @@
   {
    "title": "OpenShell(经典开始菜单软件) v4.4.198 / 4.4.202 中文直装版",
    "url": "https://www.gndown.com/5150.html",
-   "date": "2026-10-13"
-  },
-  {
-   "title": "NAPS2(多功能文档扫描工具) v8.5.1 多语便携版",
-   "url": "https://www.gndown.com/14663.html",
    "date": "2026-10-13"
   },
   {
@@ -1989,11 +2009,6 @@
   {
    "title": "Core Temp(监测和显示CPU温度) v1.21.0 多语便携版",
    "url": "https://www.gndown.com/6127.html",
-   "date": "2026-10-12"
-  },
-  {
-   "title": "CoolUtils Total Movie Converter(视频转换软件) v4.1.0.94 多语便携版",
-   "url": "https://www.gndown.com/8906.html",
    "date": "2026-10-12"
   },
   {
