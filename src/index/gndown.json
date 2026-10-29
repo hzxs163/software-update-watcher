@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-29 01:40:14",
+ "updated_at": "2026-10-29 11:33:16",
  "items": [
   {
    "title": "微信输入法(微信官方出品) v3.0.0.38 BEIKING绿色精简版",
@@ -12,13 +12,53 @@
    "date": "2026-10-29"
   },
   {
-   "title": "UPX (Ultimate Packer for eXecutables) v5.3.0",
+   "title": "eM Client(邮箱客户端) Pro v11.0.1389.0 多语便携版",
+   "url": "https://www.gndown.com/8725.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "WindowTabs(给窗口增加多页标签工具) 2026.10.29 中文绿色版",
+   "url": "https://www.gndown.com/3876.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "Visual Studio Code(微软轻量级免费代码编辑器) v1.144.0",
+   "url": "https://www.gndown.com/1742.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "UPX (Ultimate Packer for eXecutables) v5.3.0 绿色版",
    "url": "https://www.gndown.com/7094.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "RadioMaximus(全球网络收音机) v2.33.18 多语便携版",
+   "url": "https://www.gndown.com/6506.html",
    "date": "2026-10-29"
   },
   {
    "title": "REAPER(数字音频工作站软件) v7.84 多语便携版",
    "url": "https://www.gndown.com/6025.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "R-Studio(数据恢复软件) Network v9.5.191861 多语便携版",
+   "url": "https://www.gndown.com/1012.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "PowerDirector安卓版(威力导演安卓版) v16.7.4 b2610281 修改版",
+   "url": "https://www.gndown.com/7588.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "PixPin截图工具(支持截长图截动图) v3.5.5.1 / 3.6.6.0 中文绿色版",
+   "url": "https://www.gndown.com/7358.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "Permissions Reporter(NTFS权限报告工具) v5.8.713.0 便携版",
+   "url": "https://www.gndown.com/7756.html",
    "date": "2026-10-29"
   },
   {
@@ -32,8 +72,33 @@
    "date": "2026-10-29"
   },
   {
+   "title": "Joplin(开源免费笔记软件) v3.7.22 多语便携版",
+   "url": "https://www.gndown.com/2160.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "Ghost Downloader(多功能下载管理工具) v4.4.6 中文绿色版",
+   "url": "https://www.gndown.com/13082.html",
+   "date": "2026-10-29"
+  },
+  {
    "title": "GeoGebra(动态数学软件) v6.0.934.0 中文绿色版",
    "url": "https://www.gndown.com/1650.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "FreeTube(开源YouTube客户端) v0.25.3 Build 7971 多语便携版",
+   "url": "https://www.gndown.com/6908.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "FolderSizes(磁盘空间分析软件) v10.3.90 便携版",
+   "url": "https://www.gndown.com/10283.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "ExplorerPatcher(恢复Win11高效设置) v26100.9711.71.1",
+   "url": "https://www.gndown.com/7547.html",
    "date": "2026-10-29"
   },
   {
@@ -42,8 +107,73 @@
    "date": "2026-10-29"
   },
   {
+   "title": "ESET NOD32 Antivirus(防病毒软件) v20.0.7.0 中文特别版",
+   "url": "https://www.gndown.com/8191.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "ESET Internet Security(网络防护套装) v20.0.7.0 中文特别版",
+   "url": "https://www.gndown.com/8193.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "Duplicate File Detective(重复文件查找工具) v8.1.62 便携版",
+   "url": "https://www.gndown.com/14403.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "DaVinci Resolve Studio(达芬奇调色软件) v21.1.2.10 中文直装版",
+   "url": "https://www.gndown.com/6999.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "DaVinci Fusion Studio(动画特效合成软件) v21.1.2.8 中文直装版",
+   "url": "https://www.gndown.com/11216.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "CudaText(免费开源代码编辑器) v1.238.0.0 中文绿色版",
+   "url": "https://www.gndown.com/6441.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "CoolUtils PDF Combine(PDF合并工具) Pro v4.2.0.206 多语便携版",
+   "url": "https://www.gndown.com/8843.html",
+   "date": "2026-10-29"
+  },
+  {
    "title": "CCTVVideoDownloader(央视视频下载器) v4.5.4 中文绿色版",
    "url": "https://www.gndown.com/15906.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "Atlantis Word Processor(文字处理软件) v5.0.6.0 多语便携版",
+   "url": "https://www.gndown.com/8247.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "Apple iTunes(苹果多媒体管理软件) v12.13.12.3",
+   "url": "https://www.gndown.com/2167.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "AdGuard广告拦截器APP v4.16.0.42420003 Nightly 解锁订阅版",
+   "url": "https://www.gndown.com/6054.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "ASCOMP F-Rename(文件重命名软件) Pro v3.003 多语便携版",
+   "url": "https://www.gndown.com/7475.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "3D Youtube Downloader-Batch(视频下载工具) v2.20.1 多语便携版",
+   "url": "https://www.gndown.com/7779.html",
+   "date": "2026-10-29"
+  },
+  {
+   "title": "010 Editor(专业十六进制编辑器) v17.0 汉化便携版",
+   "url": "https://www.gndown.com/1110.html",
    "date": "2026-10-29"
   },
   {
@@ -417,11 +547,6 @@
    "date": "2026-10-27"
   },
   {
-   "title": "FreeTube(开源YouTube客户端) v0.25.3 Build 7960 多语便携版",
-   "url": "https://www.gndown.com/6908.html",
-   "date": "2026-10-27"
-  },
-  {
    "title": "Epub电子书编辑器(电子书制作工具) v3.4.0 中文绿色版",
    "url": "https://www.gndown.com/7391.html",
    "date": "2026-10-27"
@@ -687,11 +812,6 @@
    "date": "2026-10-25"
   },
   {
-   "title": "WindowTabs(给窗口增加多页标签工具) 2026.10.25 中文绿色版",
-   "url": "https://www.gndown.com/3876.html",
-   "date": "2026-10-25"
-  },
-  {
    "title": "VueScan(扫描仪增强软件) Pro v9.8.59.07 多语便携版",
    "url": "https://www.gndown.com/2077.html",
    "date": "2026-10-25"
@@ -807,11 +927,6 @@
    "date": "2026-10-24"
   },
   {
-   "title": "eM Client(邮箱客户端) Pro v11.0.1267.0 多语便携版",
-   "url": "https://www.gndown.com/8725.html",
-   "date": "2026-10-24"
-  },
-  {
    "title": "draw.io(免费流程图制作工具) v32.6.1 中文绿色版",
    "url": "https://www.gndown.com/5099.html",
    "date": "2026-10-24"
@@ -854,11 +969,6 @@
   {
    "title": "Q-Dir(四窗口文件管理器) v12.82 多语便携版",
    "url": "https://www.gndown.com/2234.html",
-   "date": "2026-10-24"
-  },
-  {
-   "title": "PixPin截图工具(支持截长图截动图) v3.5.5.1 / 3.6.5.1 中文绿色版",
-   "url": "https://www.gndown.com/7358.html",
    "date": "2026-10-24"
   },
   {
@@ -914,11 +1024,6 @@
   {
    "title": "Free Download Manager(BT下载工具) v6.35.2.7075 多语便携版",
    "url": "https://www.gndown.com/1703.html",
-   "date": "2026-10-24"
-  },
-  {
-   "title": "CudaText(免费开源代码编辑器) v1.237.5.0 中文绿色版",
-   "url": "https://www.gndown.com/6441.html",
    "date": "2026-10-24"
   },
   {
@@ -1012,11 +1117,6 @@
    "date": "2026-10-23"
   },
   {
-   "title": "PowerDirector安卓版(威力导演安卓版) v16.7.4 b2610222 修改版",
-   "url": "https://www.gndown.com/7588.html",
-   "date": "2026-10-23"
-  },
-  {
    "title": "Office专业增强版2019(中文直装版)x64 v16.0.10417.20231 10月版",
    "url": "https://www.gndown.com/6581.html",
    "date": "2026-10-23"
@@ -1044,11 +1144,6 @@
   {
    "title": "GoodSync(数据同步备份软件) v12.11.12.2 多语便携版",
    "url": "https://www.gndown.com/680.html",
-   "date": "2026-10-23"
-  },
-  {
-   "title": "Ghost Downloader(多功能下载管理工具) v4.4.5 中文绿色版",
-   "url": "https://www.gndown.com/13082.html",
    "date": "2026-10-23"
   },
   {
@@ -1152,11 +1247,6 @@
    "date": "2026-10-22"
   },
   {
-   "title": "Visual Studio Code(微软轻量级免费代码编辑器) v1.143.0",
-   "url": "https://www.gndown.com/1742.html",
-   "date": "2026-10-22"
-  },
-  {
    "title": "Telegram Desktop(桌面即时通讯客户端) v7.3.3 多语便携版",
    "url": "https://www.gndown.com/5467.html",
    "date": "2026-10-22"
@@ -1214,11 +1304,6 @@
   {
    "title": "CoolUtils Total XML Converter(XML转换工具) v3.2.0.221 多语便携版",
    "url": "https://www.gndown.com/8863.html",
-   "date": "2026-10-22"
-  },
-  {
-   "title": "CoolUtils PDF Combine(PDF合并工具) Pro v4.2.0.205 多语便携版",
-   "url": "https://www.gndown.com/8843.html",
    "date": "2026-10-22"
   },
   {
@@ -1492,11 +1577,6 @@
    "date": "2026-10-19"
   },
   {
-   "title": "R-Studio(数据恢复软件) Network v9.5.191850 多语便携版",
-   "url": "https://www.gndown.com/1012.html",
-   "date": "2026-10-19"
-  },
-  {
    "title": "PlayerFab(4K蓝光影音播放软件) v7.0.6.4 多语便携版",
    "url": "https://www.gndown.com/1720.html",
    "date": "2026-10-19"
@@ -1524,11 +1604,6 @@
   {
    "title": "Freemake Video Converter(视频转换工具) v6.1.0.0 多语便携版",
    "url": "https://www.gndown.com/6181.html",
-   "date": "2026-10-19"
-  },
-  {
-   "title": "FolderSizes(磁盘空间分析软件) v10.3.90 便携版",
-   "url": "https://www.gndown.com/10283.html",
    "date": "2026-10-19"
   },
   {
@@ -1909,11 +1984,6 @@
   {
    "title": "Adobe Acrobat Pro DC v2026.002.22031 中文直装版 32位 & 64位",
    "url": "https://www.gndown.com/4587.html",
-   "date": "2026-10-15"
-  },
-  {
-   "title": "AdGuard广告拦截器APP v4.15.0.42319003 Beta-1 解锁订阅版",
-   "url": "https://www.gndown.com/6054.html",
    "date": "2026-10-15"
   },
   {
@@ -2342,16 +2412,6 @@
    "date": "2026-10-10"
   },
   {
-   "title": "ESET NOD32 Antivirus v19.2.10.0 x86 & x64 特别版",
-   "url": "https://www.gndown.com/8191.html",
-   "date": "2026-10-10"
-  },
-  {
-   "title": "ESET Internet Security v19.2.10.0 x86 & x64 特别版",
-   "url": "https://www.gndown.com/8193.html",
-   "date": "2026-10-10"
-  },
-  {
    "title": "CoolMSD(存储控制器驱动离线安装) v1.0.8 中文绿色版",
    "url": "https://www.gndown.com/1508.html",
    "date": "2026-10-10"
@@ -2537,11 +2597,6 @@
    "date": "2026-10-06"
   },
   {
-   "title": "RadioMaximus(全球网络收音机) v2.33.16 多语便携版",
-   "url": "https://www.gndown.com/6506.html",
-   "date": "2026-10-06"
-  },
-  {
    "title": "Duplicate Files Search & Link(查找重复文件) v10.8.4 多语便携版",
    "url": "https://www.gndown.com/13109.html",
    "date": "2026-10-06"
@@ -2579,16 +2634,6 @@
   {
    "title": "TagSpaces(文件标签管理器) v6.14.0 中文绿色版",
    "url": "https://www.gndown.com/14545.html",
-   "date": "2026-10-05"
-  },
-  {
-   "title": "DaVinci Resolve Studio(达芬奇调色软件) v21.1.1.10 中文直装版",
-   "url": "https://www.gndown.com/6999.html",
-   "date": "2026-10-05"
-  },
-  {
-   "title": "DaVinci Fusion Studio(动画特效合成软件) v21.1.1.11 中文直装版",
-   "url": "https://www.gndown.com/11216.html",
    "date": "2026-10-05"
   },
   {
@@ -2724,11 +2769,6 @@
   {
    "title": "Autorun Organizer(自启动管理工具) v7.02 多语便携版",
    "url": "https://www.gndown.com/7526.html",
-   "date": "2026-10-03"
-  },
-  {
-   "title": "3D Youtube Downloader-Batch(视频下载工具) v2.20 多语便携版",
-   "url": "https://www.gndown.com/7779.html",
    "date": "2026-10-03"
   },
   {
@@ -3009,11 +3049,6 @@
   {
    "title": "Xournal++(PDF文档注释工具) v1.3.8 中文绿色版",
    "url": "https://www.gndown.com/2208.html",
-   "date": "2026-09-26"
-  },
-  {
-   "title": "Joplin(开源免费笔记软件) v3.7.21 多语便携版",
-   "url": "https://www.gndown.com/2160.html",
    "date": "2026-09-26"
   },
   {
