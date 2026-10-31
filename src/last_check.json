@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-31 19:26:59",
+  "checked_at": "2026-11-01 00:33:12",
   "checked_at_tz": "Asia/Shanghai",
   "keywords": [
     "CorelDRAW"
@@ -14,8 +14,8 @@
   "sources": {
     "x6d-green": {
       "name": "小刀娱乐网-绿色软件",
-      "error": "站内搜索全部失败: 所有抓取通道均失败: 直连: HTTP 502；代理 api.allorigins.win: HTTP 520；代理 api.codetabs.com: HTTP 522；代理 cors.eu.org: HTTP 429；jina: 返回200但正文过短(<500字节)",
-      "fail_streak": 17,
+      "error": "站内搜索全部失败: 所有抓取通道均失败: 直连: HTTP 502；代理 api.allorigins.win: 响应过短(<500字节)；代理 api.codetabs.com: HTTP 522；代理 cors.eu.org: HTTP 429；jina: 返回200但正文过短(<500字节)",
+      "fail_streak": 18,
       "kept_seen": 10
     },
     "423down": {
