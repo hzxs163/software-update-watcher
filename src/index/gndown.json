@@ -1,9 +1,14 @@
 {
- "updated_at": "2026-11-05 12:17:51",
+ "updated_at": "2026-11-05 21:44:23",
  "items": [
   {
    "title": "红果短剧电脑版(无需安装安卓模拟器) v1.2.22 中文绿色版",
    "url": "https://www.gndown.com/1180.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "搜狗拼音输入法PC版 v16.10.0.5858 精简优化版",
+   "url": "https://www.gndown.com/973.html",
    "date": "2026-11-05"
   },
   {
@@ -14,6 +19,21 @@
   {
    "title": "微信正式版WeChat v4.2.0.13 多开防撤回带提示安装版",
    "url": "https://www.gndown.com/245.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "微信公测版WeChat v4.2.0.50 多开防撤回带提示绿色版",
+   "url": "https://www.gndown.com/964.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "不忘初心精简版 Win11 v23H2(22631.7654)",
+   "url": "https://www.gndown.com/5037.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "不忘初心游戏版 Win11 v23H2(22631.7654)",
+   "url": "https://www.gndown.com/5030.html",
    "date": "2026-11-05"
   },
   {
@@ -32,8 +52,28 @@
    "date": "2026-11-05"
   },
   {
+   "title": "Win11 v25H2(26200.9818) 不忘初心精简版",
+   "url": "https://www.gndown.com/15570.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "Win11 v25H2(26200.9818) 不忘初心游戏版",
+   "url": "https://www.gndown.com/15569.html",
+   "date": "2026-11-05"
+  },
+  {
    "title": "Visual Studio Code(微软轻量级免费代码编辑器) v1.145.0",
    "url": "https://www.gndown.com/1742.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "VeraCrypt(开源磁盘加密软件) v1.26.31 多语便携版",
+   "url": "https://www.gndown.com/3012.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "UltraSearch(文件搜索神器) Pro v4.9.5.1303 多语便携版",
+   "url": "https://www.gndown.com/5813.html",
    "date": "2026-11-05"
   },
   {
@@ -44,6 +84,11 @@
   {
    "title": "Telegram Desktop(桌面即时通讯客户端) v7.3.5 多语便携版",
    "url": "https://www.gndown.com/5467.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "Supermium(第三方Chromium浏览器) v150.0.7871.255 R2.02",
+   "url": "https://www.gndown.com/13091.html",
    "date": "2026-11-05"
   },
   {
@@ -72,8 +117,28 @@
    "date": "2026-11-05"
   },
   {
+   "title": "NVIDIA GeForce Game Ready 图形驱动程序 v621.14 WHQL 精简版",
+   "url": "https://www.gndown.com/3774.html",
+   "date": "2026-11-05"
+  },
+  {
    "title": "NP管理器APP(安卓APK逆向修改工具) v3.2.7 官方版",
    "url": "https://www.gndown.com/9689.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "Motrix(aria2内核多线程下载工具) v2.3.0 中文绿色版",
+   "url": "https://www.gndown.com/2676.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "MiniTool Partition Wizard Technician(磁盘分区工具) v13.9 便携版",
+   "url": "https://www.gndown.com/13098.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "MPC-BE视频播放器(强大视频播放器) v1.9.3 中文绿色版",
+   "url": "https://www.gndown.com/7415.html",
    "date": "2026-11-05"
   },
   {
@@ -87,13 +152,33 @@
    "date": "2026-11-05"
   },
   {
+   "title": "IDM下载器(Internet Download Manager) v6.43.18 仿官方安装版",
+   "url": "https://www.gndown.com/8766.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "IDM下载器(Internet Download Manager) v6.43.18 中文绿色版",
+   "url": "https://www.gndown.com/491.html",
+   "date": "2026-11-05"
+  },
+  {
    "title": "IDM下载器(Internet Download Manager) v6.43.18 中文直装版",
    "url": "https://www.gndown.com/9494.html",
    "date": "2026-11-05"
   },
   {
+   "title": "HWiNFO(专业系统信息检测工具) Pro v8.54 / 8.55.6115 多语便携版",
+   "url": "https://www.gndown.com/10097.html",
+   "date": "2026-11-05"
+  },
+  {
    "title": "FreeCommander XE(文件管理器) 2026 Build 956 64bit 多语便携版",
    "url": "https://www.gndown.com/13094.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "Foxmail(电子邮件客户端) v7.2.25 Build 586 官方版",
+   "url": "https://www.gndown.com/1656.html",
    "date": "2026-11-05"
   },
   {
@@ -142,6 +227,16 @@
    "date": "2026-11-05"
   },
   {
+   "title": "4K Downloader(高清4K视频下载软件) v6.6.2 便携版",
+   "url": "https://www.gndown.com/9138.html",
+   "date": "2026-11-05"
+  },
+  {
+   "title": "010 Editor(专业十六进制编辑器) v17.0.1 汉化便携版",
+   "url": "https://www.gndown.com/1110.html",
+   "date": "2026-11-05"
+  },
+  {
    "title": "豆包输入法(字节跳动出品) v1.0.0.23 BEIKING绿色精简版",
    "url": "https://www.gndown.com/3423.html",
    "date": "2026-11-04"
@@ -159,11 +254,6 @@
   {
    "title": "批量转双层PDF(可识别各种语言) v4.2 中文绿色版",
    "url": "https://www.gndown.com/14214.html",
-   "date": "2026-11-04"
-  },
-  {
-   "title": "微信公测版WeChat v4.2.0.48 多开防撤回带提示绿色版",
-   "url": "https://www.gndown.com/964.html",
    "date": "2026-11-04"
   },
   {
@@ -264,16 +354,6 @@
   {
    "title": "IObit Smart Defrag(磁盘碎片整理) Pro v12.1.0.619 多语便携版",
    "url": "https://www.gndown.com/3627.html",
-   "date": "2026-11-04"
-  },
-  {
-   "title": "IDM下载器(Internet Download Manager) v6.43.17 仿官方安装版",
-   "url": "https://www.gndown.com/8766.html",
-   "date": "2026-11-04"
-  },
-  {
-   "title": "IDM下载器(Internet Download Manager) v6.43.17 中文绿色版",
-   "url": "https://www.gndown.com/491.html",
    "date": "2026-11-04"
   },
   {
@@ -472,11 +552,6 @@
    "date": "2026-11-03"
   },
   {
-   "title": "Motrix(aria2内核多线程下载工具) v2.2.1 中文绿色版",
-   "url": "https://www.gndown.com/2676.html",
-   "date": "2026-11-03"
-  },
-  {
    "title": "Macrorit Data Wiper(硬盘数据擦除器) v8.6.0 多语便携版",
    "url": "https://www.gndown.com/6227.html",
    "date": "2026-11-03"
@@ -484,11 +559,6 @@
   {
    "title": "MPC-HC视频播放器(便捷视频播放器) v2.8.4.78 中文绿色版",
    "url": "https://www.gndown.com/961.html",
-   "date": "2026-11-03"
-  },
-  {
-   "title": "MPC-BE视频播放器(强大视频播放器) v1.9.2.83 中文绿色版",
-   "url": "https://www.gndown.com/7415.html",
    "date": "2026-11-03"
   },
   {
@@ -1277,11 +1347,6 @@
    "date": "2026-10-29"
   },
   {
-   "title": "010 Editor(专业十六进制编辑器) v17.0 汉化便携版",
-   "url": "https://www.gndown.com/1110.html",
-   "date": "2026-10-29"
-  },
-  {
    "title": "010 Editor(专业十六进制编辑器) v17.0 官方便携版",
    "url": "https://www.gndown.com/9320.html",
    "date": "2026-10-29"
@@ -1357,11 +1422,6 @@
    "date": "2026-10-28"
   },
   {
-   "title": "NVIDIA GeForce Game Ready 图形驱动程序 v621.12 WHQL 精简版",
-   "url": "https://www.gndown.com/3774.html",
-   "date": "2026-10-28"
-  },
-  {
    "title": "MXPlayer(安卓MX播放器APP) v3.4.1 / 1.93.4 付费专业版",
    "url": "https://www.gndown.com/3961.html",
    "date": "2026-10-28"
@@ -1389,11 +1449,6 @@
   {
    "title": "HyperSnap(专业屏幕截图软件) v10.5.0 汉化绿色版",
    "url": "https://www.gndown.com/4420.html",
-   "date": "2026-10-28"
-  },
-  {
-   "title": "HWiNFO(专业系统信息检测工具) Pro v8.54 / 8.55.6110 多语便携版",
-   "url": "https://www.gndown.com/10097.html",
    "date": "2026-10-28"
   },
   {
@@ -1439,11 +1494,6 @@
   {
    "title": "Windows 10 LTSC 2021 Build 19044.7811(集成累积更新)",
    "url": "https://www.gndown.com/11873.html",
-   "date": "2026-10-27"
-  },
-  {
-   "title": "VeraCrypt(开源磁盘加密软件) v1.26.30 多语便携版",
-   "url": "https://www.gndown.com/3012.html",
    "date": "2026-10-27"
   },
   {
@@ -1842,11 +1892,6 @@
    "date": "2026-10-24"
   },
   {
-   "title": "4K Downloader(高清4K视频下载软件) v6.5.29 便携版",
-   "url": "https://www.gndown.com/9138.html",
-   "date": "2026-10-24"
-  },
-  {
    "title": "3D Youtube Downloader(视频下载工具) v1.26.9 多语便携版",
    "url": "https://www.gndown.com/5513.html",
    "date": "2026-10-24"
@@ -1972,16 +2017,6 @@
    "date": "2026-10-22"
   },
   {
-   "title": "Win11 v25H2(26200.9711) 不忘初心精简版",
-   "url": "https://www.gndown.com/15570.html",
-   "date": "2026-10-22"
-  },
-  {
-   "title": "Win11 v25H2(26200.9711) 不忘初心游戏版",
-   "url": "https://www.gndown.com/15569.html",
-   "date": "2026-10-22"
-  },
-  {
    "title": "Soluling(自动化本地化工具) v1.0.1117 汉化安装版",
    "url": "https://www.gndown.com/15730.html",
    "date": "2026-10-22"
@@ -2074,11 +2109,6 @@
   {
    "title": "Syncthing(开源文件同步工具) v2.1.7 中文绿色版",
    "url": "https://www.gndown.com/3235.html",
-   "date": "2026-10-21"
-  },
-  {
-   "title": "Supermium(第三方Chromium浏览器) v150.0.7871.255 R2.01",
-   "url": "https://www.gndown.com/13091.html",
    "date": "2026-10-21"
   },
   {
@@ -2829,11 +2859,6 @@
   {
    "title": "星愿浏览器Twinkstar v11.5.1000.2609 中文便携版",
    "url": "https://www.gndown.com/15685.html",
-   "date": "2026-10-10"
-  },
-  {
-   "title": "搜狗拼音输入法PC版 v16.9.0.5523 精简优化版",
-   "url": "https://www.gndown.com/973.html",
    "date": "2026-10-10"
   },
   {
