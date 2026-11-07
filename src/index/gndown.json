@@ -1,6 +1,46 @@
 {
- "updated_at": "2026-11-07 20:07:57",
+ "updated_at": "2026-11-08 05:15:06",
  "items": [
+  {
+   "title": "Zen Browser(基于Firefox引擎浏览器) v1.24.1b(2026-11-06)",
+   "url": "https://www.gndown.com/15019.html",
+   "date": "2026-11-08"
+  },
+  {
+   "title": "Dawn Launcher(快速启动工具) v3.1.3 多语便携版",
+   "url": "https://www.gndown.com/548.html",
+   "date": "2026-11-08"
+  },
+  {
+   "title": "CoolUtils Total XML Converter(XML转换工具) v3.2.0.224 多语便携版",
+   "url": "https://www.gndown.com/8863.html",
+   "date": "2026-11-08"
+  },
+  {
+   "title": "CoolUtils Total Outlook Converter Pro v5.1.1.681 多语便携版",
+   "url": "https://www.gndown.com/8840.html",
+   "date": "2026-11-08"
+  },
+  {
+   "title": "CoolUtils Total Mail Converter Pro v11.1.0.830 多语便携版",
+   "url": "https://www.gndown.com/8837.html",
+   "date": "2026-11-08"
+  },
+  {
+   "title": "CoolUtils Total HTML Converter v5.1.0.386 多语便携版",
+   "url": "https://www.gndown.com/8830.html",
+   "date": "2026-11-08"
+  },
+  {
+   "title": "CoolUtils Total CSV Converter(CSV转换工具) v4.1.1.95 多语便携版",
+   "url": "https://www.gndown.com/8860.html",
+   "date": "2026-11-08"
+  },
+  {
+   "title": "CoolUtils Total CAD Converter(CAD转换工具) v4.1.0.268 多语便携版",
+   "url": "https://www.gndown.com/8831.html",
+   "date": "2026-11-08"
+  },
   {
    "title": "红果短剧电脑版(无需安装安卓模拟器) v1.2.24 中文绿色版",
    "url": "https://www.gndown.com/1180.html",
@@ -24,6 +64,16 @@
   {
    "title": "X-plore安卓版(安卓手机文件管理器) v4.52.02 修改版",
    "url": "https://www.gndown.com/7670.html",
+   "date": "2026-11-07"
+  },
+  {
+   "title": "Win11 v26H2(26300.9818) 不忘初心精简版",
+   "url": "https://www.gndown.com/1085.html",
+   "date": "2026-11-07"
+  },
+  {
+   "title": "Win11 v26H2(26300.9818) 不忘初心游戏版",
+   "url": "https://www.gndown.com/4299.html",
    "date": "2026-11-07"
   },
   {
@@ -172,6 +222,11 @@
    "date": "2026-11-07"
   },
   {
+   "title": "EmEditor(Windows文本编辑器) v26.4.2 多语便携版 & 安装版",
+   "url": "https://www.gndown.com/504.html",
+   "date": "2026-11-07"
+  },
+  {
    "title": "Electerm(跨平台SSH桌面终端) v5.9.0 中文绿色版",
    "url": "https://www.gndown.com/1713.html",
    "date": "2026-11-07"
@@ -189,6 +244,11 @@
   {
    "title": "Agisoft Metashape(3D建模软件) Pro v2.4.0.23477 多语便携版",
    "url": "https://www.gndown.com/14452.html",
+   "date": "2026-11-07"
+  },
+  {
+   "title": "7-Zip解压缩软件 v26.06 官方简体中文版 & 解NSIS脚本版",
+   "url": "https://www.gndown.com/1130.html",
    "date": "2026-11-07"
   },
   {
@@ -329,11 +389,6 @@
   {
    "title": "File Commander安卓版(文件指挥官) v11.7.57185 修改版",
    "url": "https://www.gndown.com/7725.html",
-   "date": "2026-11-06"
-  },
-  {
-   "title": "EmEditor(Windows文本编辑器) v26.4.1 多语便携版 & 安装版",
-   "url": "https://www.gndown.com/504.html",
    "date": "2026-11-06"
   },
   {
@@ -569,21 +624,6 @@
   {
    "title": "EaseUS Partition Master(易我分区大师) v20.11.0 Build 202611021322",
    "url": "https://www.gndown.com/10618.html",
-   "date": "2026-11-05"
-  },
-  {
-   "title": "CoolUtils Total XML Converter(XML转换工具) v3.2.0.223 多语便携版",
-   "url": "https://www.gndown.com/8863.html",
-   "date": "2026-11-05"
-  },
-  {
-   "title": "CoolUtils Total HTML Converter v5.1.0.385 多语便携版",
-   "url": "https://www.gndown.com/8830.html",
-   "date": "2026-11-05"
-  },
-  {
-   "title": "CoolUtils Total CSV Converter(CSV转换工具) v4.1.1.94 多语便携版",
-   "url": "https://www.gndown.com/8860.html",
    "date": "2026-11-05"
   },
   {
@@ -1072,16 +1112,6 @@
    "date": "2026-11-02"
   },
   {
-   "title": "CoolUtils Total Outlook Converter Pro v5.1.1.678 多语便携版",
-   "url": "https://www.gndown.com/8840.html",
-   "date": "2026-11-02"
-  },
-  {
-   "title": "CoolUtils Total Mail Converter Pro v11.1.0.829 多语便携版",
-   "url": "https://www.gndown.com/8837.html",
-   "date": "2026-11-02"
-  },
-  {
    "title": "CoolUtils Total Image Converter(图像转换工具) v8.5.0.359 多语便携版",
    "url": "https://www.gndown.com/8827.html",
    "date": "2026-11-02"
@@ -1329,11 +1359,6 @@
   {
    "title": "bkViewer小巧精悍数码照片浏览器 v8.9b 中文绿色版",
    "url": "https://www.gndown.com/958.html",
-   "date": "2026-10-30"
-  },
-  {
-   "title": "Zen Browser(基于Firefox引擎浏览器) v1.24b (2026-10-29)",
-   "url": "https://www.gndown.com/15019.html",
    "date": "2026-10-30"
   },
   {
@@ -1967,11 +1992,6 @@
    "date": "2026-10-25"
   },
   {
-   "title": "Dawn Launcher(快速启动工具) v3.1.2 多语便携版",
-   "url": "https://www.gndown.com/548.html",
-   "date": "2026-10-25"
-  },
-  {
    "title": "Dashcam Viewer(行车记录仪查看工具) v4.0.9 多语便携版",
    "url": "https://www.gndown.com/7709.html",
    "date": "2026-10-25"
@@ -1999,16 +2019,6 @@
   {
    "title": "XtraTools Professional(系统优化软件) v26.10.1 多语便携版",
    "url": "https://www.gndown.com/13213.html",
-   "date": "2026-10-24"
-  },
-  {
-   "title": "Win11 v26H2(26300.9711) 不忘初心精简版",
-   "url": "https://www.gndown.com/1085.html",
-   "date": "2026-10-24"
-  },
-  {
-   "title": "Win11 v26H2(26300.9711) 不忘初心游戏版",
-   "url": "https://www.gndown.com/4299.html",
    "date": "2026-10-24"
   },
   {
@@ -2059,11 +2069,6 @@
   {
    "title": "7-Zip解压软件(美化版、解NSIS脚本版) v26.05 美化增强版",
    "url": "https://www.gndown.com/7544.html",
-   "date": "2026-10-24"
-  },
-  {
-   "title": "7-Zip解压缩软件 v26.05 官方简体中文版 & 解NSIS脚本版",
-   "url": "https://www.gndown.com/1130.html",
    "date": "2026-10-24"
   },
   {
@@ -2144,11 +2149,6 @@
   {
    "title": "EaseUS PDF Editor(易我PDF编辑软件) v6.5.1.2 Build 10.20.2026",
    "url": "https://www.gndown.com/11006.html",
-   "date": "2026-10-23"
-  },
-  {
-   "title": "CoolUtils Total CAD Converter(CAD转换工具) v4.1.0.265 多语便携版",
-   "url": "https://www.gndown.com/8831.html",
    "date": "2026-10-23"
   },
   {
