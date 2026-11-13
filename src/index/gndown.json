@@ -1,9 +1,29 @@
 {
- "updated_at": "2026-11-13 06:58:40",
+ "updated_at": "2026-11-13 12:10:12",
  "items": [
   {
    "title": "谷歌商店客户端 Google Play Store v54.1.1 官方版",
    "url": "https://www.gndown.com/4319.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "微软Edge浏览器 v157.0.4341.57 官方正式版",
+   "url": "https://www.gndown.com/420.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "微软Edge浏览器 v157.0.4341.57 多语便携版",
+   "url": "https://www.gndown.com/950.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "图档批处理助手(批处理文档和图像) v1.5.1 中文绿色版",
+   "url": "https://www.gndown.com/14386.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "YT Downloader(下载YouTube视频工具) v10.7.3 便携版",
+   "url": "https://www.gndown.com/8955.html",
    "date": "2026-11-13"
   },
   {
@@ -12,8 +32,33 @@
    "date": "2026-11-13"
   },
   {
+   "title": "Volumey(Windows音量控制器软件) v2.3.1.0 中文绿色版",
+   "url": "https://www.gndown.com/2261.html",
+   "date": "2026-11-13"
+  },
+  {
    "title": "Ungoogled-Chromium v157.0.8103.50-1.1 中文绿色版",
    "url": "https://www.gndown.com/12342.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "Telegram Desktop(桌面即时通讯客户端) v7.4.3 多语便携版",
+   "url": "https://www.gndown.com/5467.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "Spotify(正版流媒体音乐平台) v1.3.6.1912 多语便携版",
+   "url": "https://www.gndown.com/7999.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "Social Media Downloader(社交媒体下载工具) v8.5.39 便携版",
+   "url": "https://www.gndown.com/13141.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "QOwnNotes(跨平台笔记应用程序) v26.11.8 中文绿色版",
+   "url": "https://www.gndown.com/1264.html",
    "date": "2026-11-13"
   },
   {
@@ -22,8 +67,48 @@
    "date": "2026-11-13"
   },
   {
+   "title": "Obsidian(黑曜石Markdown笔记) v1.15.1 中文绿色版",
+   "url": "https://www.gndown.com/3051.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "Notepad3(开源文本编辑器) v7.26.1112.1 断剑留痕绿色版",
+   "url": "https://www.gndown.com/2011.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "NonCompressibleFiles(创建不可压缩文件) v5.15 多语便携版",
+   "url": "https://www.gndown.com/14172.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "LibreOffice(免费开源跨平台办公套件) v26.8.3",
+   "url": "https://www.gndown.com/1003.html",
+   "date": "2026-11-13"
+  },
+  {
    "title": "IsMyMemoryOK(内存检测工具) v1.41 多语便携版",
    "url": "https://www.gndown.com/12585.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "FreeTube(开源YouTube客户端) v0.26.0.8070 多语便携版",
+   "url": "https://www.gndown.com/6908.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "FluentCleaner(垃圾清理软件) Classic v1.19.269 中文绿色版",
+   "url": "https://www.gndown.com/3389.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "Fast Video Cutter Joiner(翔基视频剪切合并) v7.2.9.0 多语便携版",
+   "url": "https://www.gndown.com/7578.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "FamiStudio(免费音乐作曲工具) v4.5.4 多语便携版",
+   "url": "https://www.gndown.com/14715.html",
    "date": "2026-11-13"
   },
   {
@@ -42,6 +127,11 @@
    "date": "2026-11-13"
   },
   {
+   "title": "Brave Browser(快速私密网页浏览器) v1.99.57 中文绿色版",
+   "url": "https://www.gndown.com/8529.html",
+   "date": "2026-11-13"
+  },
+  {
    "title": "Advanced Installer(MSI安装包部署工具) v24.2 多语便携版",
    "url": "https://www.gndown.com/1217.html",
    "date": "2026-11-13"
@@ -49,6 +139,11 @@
   {
    "title": "Advanced Installer(MSI安装包制作工具) v24.2 中文直装版",
    "url": "https://www.gndown.com/687.html",
+   "date": "2026-11-13"
+  },
+  {
+   "title": "AIMP(本地音频播放工具) v5.40.2731 多语便携版",
+   "url": "https://www.gndown.com/2033.html",
    "date": "2026-11-13"
   },
   {
@@ -337,11 +432,6 @@
    "date": "2026-11-11"
   },
   {
-   "title": "Telegram Desktop(桌面即时通讯客户端) v7.4.2 多语便携版",
-   "url": "https://www.gndown.com/5467.html",
-   "date": "2026-11-11"
-  },
-  {
    "title": "Solid Explorer(安卓文件管理器) v3.6.4 解锁完整版",
    "url": "https://www.gndown.com/4043.html",
    "date": "2026-11-11"
@@ -354,11 +444,6 @@
   {
    "title": "RightClickTools(右键菜单增强工具) v2.0.6 中文绿色版",
    "url": "https://www.gndown.com/1196.html",
-   "date": "2026-11-11"
-  },
-  {
-   "title": "QOwnNotes(跨平台笔记应用程序) v26.11.7 中文绿色版",
-   "url": "https://www.gndown.com/1264.html",
    "date": "2026-11-11"
   },
   {
@@ -497,11 +582,6 @@
    "date": "2026-11-11"
   },
   {
-   "title": "Brave Browser(快速私密网页浏览器) v1.99.56 中文绿色版",
-   "url": "https://www.gndown.com/8529.html",
-   "date": "2026-11-11"
-  },
-  {
    "title": "Blender(免费开源3D建模工具) v5.3.0 中文绿色版",
    "url": "https://www.gndown.com/5969.html",
    "date": "2026-11-11"
@@ -529,16 +609,6 @@
   {
    "title": "微软常用运行库合集(Visual C++) 2026.11.10 By Dreamcast",
    "url": "https://www.gndown.com/163.html",
-   "date": "2026-11-10"
-  },
-  {
-   "title": "微软Edge浏览器 v157.0.4341.46 官方正式版",
-   "url": "https://www.gndown.com/420.html",
-   "date": "2026-11-10"
-  },
-  {
-   "title": "微软Edge浏览器 v157.0.4341.46 多语便携版",
-   "url": "https://www.gndown.com/950.html",
    "date": "2026-11-10"
   },
   {
@@ -582,11 +652,6 @@
    "date": "2026-11-10"
   },
   {
-   "title": "Social Media Downloader(社交媒体下载工具) v8.5.38 便携版",
-   "url": "https://www.gndown.com/13141.html",
-   "date": "2026-11-10"
-  },
-  {
    "title": "Sigil(开源EPUB格式电子书编辑器) v2.8.6 多语便携版",
    "url": "https://www.gndown.com/1739.html",
    "date": "2026-11-10"
@@ -627,11 +692,6 @@
    "date": "2026-11-10"
   },
   {
-   "title": "Notepad3(开源文本编辑器) v7.26.1109.1 断剑留痕绿色版",
-   "url": "https://www.gndown.com/2011.html",
-   "date": "2026-11-10"
-  },
-  {
    "title": "NP管理器APP(安卓APK逆向修改工具) v3.2.11 官方版",
    "url": "https://www.gndown.com/9689.html",
    "date": "2026-11-10"
@@ -669,11 +729,6 @@
   {
    "title": "HopToDesk(免费远程协助工具) v1.46.82.0 中文绿色版",
    "url": "https://www.gndown.com/3200.html",
-   "date": "2026-11-10"
-  },
-  {
-   "title": "Fast Video Cutter Joiner(翔基视频剪切合并) v7.2.8.0 多语便携版",
-   "url": "https://www.gndown.com/7578.html",
    "date": "2026-11-10"
   },
   {
@@ -762,11 +817,6 @@
    "date": "2026-11-09"
   },
   {
-   "title": "YT Downloader(下载YouTube视频工具) v10.7.2 便携版",
-   "url": "https://www.gndown.com/8955.html",
-   "date": "2026-11-09"
-  },
-  {
    "title": "XnViewMP(图像浏览和转换软件) v1.12.3 中文绿色版",
    "url": "https://www.gndown.com/1227.html",
    "date": "2026-11-09"
@@ -784,11 +834,6 @@
   {
    "title": "Trilium Notes(层级式笔记工具) v0.107.0 中文绿色版",
    "url": "https://www.gndown.com/2725.html",
-   "date": "2026-11-09"
-  },
-  {
-   "title": "Spotify(正版流媒体音乐平台) v1.3.6.1909 多语便携版",
-   "url": "https://www.gndown.com/7999.html",
    "date": "2026-11-09"
   },
   {
@@ -822,11 +867,6 @@
    "date": "2026-11-09"
   },
   {
-   "title": "FreeTube(开源YouTube客户端) v0.26.0.8060 多语便携版",
-   "url": "https://www.gndown.com/6908.html",
-   "date": "2026-11-09"
-  },
-  {
    "title": "FontViewOK(字体管理软件) v9.39 多语便携版",
    "url": "https://www.gndown.com/12300.html",
    "date": "2026-11-09"
@@ -854,11 +894,6 @@
   {
    "title": "Adobe全家桶残留卸载修复工具 v4.3.0.1437 绿色版",
    "url": "https://www.gndown.com/9198.html",
-   "date": "2026-11-09"
-  },
-  {
-   "title": "AIMP(本地音频播放工具) v5.40.2730 多语便携版",
-   "url": "https://www.gndown.com/2033.html",
    "date": "2026-11-09"
   },
   {
@@ -1009,11 +1044,6 @@
   {
    "title": "WPS Office 2023 专业增强版 v12.8.0.21255 永久激活版(11.06)",
    "url": "https://www.gndown.com/3683.html",
-   "date": "2026-11-07"
-  },
-  {
-   "title": "Volumey(Windows音量控制器软件) v2.3.0.0 中文绿色版",
-   "url": "https://www.gndown.com/2261.html",
    "date": "2026-11-07"
   },
   {
@@ -1597,11 +1627,6 @@
    "date": "2026-11-03"
   },
   {
-   "title": "Obsidian(黑曜石Markdown笔记) v1.15.0 中文绿色版",
-   "url": "https://www.gndown.com/3051.html",
-   "date": "2026-11-03"
-  },
-  {
    "title": "Macrorit Data Wiper(硬盘数据擦除器) v8.6.0 多语便携版",
    "url": "https://www.gndown.com/6227.html",
    "date": "2026-11-03"
@@ -1962,11 +1987,6 @@
    "date": "2026-10-30"
   },
   {
-   "title": "LibreOffice(免费开源跨平台办公套件) v26.8.2",
-   "url": "https://www.gndown.com/1003.html",
-   "date": "2026-10-30"
-  },
-  {
    "title": "Imagine(轻量级图像浏览器) v2.8.0 中文绿色版",
    "url": "https://www.gndown.com/1362.html",
    "date": "2026-10-30"
@@ -2109,11 +2129,6 @@
   {
    "title": "抖音APP(内置逗音小手) v40.9.0(400901) 抖音助手增强版",
    "url": "https://www.gndown.com/3905.html",
-   "date": "2026-10-28"
-  },
-  {
-   "title": "图档批处理助手(批处理文档和图像) v1.5 中文绿色版",
-   "url": "https://www.gndown.com/14386.html",
    "date": "2026-10-28"
   },
   {
